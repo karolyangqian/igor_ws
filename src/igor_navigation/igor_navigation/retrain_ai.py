@@ -571,17 +571,31 @@ def export_all_model_weights(model: PPO, target_weights_dir: str, total_timestep
     dummy_input = torch.randn(1, 74, dtype=torch.float32)
     onnx_path = os.path.join(target_weights_dir, "cl_drl_jetauto_residual_fp32.onnx")
 
-    torch.onnx.export(
-        actor_onnx,
-        dummy_input,
-        onnx_path,
-        export_params=True,
-        opset_version=14,
-        do_constant_folding=True,
-        input_names=["obs_74"],
-        output_names=["action_3"],
-        dynamic_axes={"obs_74": {0: "batch_size"}, "action_3": {0: "batch_size"}}
-    )
+    try:
+        torch.onnx.export(
+            actor_onnx,
+            dummy_input,
+            onnx_path,
+            export_params=True,
+            opset_version=14,
+            do_constant_folding=True,
+            input_names=["obs_74"],
+            output_names=["action_3"],
+            dynamic_axes={"obs_74": {0: "batch_size"}, "action_3": {0: "batch_size"}},
+            dynamo=False
+        )
+    except TypeError:
+        torch.onnx.export(
+            actor_onnx,
+            dummy_input,
+            onnx_path,
+            export_params=True,
+            opset_version=14,
+            do_constant_folding=True,
+            input_names=["obs_74"],
+            output_names=["action_3"],
+            dynamic_axes={"obs_74": {0: "batch_size"}, "action_3": {0: "batch_size"}}
+        )
     print(f"✔ ONNX FP32 Model Saved: {onnx_path}")
 
     # 4. Kuantisasi Q8.8 & Export C-Header
@@ -694,8 +708,8 @@ def evaluate_and_generate_artifacts(
 
     for algo_name in algorithms:
         controller = controllers[algo_name]
-        carrot_tracker = LookaheadCarrotTracker(global_path, lookahead_distance=0.60, carrot_speed=0.45)
-        metrics_tracker = BenchmarkMetricsTracker(global_path=global_path, goal_pos=target_goal)
+        carrot_tracker = LookaheadCarrotTracker(global_path, cruise_speed=0.45, lookahead_dist=0.60)
+        metrics_tracker = BenchmarkMetricsTracker(algorithm_name=algo_name, optimal_path_length=6.0)
 
         eval_obstacles = create_eval_obstacles()
         num_rays = 64
@@ -738,7 +752,9 @@ def evaluate_and_generate_artifacts(
             d_min = float(np.min(lidar_ranges))
 
             # Update Carrot Tracker
-            cmd_vx, cmd_vy, cmd_w, head_err = carrot_tracker.update(robot_pos, robot_yaw, dt)
+            cmd_vx, cmd_vy, cmd_w, head_err, dist_to_goal, goal_reached = carrot_tracker.compute_nominal_twist(
+                (float(robot_pos[0]), float(robot_pos[1]), float(robot_yaw))
+            )
             cmd_vel = (cmd_vx, cmd_vy, cmd_w)
 
             # IMU
@@ -784,14 +800,25 @@ def evaluate_and_generate_artifacts(
                 obs.update(dt)
 
             dist_goal = float(np.linalg.norm(robot_pos - np.array(target_goal)))
+            cte = global_path.compute_cross_track_error(float(robot_pos[0]), float(robot_pos[1]))
+            intervened = bool(info.get('intervened', info.get('shield_active', False)))
+            alpha_val = float(info.get('alpha_gating', 0.0))
+            collided = (d_min < 0.05)
+            reached_goal = (dist_goal < 0.25)
+
             metrics_tracker.record_step(
-                robot_pos=robot_pos,
-                robot_yaw=robot_yaw,
-                robot_vel=robot_vel,
-                cmd_vel=np.array(cmd_vel[:2]),
-                obstacles=eval_obstacles,
+                pose=(float(robot_pos[0]), float(robot_pos[1]), float(robot_yaw)),
+                cmd_vel=cmd_vel,
+                exec_vel=(exec_vx, exec_vy, exec_w),
+                d_min=d_min,
+                cte=cte,
+                heading_err=head_err,
                 latency_ms=controller.last_latency_ms,
-                dt=dt
+                motor_rps=mot_rps,
+                intervened=intervened,
+                alpha=alpha_val,
+                collided=collided,
+                reached_goal=reached_goal
             )
 
             frames.append({
@@ -980,9 +1007,9 @@ def evaluate_and_generate_artifacts(
 
     metric_keys = [
         ('min_clearance_cm', 'Min Clearance (cm)', '#10b981', 'cm'),
-        ('path_deviation_rmse_m', 'Path RMSE (m)', '#38bdf8', 'm'),
+        ('mean_cte_m', 'Mean CTE (m)', '#38bdf8', 'm'),
         ('time_to_goal_s', 'Waktu Tempuh (s)', '#f59e0b', 's'),
-        ('latency_ms', 'Latensi Inferensi (ms)', '#ec4899', 'ms')
+        ('avg_latency_ms', 'Latensi Inferensi (ms)', '#ec4899', 'ms')
     ]
 
     for ax, (m_key, title, color, unit) in zip(axes, metric_keys):

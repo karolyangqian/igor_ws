@@ -32,6 +32,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'retrain_ai = igor_navigation.retrain_ai:main',
         ],
     },
 )
