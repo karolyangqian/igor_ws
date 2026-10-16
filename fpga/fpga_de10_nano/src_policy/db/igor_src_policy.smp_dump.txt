@@ -1,0 +1,31 @@
+
+State Machine - |igor_src_policy_de10_nano|igor_src_policy_uart:policy|mode
+Name mode.TX_END_LAST mode.TX_START_LAST mode.TX mode.CAP2 mode.CAP1 mode.CAP0 mode.RUN mode.START mode.LOAD mode.RX 
+mode.RX 0 0 0 0 0 0 0 0 0 0 
+mode.LOAD 0 0 0 0 0 0 0 0 1 1 
+mode.START 0 0 0 0 0 0 0 1 0 1 
+mode.RUN 0 0 0 0 0 0 1 0 0 1 
+mode.CAP0 0 0 0 0 0 1 0 0 0 1 
+mode.CAP1 0 0 0 0 1 0 0 0 0 1 
+mode.CAP2 0 0 0 1 0 0 0 0 0 1 
+mode.TX 0 0 1 0 0 0 0 0 0 1 
+mode.TX_START_LAST 0 1 0 0 0 0 0 0 0 1 
+mode.TX_END_LAST 1 0 0 0 0 0 0 0 0 1 
+
+State Machine - |igor_src_policy_de10_nano|igor_src_policy_uart:policy|igor_src_policy_core:core|state
+Name state.ACTIVATE state.MAC state.WEIGHT_WAIT state.WEIGHT_ADDRESS state.BIAS_TAKE state.BIAS_WAIT state.BIAS_ADDRESS state.IDLE 
+state.IDLE 0 0 0 0 0 0 0 0 
+state.BIAS_ADDRESS 0 0 0 0 0 0 1 1 
+state.BIAS_WAIT 0 0 0 0 0 1 0 1 
+state.BIAS_TAKE 0 0 0 0 1 0 0 1 
+state.WEIGHT_ADDRESS 0 0 0 1 0 0 0 1 
+state.WEIGHT_WAIT 0 0 1 0 0 0 0 1 
+state.MAC 0 1 0 0 0 0 0 1 
+state.ACTIVATE 1 0 0 0 0 0 0 1 
+
+State Machine - |igor_src_policy_de10_nano|igor_src_policy_uart:policy|igor_uart_rx:receiver|state
+Name state.11 state.10 state.01 state.00 
+state.00 0 0 0 0 
+state.01 0 0 1 1 
+state.10 0 1 0 1 
+state.11 1 0 0 1 

@@ -1,0 +1,61 @@
+
+State Machine - |igor_uart_top|igor_neural_core:neural|igor_neural_datapath:core|state
+Name state.0111 state.0110 state.0101 state.0100 state.0011 state.0010 state.0001 state.0000 
+state.0000 0 0 0 0 0 0 0 0 
+state.0001 0 0 0 0 0 0 1 1 
+state.0010 0 0 0 0 0 1 0 1 
+state.0011 0 0 0 0 1 0 0 1 
+state.0100 0 0 0 1 0 0 0 1 
+state.0101 0 0 1 0 0 0 0 1 
+state.0110 0 1 0 0 0 0 0 1 
+state.0111 1 0 0 0 0 0 0 1 
+
+State Machine - |igor_uart_top|igor_top:core|state
+Name state.FAULT state.RESULT state.RUN state.IDLE 
+state.IDLE 0 0 0 0 
+state.RUN 0 0 1 1 
+state.RESULT 0 1 0 1 
+state.FAULT 1 0 0 1 
+
+State Machine - |igor_uart_top|igor_top:core|igor_rollout_tile:tiles[3].tile|state
+Name state.FINISH state.SCORE state.WAIT_RAM state.STEP state.INIT state.IDLE 
+state.IDLE 0 0 0 0 0 0 
+state.INIT 0 0 0 0 1 1 
+state.STEP 0 0 0 1 0 1 
+state.WAIT_RAM 0 0 1 0 0 1 
+state.SCORE 0 1 0 0 0 1 
+state.FINISH 1 0 0 0 0 1 
+
+State Machine - |igor_uart_top|igor_top:core|igor_rollout_tile:tiles[2].tile|state
+Name state.FINISH state.SCORE state.WAIT_RAM state.STEP state.INIT state.IDLE 
+state.IDLE 0 0 0 0 0 0 
+state.INIT 0 0 0 0 1 1 
+state.STEP 0 0 0 1 0 1 
+state.WAIT_RAM 0 0 1 0 0 1 
+state.SCORE 0 1 0 0 0 1 
+state.FINISH 1 0 0 0 0 1 
+
+State Machine - |igor_uart_top|igor_top:core|igor_rollout_tile:tiles[1].tile|state
+Name state.FINISH state.SCORE state.WAIT_RAM state.STEP state.INIT state.IDLE 
+state.IDLE 0 0 0 0 0 0 
+state.INIT 0 0 0 0 1 1 
+state.STEP 0 0 0 1 0 1 
+state.WAIT_RAM 0 0 1 0 0 1 
+state.SCORE 0 1 0 0 0 1 
+state.FINISH 1 0 0 0 0 1 
+
+State Machine - |igor_uart_top|igor_top:core|igor_rollout_tile:tiles[0].tile|state
+Name state.FINISH state.SCORE state.WAIT_RAM state.STEP state.INIT state.IDLE 
+state.IDLE 0 0 0 0 0 0 
+state.INIT 0 0 0 0 1 1 
+state.STEP 0 0 0 1 0 1 
+state.WAIT_RAM 0 0 1 0 0 1 
+state.SCORE 0 1 0 0 0 1 
+state.FINISH 1 0 0 0 0 1 
+
+State Machine - |igor_uart_top|igor_uart_protocol:serial|igor_uart_rx:receiver|state
+Name state.11 state.10 state.01 state.00 
+state.00 0 0 0 0 
+state.01 0 0 1 1 
+state.10 0 1 0 1 
+state.11 1 0 0 1 

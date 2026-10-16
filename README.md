@@ -1,4 +1,118 @@
-# 🤖 Project IGOR: JetAuto Mecanum AMR Autonomous Navigation & Obstacle Avoidance Suite
+# IGOR: software, RTL terverifikasi, dan DE10-Nano
+
+Seluruh hasil implementasi ada di folder **`./fpga`** pada root workspace.
+`./src` tetap referensi software asli dan `./peruri-iseedesign` referensi awal.
+Software dengan perbaikan integrasi tersedia di `fpga/software_integration/`.
+
+Implementasi RTL yang mengikuti software workspace ini ada di
+[`fpga/rtl/igor_src_policy/`](fpga/rtl/igor_src_policy/README.md).
+Buka proyek Quartus 25
+[`fpga/fpga_de10_nano/src_policy/igor_src_policy.qpf`](fpga/fpga_de10_nano/src_policy/igor_src_policy.qpf).
+Pin planning sudah disertakan dan dijelaskan lengkap di
+[README board](fpga/fpga_de10_nano/src_policy/README.md).
+Semua persyaratan, edge case, serta A1–A14/B1–B6/D1–D7 dari dokumen checklist
+dipetakan pada [kesiapan implementasi](fpga/docs/IMPLEMENTATION_READINESS.md).
+
+**Dua model yang berbeda harus dibedakan.** Software `src` saat ini memakai
+PPO residual **74 → 128 → 64 → 3**. Proyek legacy dalam `fpga`
+memakai SAC **24 → 64 → 64 → 4** dan planner peta 128×128.
+Angka 18.192 siklus/400 keluaran pada dokumentasi legacy bukan hasil jaringan
+74 input. Core baru mengukur 54.348 siklus untuk inferensi Q8.8; kesamaan yang
+diuji adalah RTL terhadap model integer independen dari bobot yang sama.
+Galat terhadap model FP32 dilaporkan terpisah dalam hasil suite.
+
+Arsitektur aktual jalur source: ROS menerima 64 beam LiDAR, 6 IMU, 3 perintah
+twist, dan 1 heading → host membentuk 74 int16 Q8.8 → frame UART 153 byte
+dengan CRC8 Maxim → FPGA memvalidasi frame/domain → ROM bobot + serial MAC
+signed 16×16/akumulator 40 bit → ReLU 128/64 neuron → tiga residual dibatasi
+[-256,256] → frame respons 11 byte → host blending/filter → kinematika empat
+roda → STM32. UART default proyek baru **921600 8N1**.
+
+Pada jalur planner legacy: host menulis seluruh peta ke bank tidak aktif →
+validasi urutan/kelengkapan → commit atomik → empat tile memeriksa 512×20 pose →
+selector dengan tie-break indeks → safety gate → `motor_enable`, `v_command`,
+`omega_command`, kode gangguan, penghitung kejadian, dan last fault.
+E-stop, peta tidak valid/usang, konfigurasi berubah, timeout, hasil tidak valid,
+overflow serta batas kecepatan/perubahan menutup gate dan menolkan output.
+Abort menyimpan penyebab awal sampai reset agar log tetap dapat menjelaskan
+penolakan. Opcode 15/16 membaca penghitung/penyebab tersimpan melalui UART.
+
+**Batas integrasi:** protokol observasi 74 input tidak membawa costmap.
+`safety_permit` pada core neural berarti residual valid dan segar; izin motor
+dengan pemeriksaan peta adalah keluaran gate planner legacy. Belum ada klaim
+bahwa model baru, pemeriksa peta, dan aktuator motor sudah menyatu di FPGA.
+Controller source masih melakukan blending/filter di Jetson. Checklist A4/A5
+kurir tanpa keputusan memerlukan implementasi dan uji integrasi berikutnya.
+
+Perbaikan fail-closed software: mode hardware tidak otomatis berubah menjadi
+mock jika port hilang; timeout/CRC salah/frame salah/residual di luar rentang
+melempar error dan controller mengirim **empat RPS nol**. Hal ini diperlukan
+karena residual AI nol masih dapat menyisakan perintah operator nonnol.
+Perintah tidak finite/di luar batas, perintah kedaluwarsa, serta LiDAR hilang
+atau kedaluwarsa juga menghentikan motor. Mock harus dipilih secara eksplisit.
+
+Verifikasi dapat diulang dari `fpga`:
+
+```powershell
+python verification/src_policy/run.py --check
+python verification/run_safety_regression.py
+python verification/run_host_regression.py
+python verification/run.py all
+python verification/run.py tt_generic
+```
+
+Suite safety baru membandingkan **111.210 vektor** dengan oracle Python,
+menjangkau seluruh kode fault 0–11, seluruh kombinasi kontrol yang dienumerasi,
+batas aritmetika, urutan map/config, freshness, deadline, E-stop saat run/result,
+serta malformed UART. Daftar batas pengujian dan SHA source berada di
+`fpga/evidence/current_safety/summary.json`. Ini bukan pembuktian
+formal seluruh state/peta/urutan temporal yang mungkin.
+
+Untuk melihat **titik persis di GTKWave**, dari folder `fpga`:
+
+```powershell
+gtkwave evidence/current_safety/top.vcd evidence/current_safety/top.gtkw
+gtkwave evidence/current_safety/gate.vcd evidence/current_safety/gate.gtkw
+gtkwave evidence/current_safety/uart.vcd evidence/current_safety/uart.gtkw
+```
+
+Gunakan satuan **ns** pada tabel berikut (VCD menyimpan resolusi ps). Sinyal
+`core` berada pada `tb_safety_top.core`; CSV juga menyebut instance varian
+deadline/freshness agar tidak salah membaca output.
+
+| Bukti | Waktu ns | Yang harus terlihat |
+|---|---:|---|
+| `top.vcd`: hasil normal | 814531 | enable=1, v=15, omega=0, fault=0 |
+| E-stop di antara clock | 814535 | enable=0, v=0, omega=0, fault=2 langsung |
+| Log E-stop pada clock berikut | 814551 | event_count=3, last_fault=2 |
+| E-stop dilepas | 814572 | output tetap nol; perlu reset |
+| Peta tidak valid | 2931031 | output nol, fault=5, last_fault=5 |
+| Deadline komputasi, `deadline_core` | 3904291 | output nol, fault=8, last_fault=8 |
+| Peta tepat kedaluwarsa, `freshness_core` | 3945471 | output nol saat map_age=10000 |
+| `gate.vcd`: batas kecepatan | 11 | output nol, fault=10 |
+| `gate.vcd`: perubahan mendadak | 12 | output nol, fault=11 |
+
+Seluruh **111 checkpoint** dan konteks lainnya ada pada
+[`cases.csv`](fpga/evidence/current_safety/cases.csv),
+[`top_checkpoints.csv`](fpga/evidence/current_safety/top_checkpoints.csv),
+dan log suite. Untuk neural baru, buka `verification/src_policy/artifacts/`
+dengan save file `.gtkw` dan `*_checkpoints.csv` yang dijelaskan pada
+[README RTL](fpga/rtl/igor_src_policy/README.md).
+
+GitHub Actions tersedia di [workflow workspace](.github/workflows/rtl-verification.yml)
+dan workflow repository RTL. Job Quartus memakai runner Windows dengan Quartus
+25 terpasang; simulator memakai Icarus. Workflow mengunggah log, waveform,
+hasil numerik, dan provenance. Dua folder memiliki repository Git masing-masing;
+lihat instruksi checkout berpasangan pada checklist sebelum publikasi.
+
+**Status hardware:** sesi ini mendeteksi **No JTAG hardware available**.
+Simulasi dan kompilasi tidak menggantikan uji board. Belum diklaim: pengukuran
+STOP roda, video E-stop, daya board, latency Jetson-FPGA fisik, atau lintasan
+robot baru. Skrip capture safety dan prosedur penerimaan tersedia di checklist.
+
+---
+
+# JetAuto Mecanum AMR Autonomous Navigation & Obstacle Avoidance Suite
 
 **Project IGOR** adalah sistem navigasi dan penghindaran rintangan (*obstacle avoidance*) otonom berbasis *Curriculum-Learned Deep Reinforcement Learning* (CL-DRL) dengan lapisan keselamatan formal (*Control Barrier Function* & *mini-DWA Shield*) untuk robot fisik **Hiwonder JetAuto Mecanum AMR**.
 
@@ -223,7 +337,7 @@ ros2 run teleop_twist_joy teleop_twist_joy --ros-args -p enable_button:=4
 ```
 
 ### Metode C: Navigasi Otonom Nav2 (Autonomous Global Planning)
-Saat paket Nav2 dijalankan, controller server Nav2 secara alami mempublikasikan perintah kecepatan haluan ke `/cmd_vel`. Controller IGOR akan menyaring perintah tersebut dengan pengereman asimetris adaptif dan menjamin lintasan 100% bebas tabrakan.
+Saat paket Nav2 dijalankan, controller server Nav2 mempublikasikan perintah ke `/cmd_vel`. Controller IGOR menyaring perintah dengan pengereman asimetris adaptif; keselamatan lintasan fisik tetap perlu divalidasi terhadap sensor, peta, pengereman, dan fixture robot sebenarnya.
 
 ### Metode D: Uji Perintah Langsung via CLI ROS 2
 ```bash
