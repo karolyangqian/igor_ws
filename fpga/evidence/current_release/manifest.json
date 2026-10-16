@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_utc": "2026-10-16T11:06:37.650907+00:00",
+  "generated_utc": "2026-10-16T11:20:57.864451+00:00",
   "scope": "Digital simulation, source-bound Quartus build and handoff images; no physical FPGA/robot acceptance",
   "hardware_tests_executed": false,
   "projects": {
@@ -78,6 +78,10 @@
     "assets/neural_24_64_64_4/weights_q8_8.h": {
       "sha256": "3936101aad3a64257e7c6cce62c0d3de47d7366185f72826cbd2f0ea209d0ef2",
       "bytes": 27599
+    },
+    "Bennaya.md": {
+      "sha256": "1329b55267e79686ba4a4a7bdbd50380f7155d9b4419cac584c43e0b1c1cbfd3",
+      "bytes": 52507
     },
     "bitstreams/igor_planner.sof": {
       "sha256": "84295ae937ab4a759efa1e4d21ebda09805559038bc4fef971894a8946d701d2",
@@ -212,7 +216,7 @@
       "bytes": 3008
     },
     "evidence/current_acceptance/audit.json": {
-      "sha256": "e9e8b3d24d001657b24b5acdeb475836a23cabc1b239fddca2f22eab33ef566c",
+      "sha256": "096028f85751c3af68ad7088699ba1d83fadd5a0db96554e2994cfb8f8366ee6",
       "bytes": 3877
     },
     "evidence/current_board_wrapper/board.gtkw": {
