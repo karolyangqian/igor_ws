@@ -18,7 +18,10 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Stage Tiny Tapeout source directory
-        run: cp -a src-chip src
+        run: |
+          mkdir -p src
+          cp -a src-chip/. src/
+          test -f src/defines.vh
 
       - name: Build GDS
         timeout-minutes: 150
