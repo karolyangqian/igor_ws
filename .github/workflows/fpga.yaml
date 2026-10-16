@@ -12,12 +12,6 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v6
 
-      - name: Stage Tiny Tapeout source directory
-        run: |
-          mkdir -p src
-          cp -a src-chip/. src/
-          test -f src/defines.vh
-
       - name: Select FPGA block RAM
         run: |
           python3 - <<'PY'

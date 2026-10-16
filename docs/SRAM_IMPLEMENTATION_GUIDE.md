@@ -93,18 +93,18 @@ contexts share this single physical memory port.
 | File | Role |
 |---|---|
 | [info.yaml](../info.yaml) | Tiny Tapeout top, tile allocation, pin descriptions, and RTL manifest |
-| [src-chip/igorchip_top.v](../src-chip/igorchip_top.v) | Scheduler, instruction execution, host registers, address arbitration, and write protection |
-| [src-chip/program_host.v](../src-chip/program_host.v) | Synchronized host SPI transport |
-| [src-chip/program_memory.v](../src-chip/program_memory.v) | Physical macro wrapper and alternate FPGA/reference implementations |
-| [src-chip/sram_256x16_bb.v](../src-chip/sram_256x16_bb.v) | Synthesis black-box declaration |
-| [src-chip/defines.vh](../src-chip/defines.vh) | Eight-bit program address width |
+| [src/igorchip_top.v](../src/igorchip_top.v) | Scheduler, instruction execution, host registers, address arbitration, and write protection |
+| [src/program_host.v](../src/program_host.v) | Synchronized host SPI transport |
+| [src/program_memory.v](../src/program_memory.v) | Physical macro wrapper and alternate FPGA/reference implementations |
+| [src/sram_256x16_bb.v](../src/sram_256x16_bb.v) | Synthesis black-box declaration |
+| [src/defines.vh](../src/defines.vh) | Eight-bit program address width |
 | [tools/config.py](../tools/config.py) | Matching Python program depth of 256 |
-| [src-chip/config.json](../src-chip/config.json) | Macro views, corners, placement, flow substitutions, and physical checks |
-| [src-chip/sram_geometry.tcl](../src-chip/sram_geometry.tcl) | Actual LEF power-column extraction and interface-pin clearance guards |
-| [src-chip/pdn_cfg.tcl](../src-chip/pdn_cfg.tcl) | Standard-cell rails and SRAM-aligned Metal4 stripes |
-| [src-chip/power_sram.tcl](../src-chip/power_sram.tcl) | Supply extension through the macro abstraction and connectivity checks |
+| [src/config.json](../src/config.json) | Macro views, corners, placement, flow substitutions, and physical checks |
+| [src/sram_geometry.tcl](../src/sram_geometry.tcl) | Actual LEF power-column extraction and interface-pin clearance guards |
+| [src/pdn_cfg.tcl](../src/pdn_cfg.tcl) | Standard-cell rails and SRAM-aligned Metal4 stripes |
+| [src/power_sram.tcl](../src/power_sram.tcl) | Supply extension through the macro abstraction and connectivity checks |
 | [librelane_plugin_program_sram.py](../librelane_plugin_program_sram.py) | Registered LibreLane power and LVS steps |
-| [src-chip/sram_256x16_lvs.spice](../src-chip/sram_256x16_lvs.spice) | Complete abstract physical pin interface for integration LVS |
+| [src/sram_256x16_lvs.spice](../src/sram_256x16_lvs.spice) | Complete abstract physical pin interface for integration LVS |
 | [tools/netgen_json.py](../tools/netgen_json.py) | Scoped Netgen input and report compatibility |
 | [test/ihp_sram/README.md](../test/ihp_sram/README.md) | Provenance of the unchanged foundry simulation models |
 | [test/test_sram.py](../test/test_sram.py) | Macro and wrapper behavior tests |
@@ -124,7 +124,7 @@ The source snapshots cover the SRAM integration layer. The immutable
 repository revision supplies the surrounding engine, host transport,
 firmware tools, test peers, and Tiny Tapeout metadata.
 
-Use the active manifest and `src-chip/igorchip_top.v` to determine implemented
+Use the active manifest and `src/igorchip_top.v` to determine implemented
 behavior. The source directory also contains earlier standalone modules
 retained for history. The active instruction encodings are implemented in
 the current top and `tools/assembler.py`.
@@ -223,9 +223,9 @@ Choose an empty, dedicated `PDK_ROOT`. The pinned installer initializes an
 IHP-Open-PDK Git checkout there and selects its exact source revision. It
 creates `ihp-sg13cmos5l/SOURCES` with the provenance.
 
-The generated `src-chip/user_config.json` supplies the top, source files, die
+The generated `src/user_config.json` supplies the top, source files, die
 area, official pin template, `VPWR`, and `VGND`. The support tool merges it
-with `src-chip/config.json` into `src-chip/config_merged.json`.
+with `src/config.json` into `src/config_merged.json`.
 
 Expected after configuration generation:
 
@@ -324,7 +324,7 @@ program_memory instance in the top: program_store
 Flattened physical instance: program_store.i_sram
 ~~~
 
-Keep `JP_PROG_AW = 8` in `src-chip/defines.vh` and `PROGRAM_DEPTH = 256` in
+Keep `JP_PROG_AW = 8` in `src/defines.vh` and `PROGRAM_DEPTH = 256` in
 `tools/config.py`. The host identification register returns `0xA7`, and
 `PROGRAM_AW` returns eight.
 
@@ -478,7 +478,7 @@ The separate STA reports qualify physical timing.
 
 ## 7. Configure the physical macro
 
-Copy the complete reference `src-chip/config.json` from the source snapshots.
+Copy the complete reference `src/config.json` from the source snapshots.
 Its `MACROS` entry supplies all physical and timing views.
 
 | Flow corner | SRAM characterization file |
@@ -563,7 +563,7 @@ from pathlib import Path
 import librelane_plugin_program_sram
 from librelane.flows import Flow
 
-config = json.loads(Path("src-chip/config.json").read_text())
+config = json.loads(Path("src/config.json").read_text())
 flow_type = Flow.factory.get("Classic").Substitute(
     config["meta"]["substituting_steps"]
 )
@@ -641,7 +641,7 @@ spacing of 0.21 micrometers.
 
 ### 9.3 Generate the grid
 
-`src-chip/pdn_cfg.tcl` creates:
+`src/pdn_cfg.tcl` creates:
 
 - A CORE voltage domain on the resolved VPWR and VGND nets.
 - Metal4 columns aligned to the SRAM's supply geometry.
@@ -715,7 +715,7 @@ the chosen macro's actual views.
 
 ### 10.1 Supply the complete port interface
 
-The abstract `src-chip/sram_256x16_lvs.spice` declares all 109 physical names.
+The abstract `src/sram_256x16_lvs.spice` declares all 109 physical names.
 It is loaded through:
 
 ~~~json
@@ -1373,22 +1373,22 @@ print("All 32 reference-source checksums match")
 
 | File | SHA-256 of LF-normalized source |
 |---|---|
-| `src-chip/program_memory.v` | `4b917488e659f82ab924d49b95ff2db3437fd48dfca91eed2aeaabad13ee34ac` |
-| `src-chip/sram_256x16_bb.v` | `e1b2050253748f8dbece08016e7f518e221cac5f11735f5c4fd508ab0a16cd36` |
-| `src-chip/config.json` | `b3204c41cf1924f7739b3c30c10db02291896ac7662c35309cf2998292800d3d` |
-| `src-chip/sram_geometry.tcl` | `00b2d4f5268f3a914a5672bc082831831a6fb7929af086b35d7533597c36cd4a` |
-| `src-chip/pdn_cfg.tcl` | `373b2392edf23c33ca311a42955cbf28ef22189a2e242f9f1917a075ef7a4652` |
-| `src-chip/power_sram.tcl` | `808ed559f59e32520f6209bbb8263b8e18751b128b98791504ab56812266a676` |
+| `src/program_memory.v` | `4b917488e659f82ab924d49b95ff2db3437fd48dfca91eed2aeaabad13ee34ac` |
+| `src/sram_256x16_bb.v` | `e1b2050253748f8dbece08016e7f518e221cac5f11735f5c4fd508ab0a16cd36` |
+| `src/config.json` | `b3204c41cf1924f7739b3c30c10db02291896ac7662c35309cf2998292800d3d` |
+| `src/sram_geometry.tcl` | `00b2d4f5268f3a914a5672bc082831831a6fb7929af086b35d7533597c36cd4a` |
+| `src/pdn_cfg.tcl` | `373b2392edf23c33ca311a42955cbf28ef22189a2e242f9f1917a075ef7a4652` |
+| `src/power_sram.tcl` | `808ed559f59e32520f6209bbb8263b8e18751b128b98791504ab56812266a676` |
 | `librelane_plugin_program_sram.py` | `a17fc86bd64130de9cf0a13eb82036ac9eabacee0be1644b04649673f25b7f7f` |
-| `src-chip/sram_256x16_lvs.spice` | `3016e308b4485554172b5f6c815535d3d6860097d568015eb390d6f88ab08d09` |
+| `src/sram_256x16_lvs.spice` | `3016e308b4485554172b5f6c815535d3d6860097d568015eb390d6f88ab08d09` |
 | `tools/netgen_json.py` | `181a2bb1b2359c9634143763c751b130d3dfa547fe88f480bb007aa7ca82802e` |
 | `test/Makefile` | `2365c553f14cb8aa890d3423bc997699cc002b8385e831c7a924d5e33f741017` |
 | `test/test_sram.py` | `f427afb39e6504039db09b2238ac6ad384cda088a8736e4828e7ab3c7c08b45a` |
 | `.github/workflows/gds.yaml` | `cde23aba1a499e72189d928333b1052c0ccdfc1f148434d6290386a87181b12e` |
 | `info.yaml` | `83c3c5ec78920b667ca26b085daf7813a51a8998d3f2efed735a7f62d28bedb2` |
-| `src-chip/igorchip_top.v` | `9f7425b4b35eb6e5dc652dc3ed869b953de545e55ca3017b6ef4aaf4012624f1` |
-| `src-chip/program_host.v` | `acd1545244d489617515b320d4eed9b5c0b522e750af74ce88a3e1f226054686` |
-| `src-chip/defines.vh` | `bee2b34a40efbacccd23d2c53a208a63d1a172e565d3a4ffb786ef04b373d0bf` |
+| `src/igorchip_top.v` | `9f7425b4b35eb6e5dc652dc3ed869b953de545e55ca3017b6ef4aaf4012624f1` |
+| `src/program_host.v` | `acd1545244d489617515b320d4eed9b5c0b522e750af74ce88a3e1f226054686` |
+| `src/defines.vh` | `bee2b34a40efbacccd23d2c53a208a63d1a172e565d3a4ffb786ef04b373d0bf` |
 | `tools/config.py` | `6310c839f095c898a78bd1825ca2ef129b84043d3608104d76a101380884b191` |
 | `tools/host.py` | `43c9fc722d71137e05f6f371f5a774adcc6ece088555acb447fc412678870924` |
 | `tools/assembler.py` | `ce18e60c3e5b16dce8a1ef7233a82fedac52eda284e789385182d85abda01861` |
@@ -1406,7 +1406,7 @@ print("All 32 reference-source checksums match")
 | `.github/workflows/fpga.yaml` | `f0c146c33a2e62becab3fb5573c703c17820083d38e65dc767b4896e148e5080` |
 | `.github/workflows/docs.yaml` | `4ab03b32e38e4ae604df854def95675b8b82398816fd3bd6dd7e143c7ec887b9` |
 
-### Snapshot 1: src-chip/program_memory.v
+### Snapshot 1: src/program_memory.v
 
 ~~~verilog
 `default_nettype none
@@ -1459,7 +1459,7 @@ module program_memory (
 endmodule
 ~~~
 
-### Snapshot 2: src-chip/sram_256x16_bb.v
+### Snapshot 2: src/sram_256x16_bb.v
 
 ~~~verilog
 `include "defines.vh"
@@ -1482,7 +1482,7 @@ endmodule
 `endif
 ~~~
 
-### Snapshot 3: src-chip/config.json
+### Snapshot 3: src/config.json
 
 ~~~json
 {
@@ -1623,7 +1623,7 @@ endmodule
 }
 ~~~
 
-### Snapshot 4: src-chip/sram_geometry.tcl
+### Snapshot 4: src/sram_geometry.tcl
 
 ~~~tcl
 # SPDX-License-Identifier: Apache-2.0
@@ -1699,7 +1699,7 @@ proc jp_sram_columns {} {
 }
 ~~~
 
-### Snapshot 5: src-chip/pdn_cfg.tcl
+### Snapshot 5: src/pdn_cfg.tcl
 
 ~~~tcl
 # SPDX-License-Identifier: Apache-2.0
@@ -1738,7 +1738,7 @@ add_pdn_stripe -grid stdcell_grid -layer Metal1 -width $::env(PDN_RAIL_WIDTH) -f
 add_pdn_connect -grid stdcell_grid -layers {Metal1 Metal4}
 ~~~
 
-### Snapshot 6: src-chip/power_sram.tcl
+### Snapshot 6: src/power_sram.tcl
 
 ~~~tcl
 # SPDX-License-Identifier: Apache-2.0
@@ -1801,11 +1801,11 @@ class PowerProgramSRAM(OpenROADStep):
     config_vars = OpenROADStep.config_vars + [
         Variable("PROGRAM_SRAM_GEOMETRY", ConfigPath,
                  "SRAM power-column geometry helper",
-                 default=ConfigPath(str(Path(__file__).resolve().parent / "src-chip" / "sram_geometry.tcl")))
+                 default=ConfigPath(str(Path(__file__).resolve().parent / "src" / "sram_geometry.tcl")))
     ]
 
     def get_script_path(self):
-        return str(Path(__file__).resolve().parent / "src-chip" / "power_sram.tcl")
+        return str(Path(__file__).resolve().parent / "src" / "power_sram.tcl")
 
 
 @Step.factory.register()
@@ -1835,7 +1835,7 @@ class ProgramSRAMLVS(LVS):
         return result
 ~~~
 
-### Snapshot 8: src-chip/sram_256x16_lvs.spice
+### Snapshot 8: src/sram_256x16_lvs.spice
 
 ~~~spice
 * SPDX-License-Identifier: Apache-2.0
@@ -1946,7 +1946,7 @@ def repair_report(path):
 SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
-SRC_DIR = $(PWD)/../src-chip
+SRC_DIR = $(PWD)/../src
 PROJECT_SOURCES = defines.vh igorchip_top.v program_host.v program_memory.v sram_256x16_bb.v top.v
 SRAM_MODEL_DIR = $(PWD)/ihp_sram
 COMPILE_ARGS += -DSIM -DFUNCTIONAL
@@ -2014,7 +2014,7 @@ class SRAMTests(unittest.TestCase):
             sources = [ROOT / "test/ihp_sram/RM_IHPSG13_1P_core_behavioral_bm_bist.v",
                        ROOT / "test/ihp_sram/RM_IHPSG13_1P_256x16_c2_bm_bist.v", *extra_sources]
             compiled = subprocess.run(["iverilog", "-g2012", "-DSIM", "-DFUNCTIONAL",
-                                       f"-I{ROOT / 'src-chip'}", "-s", "tb", "-o", str(p / "sim"),
+                                       f"-I{ROOT / 'src'}", "-s", "tb", "-o", str(p / "sim"),
                                        str(p / "tb.v"), *map(str, sources)], capture_output=True, text=True)
             self.assertEqual(compiled.returncode, 0, compiled.stderr)
             result = subprocess.run(["vvp", str(p / "sim")], capture_output=True, text=True, timeout=15)
@@ -2062,7 +2062,7 @@ class SRAMTests(unittest.TestCase):
             program_memory memory(.clk(clk), .rst_n(rst_n), .address(addr),
               .write_enable(we), .high_byte(high), .write_data(d), .read_data(q));
             task tick; begin #5; clk=0; #5; clk=1; end endtask
-        ''', [ROOT / "src-chip/program_memory.v"])
+        ''', [ROOT / "src/program_memory.v"])
 ~~~
 
 ### Snapshot 12: .github/workflows/gds.yaml
@@ -2101,8 +2101,8 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
           path: |
-            src-chip/config*.json
-            src-chip/user_config*.json
+            src/config*.json
+            src/user_config*.json
             runs/wokwi/**/config*.json
             runs/wokwi/**/*.log
             runs/wokwi/**/*.rpt

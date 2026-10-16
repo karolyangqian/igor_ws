@@ -142,7 +142,7 @@ class ModelTests(unittest.TestCase):
     def test_geometry_matches_rtl(self):
         import re
         from pathlib import Path
-        defines = (Path(__file__).resolve().parents[1] / 'src-chip/defines.vh').read_text()
+        defines = (Path(__file__).resolve().parents[1] / 'src/defines.vh').read_text()
         self.assertEqual(int(re.search(r'`define JP_PROG_DEPTH\s+(\d+)', defines)[1]), PROGRAM_DEPTH)
         self.assertEqual(1 << int(re.search(r'`define JP_PROG_AW\s+(\d+)', defines)[1]), PROGRAM_DEPTH)
 

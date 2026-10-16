@@ -9,8 +9,8 @@ map and four-context scheduler. UART, SPI, and I2C firmware use the same storage
 
 ## RTL and programming
 
-[src-chip/program_memory.v](../src-chip/program_memory.v) connects the real macro.
-[src-chip/sram_256x16_bb.v](../src-chip/sram_256x16_bb.v) supplies its synthesis declaration.
+[src/program_memory.v](../src/program_memory.v) connects the real macro.
+[src/sram_256x16_bb.v](../src/sram_256x16_bb.v) supplies its synthesis declaration.
 The instance becomes `program_store.i_sram` after flattening.
 
 | Signal | Connection |
@@ -64,13 +64,13 @@ VDD and VSS connect through the flow's global rules. The PDN scripts read
 VDD_NET and GND_NET from LibreLane, keeping the grid and connectivity
 checks aligned with its resolved supply configuration.
 
-[src-chip/sram_geometry.tcl](../src-chip/sram_geometry.tcl) reads the supply-column
+[src/sram_geometry.tcl](../src/sram_geometry.tcl) reads the supply-column
 positions from the installed LEF, including the irregular middle band.
-[src-chip/pdn_cfg.tcl](../src-chip/pdn_cfg.tcl) aligns 2.1-micrometer Metal4 stripes
+[src/pdn_cfg.tcl](../src/pdn_cfg.tcl) aligns 2.1-micrometer Metal4 stripes
 with the macro and retains the ordinary standard-cell grid elsewhere.
 
 The root LibreLane plugin inserts `Project.PowerProgramSRAM` immediately
-after `OpenROAD.GeneratePDN`. [src-chip/power_sram.tcl](../src-chip/power_sram.tcl)
+after `OpenROAD.GeneratePDN`. [src/power_sram.tcl](../src/power_sram.tcl)
 extends the 20 power and 20 ground columns through the macro abstraction
 to the tile boundaries. Supply-connectivity errors stop the flow.
 
@@ -129,7 +129,7 @@ Successful builds provide the submission and viewer artifacts as usual.
 
 ## LVS interface
 
-[src-chip/sram_256x16_lvs.spice](../src-chip/sram_256x16_lvs.spice) provides an abstract
+[src/sram_256x16_lvs.spice](../src/sram_256x16_lvs.spice) provides an abstract
 109-pin interface derived from the official LEF. Contiguous descending bus
 order enables Netgen vector inference. EXTRA_SPICE_MODELS loads this view
 before the powered top-level netlist. This checks integration wiring around

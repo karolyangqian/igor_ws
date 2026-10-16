@@ -5,7 +5,7 @@
 SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
-SRC_DIR = $(PWD)/../src-chip
+SRC_DIR = $(PWD)/../src
 PROJECT_SOURCES = defines.vh igorchip_top.v program_host.v program_memory.v sram_256x16_bb.v top.v
 SRAM_MODEL_DIR = $(PWD)/ihp_sram
 COMPILE_ARGS += -DSIM -DFUNCTIONAL

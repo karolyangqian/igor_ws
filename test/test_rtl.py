@@ -85,9 +85,9 @@ class RTLTests(unittest.TestCase):
                 "iverilog", "-g2012", "-DSIM", "-DFUNCTIONAL",
                 *(["-DJP_FPGA_SYNC_MEMORY"] if os.getenv("JP_TEST_FPGA") == "1" else []),
                 *(["-DJP_REGISTER_MEMORY"] if os.getenv("JP_TEST_REGISTER") == "1" else []),
-                "-s", "integration_tb", f"-I{ROOT / 'src-chip'}", f"-I{path}",
-                "-o", str(path / "sim.out"), str(ROOT / "src-chip/igorchip_top.v"),
-                str(ROOT / "src-chip/program_host.v"), str(ROOT / "src-chip/program_memory.v"),
+                "-s", "integration_tb", f"-I{ROOT / 'src'}", f"-I{path}",
+                "-o", str(path / "sim.out"), str(ROOT / "src/igorchip_top.v"),
+                str(ROOT / "src/program_host.v"), str(ROOT / "src/program_memory.v"),
                 str(ROOT / "test/ihp_sram/RM_IHPSG13_1P_core_behavioral_bm_bist.v"),
                 str(ROOT / "test/ihp_sram/RM_IHPSG13_1P_256x16_c2_bm_bist.v"),
                 str(ROOT / "test/integration_tb.v")

@@ -18,11 +18,11 @@ def main() -> None:
     if args.netlist:
         sources += [args.netlist.resolve()] + [path.resolve() for path in args.cell_models]
     else:
-        sources += [root / 'src-chip/igorchip_top.v', root / 'src-chip/program_host.v', root / 'src-chip/program_memory.v']
+        sources += [root / 'src/igorchip_top.v', root / 'src/program_host.v', root / 'src/program_memory.v']
     sources += [root / 'test/ihp_sram/RM_IHPSG13_1P_core_behavioral_bm_bist.v',
                 root / 'test/ihp_sram/RM_IHPSG13_1P_256x16_c2_bm_bist.v']
     runner = get_runner('icarus')
-    runner.build(sources=sources, includes=[root / 'src-chip'],
+    runner.build(sources=sources, includes=[root / 'src'],
                  hdl_toplevel='tb', build_dir=build, build_args=['-g2012', '-DSIM', '-DFUNCTIONAL'])
     sys.path.insert(0, str(root / 'test'))
     results = runner.test(test_module='test', hdl_toplevel='tb', test_dir=build,

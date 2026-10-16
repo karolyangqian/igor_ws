@@ -13,26 +13,15 @@ project:
   # Your top module name must start with "tt_um_". Make it unique by including your github username:
   top_module:  "tt_um_igorchip"
 
-  # GitHub Actions stages ./src-chip as ./src for Tiny Tapeout compatibility.
-  # Keep every HDL source in src-chip listed here so the staged design is
-  # exactly the design presented to Tiny Tapeout.
+  # List your project's source files here.
+  # Source files must be in ./src and you must list each source file separately, one per line.
+  # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
     - "defines.vh"
-    - "bit_engine.v"
-    - "dm.v"
-    - "edge_units.v"
-    - "fifo.v"
-    - "gpio.v"
-    - "host_if.v"
     - "igorchip_top.v"
-    - "prog_mem.v"
     - "program_host.v"
     - "program_memory.v"
-    - "scheduler.v"
     - "sram_256x16_bb.v"
-    - "thread.v"
-    - "timing.v"
-    - "top.v"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
