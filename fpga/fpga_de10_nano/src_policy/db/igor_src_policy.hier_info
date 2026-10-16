@@ -6,15 +6,15 @@ KEY[1] => comb.IN1
 KEY[1] => stop_sync[0].DATAIN
 KEY[1] => stop_latched.ENA
 UART_RX => UART_RX.IN1
-UART_TX <= igor_src_policy_uart:policy.uart_tx
-LED[0] <= igor_src_policy_uart:policy.safety_permit
-LED[1] <= rst_n.DB_MAX_OUTPUT_PORT_TYPE
-LED[2] <= igor_src_policy_uart:policy.response_valid
-LED[3] <= stop_active.DB_MAX_OUTPUT_PORT_TYPE
-LED[4] <= igor_src_policy_uart:policy.error_code
-LED[5] <= igor_src_policy_uart:policy.error_code
-LED[6] <= igor_src_policy_uart:policy.error_code
-LED[7] <= igor_src_policy_uart:policy.error_code
+UART_TX << igor_src_policy_uart:policy.uart_tx
+LED[0] << igor_src_policy_uart:policy.safety_permit
+LED[1] << rst_n.DB_MAX_OUTPUT_PORT_TYPE
+LED[2] << igor_src_policy_uart:policy.response_valid
+LED[3] << stop_active.DB_MAX_OUTPUT_PORT_TYPE
+LED[4] << igor_src_policy_uart:policy.error_code
+LED[5] << igor_src_policy_uart:policy.error_code
+LED[6] << igor_src_policy_uart:policy.error_code
+LED[7] << igor_src_policy_uart:policy.error_code
 
 
 |igor_src_policy_de10_nano|igor_src_policy_uart:policy

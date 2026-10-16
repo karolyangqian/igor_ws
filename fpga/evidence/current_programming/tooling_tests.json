@@ -1,0 +1,18 @@
+﻿{
+    "cases":  [
+                  "inspect_detects_fpga_at_2_and_bypasses_hps_at_1_without_programming",
+                  "whatif_does_not_program",
+                  "hps_selection_rejected",
+                  "missing_cable_rejected",
+                  "missing_device_index_rejected",
+                  "tampered_sof_hash_rejected",
+                  "failed_full_source_build_release_check_rejected",
+                  "explicit_program_reaches_only_fake_tool_with_correct_arguments"
+              ],
+    "physical_hardware_accessed":  false,
+    "schema":  1,
+    "evidence_kind":  "isolated fake executable fixture; not hardware evidence",
+    "count":  8,
+    "utc":  "2026-10-16T10:56:11.4408418Z",
+    "status":  "PASS"
+}

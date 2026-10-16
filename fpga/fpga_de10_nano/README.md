@@ -1,29 +1,31 @@
-# IGOR DE10-Nano · Cyclone V 5CSEBA6U23I7
+# DE10-Nano: pilih project yang sesuai
 
-Untuk software workspace `../../src` yang memakai **74 → 128 → 64 → 3**,
-gunakan **[src_policy/igor_src_policy.qpf](src_policy/igor_src_policy.qpf)** dan
-[README pin planning serta arsitekturnya](src_policy/README.md).
-Proyek `quartus/igor.qpf` di bawah adalah planner peta + neural legacy
-**24 → 64 → 64 → 4**, dengan protokol berbeda. Jangan menukar bitstream.
-Tiga file safety/protokol board sudah disamakan dengan source kanonik saat ini;
-hasil kompilasi baru berada di `quartus/compile_current.log` dan
-`quartus/output_files/`, sedangkan angka historis tetap merujuk bukti asalnya.
+Seluruh paket `fpga` harus dipertahankan, karena kedua QSF membaca source
+kanonik `../../rtl`. Folder `rtl` salinan board adalah referensi kompatibilitas;
+source build aktual berada di `fpga/rtl`.
 
-Top entity: **igor_uart_top**. Clock desain: **50 MHz**.
+| Profil | Project | Top | Host UART |
+|---|---|---|---|
+| PPO dari software 74-128-64-3 | [src_policy/igor_src_policy.qpf](src_policy/igor_src_policy.qpf) | igor_src_policy_de10_nano | 921600, request 153/respons 11 byte, CRC8 Maxim |
+| Planner peta + gate + neural legacy 24-64-64-4 | [quartus/igor.qpf](quartus/igor.qpf) | igor_uart_top | 115200, frame 8 byte, CRC8 0x07 |
 
-| Entry point | File |
-|---|---|
-| Quartus project | [quartus/igor.qpf](quartus/igor.qpf) |
-| Programming image | [quartus/output_files/igor.sof](quartus/output_files/igor.sof) |
-| Source | [rtl/](rtl) |
-| ROM dan neural vectors | [assets/](assets) |
-| Pin assignment | [quartus/pin_assignment.tcl](quartus/pin_assignment.tcl) |
-| Host test | [host/igor_uart.py](host/igor_uart.py) |
+Kedua profil memakai 5CSEBA6U23I7 dan clock 50 MHz. Pin planning dan SDC
+sudah disertakan. Buka QPF, lalu Assignments > Pin Planner untuk melihat
+lokasi dan standar I/O. UART fabric berada di JP1 pin 1 RX, pin 2 TX dan
+pin 12/30 GND, menggunakan TTL 3,3 V. KEY0 reset; KEY1 E-stop demo.
 
-Copy folder board ini secara utuh untuk menjaga source path dan ROM tetap tersedia. Buka QPF, pilih device/top yang sesuai, lalu gunakan Quartus Programmer untuk memuat SOF melalui JTAG.
+Planner LED0=gate enable, LED1=reset dilepas, LED2=busy, LED3=done,
+LED 7:4=fault. SW2 ready inhibit dan SW3 protective stop; SW 0/1 tidak dipakai.
+Arti LED policy berbeda; lihat [README policy](src_policy/README.md).
 
-Panduan lengkap: [Programming FPGA](../docs/FPGA_PROGRAMMING.md), [Quickstart](../docs/QUICKSTART.md), dan [Resource/timing](../docs/PERFORMANCE.md).
+Hasil terbaru, warnings dan hash:
+[BUILD_STATUS.md](../BUILD_STATUS.md),
+[receipt planner](../evidence/current_builds/planner.json),
+[receipt policy](../evidence/current_builds/source_policy.json),
+[release manifest](../evidence/current_release/manifest.json).
+Programming: [BOARD_PROGRAMMING.md](../docs/BOARD_PROGRAMMING.md).
 
-Host UART planner memakai **115200 8N1** dengan TTL 3,3 V. Gunakan port adapter FPGA yang sebenarnya. Reset KEY0 sebelum setiap DWA scene. ROM readback serta 100-vector neural check tersedia pada host script. Transport motor memakai project dan protocol terpisah.
-
-Build evidence dan hash image tercantum pada [build_evidence.json](../evidence/build_evidence.json). Cakupan acceptance ada pada [Hasil dan cakupan](../docs/RESULTS_AND_SCOPE.md).
+Host legacy [igor_uart.py](host/igor_uart.py) menyediakan status, ROM readback,
+100-vector neural check dan DWA demo. RESET KEY0 sebelum setiap scene. Map
+freshness dan command lease 20 ms harus diperhitungkan. Transport motor memiliki
+protokol terpisah; SOF planner ini belum langsung menserialkan pesan motor.

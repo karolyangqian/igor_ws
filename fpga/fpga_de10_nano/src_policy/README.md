@@ -76,7 +76,7 @@ clock penerima; path komputasi internal tetap dianalisis.
 
 ## Reproduksi verifikasi dan kompilasi
 
-Dari folder `peruri-iseedesign`:
+Dari folder `igor_ws/fpga`:
 
 ```powershell
 python verification/src_policy/run.py --check
@@ -97,7 +97,8 @@ Log build ada pada `compile.log`; hasil aktual ada pada
 harus dibaca dari hasil build saat ini, bukan angka proyek legacy pada halaman
 utama. Bukti yang dibekukan dicatat di `../../evidence/current_release/`.
 
-Untuk operasi software:
+Untuk operasi software gunakan workspace yang diperbaiki pada
+`fpga/software_integration`, lalu build/source sesuai README di folder itu:
 
 ```bash
 ros2 launch igor_bringup bringup.launch.py algorithm:=cl_drl_cbf use_fpga:=true fpga_port:=/dev/fpga fpga_baudrate:=921600

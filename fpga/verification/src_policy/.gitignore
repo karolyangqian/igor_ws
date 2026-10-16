@@ -1,5 +1,4 @@
 artifacts/*.vvp
 artifacts/*.vcd
 artifacts/*.fst
-artifacts/*.hex
 *.gtkw.bak

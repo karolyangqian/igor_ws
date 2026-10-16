@@ -1,0 +1,56 @@
+{
+  "status": "PASS",
+  "started_utc": "2026-10-16T10:54:21.518628+00:00",
+  "suites": [
+    "host"
+  ],
+  "evidence_kind": "Software and RTL simulation; no physical FPGA or motor measurement",
+  "hardware_tests_executed": false,
+  "python": "3.11.9",
+  "runner_sha256": "5e7b03382c64288c125a793c796525b9668a29c08ba828d57d68952b793ad965",
+  "steps": [
+    {
+      "name": "host",
+      "command": [
+        "C:\\Users\\William Anthony\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "verification/run_host_regression.py"
+      ],
+      "cwd": ".",
+      "started_utc": "2026-10-16T10:54:21.519627+00:00",
+      "status": "PASS",
+      "log": "host.log",
+      "returncode": 0,
+      "elapsed_seconds": 0.531,
+      "log_sha256": "b7dcfba215506f95550c1ce3bc1c649a4b8919f6d7f6a7d6905fd7e42db52ddf"
+    },
+    {
+      "name": "lidar",
+      "command": [
+        "C:\\Users\\William Anthony\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "verification/run_lidar_regression.py"
+      ],
+      "cwd": ".",
+      "started_utc": "2026-10-16T10:54:22.067022+00:00",
+      "status": "PASS",
+      "log": "lidar.log",
+      "returncode": 0,
+      "elapsed_seconds": 0.344,
+      "log_sha256": "acd3354f6ecfc9fa4f24d1d9868ab6e3751fa79654cbc151168c59f532a5d00b"
+    },
+    {
+      "name": "hardware_capture_fixtures",
+      "command": [
+        "C:\\Users\\William Anthony\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+        "verification/test_capture_hardware_safety.py"
+      ],
+      "cwd": ".",
+      "started_utc": "2026-10-16T10:54:22.417815+00:00",
+      "status": "PASS",
+      "log": "hardware_capture_fixtures.log",
+      "returncode": 0,
+      "elapsed_seconds": 0.125,
+      "log_sha256": "a2e696858cc8b4ba2bb9edaa21a9030c678af611a15d8a819dda5a0984c793e9"
+    }
+  ],
+  "completed_utc": "2026-10-16T10:54:22.547674+00:00"
+}
