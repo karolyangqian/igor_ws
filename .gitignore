@@ -6,3 +6,5 @@ build/
 .venv/
 test/sim_build/
 test/results.xml
+install/
+log/
