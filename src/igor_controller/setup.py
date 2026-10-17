@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'controller_node = igor_controller.controller_node:main',
+            'waypoint_global_planner_node = igor_controller.waypoint_global_planner_node:main',
         ],
     },
 )

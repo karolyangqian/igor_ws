@@ -70,6 +70,12 @@ def generate_launch_description():
         description='Control loop frequency in Hz'
     )
 
+    launch_planner_arg = DeclareLaunchArgument(
+        'launch_planner',
+        default_value='true',
+        description='Whether to launch the Igor Waypoint Global Planner Action Server'
+    )
+
     # Launch Configurations
     algorithm = LaunchConfiguration('algorithm')
     use_fpga = LaunchConfiguration('use_fpga')
@@ -77,6 +83,7 @@ def generate_launch_description():
     fpga_port = LaunchConfiguration('fpga_port')
     lidar_port = LaunchConfiguration('lidar_port')
     launch_lidar = LaunchConfiguration('launch_lidar')
+    launch_planner = LaunchConfiguration('launch_planner')
     use_mock_serial = LaunchConfiguration('use_mock_serial')
     control_rate_hz = LaunchConfiguration('control_rate_hz')
 
@@ -111,6 +118,23 @@ def generate_launch_description():
         }]
     )
 
+    # Igor Waypoint Global Planner Node
+    planner_node = Node(
+        package='igor_controller',
+        executable='waypoint_global_planner_node',
+        name='waypoint_global_planner_node',
+        output='screen',
+        parameters=[{
+            'cruise_speed': 0.45,
+            'max_linear_speed': 0.60,
+            'max_angular_speed': 1.80,
+            'lookahead_dist': 0.50,
+            'xy_goal_tolerance': 0.15,
+            'yaw_goal_tolerance': 0.10
+        }],
+        condition=IfCondition(launch_planner)
+    )
+
     return LaunchDescription([
         algo_arg,
         use_fpga_arg,
@@ -118,11 +142,13 @@ def generate_launch_description():
         fpga_port_arg,
         lidar_port_arg,
         launch_lidar_arg,
+        launch_planner_arg,
         use_mock_serial_arg,
         control_rate_arg,
         LogInfo(msg="================================================================"),
         LogInfo(msg="   LAUNCHING PROJECT IGOR AUTONOMOUS JETAUTO NAVIGATION STACK   "),
         LogInfo(msg="================================================================"),
         rplidar_node,
-        controller_node
+        controller_node,
+        planner_node
     ])

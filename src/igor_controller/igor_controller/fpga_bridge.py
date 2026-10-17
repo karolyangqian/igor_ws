@@ -1,18 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-fpga_bridge.py - Terasic DE10-Nano FPGA Accelerator Serial Bridge
-Target Platform: DE10-Nano Cyclone V FPGA via UART (/dev/fpga @ 115200 / 921600 bps)
+fpga_bridge.py - Terasic DE10-Nano FPGA Accelerator Bridge (Ethernet UDP & Serial UART)
+Target Platform: DE10-Nano Cyclone V FPGA via Gigabit Ethernet UDP (Port 8080) or UART (/dev/fpga)
 PERURI Chip Hackathon 2026 - Project IGOR
 
-Frame Framing Protocol:
-TX Packet (Host -> FPGA, 153 Bytes):
-  [0x5A, 0xA5, 0x01, 0x94] + [74 x int16 Q8.8 Little-Endian] + [CRC-8]
-RX Packet (FPGA -> Host, 11 Bytes):
-  [0x5A, 0xA5, 0x02, 0x06] + [3 x int16 Q8.8 Little-Endian] + [CRC-8]
+Features:
+1. Dual-Mode Communication:
+   - Gigabit Ethernet UDP (Target: 192.168.1.50:8080 or 127.0.0.1 for Mock) as per pipeline_architecture.md.
+   - Serial UART fallback (/dev/fpga @ 115200 / 921600 bps).
+2. Binary Q8.8 fixed-point quantization:
+   - 74-D input observation vector -> Q8.8 int16.
+   - 3-D output action vector <- Q8.8 int16.
+3. Fast timeout (30ms) & CRC-8 data integrity validation.
+4. Built-in software mock emulation fallback for offline testing without hardware.
 """
 
 import time
+import socket
 import struct
 import logging
 from typing import Optional, List, Tuple
@@ -54,6 +59,7 @@ def checksum_crc8(data: bytes) -> int:
 class FPGABridge:
     """
     Hardware bridge communicating with Terasic DE10-Nano FPGA accelerator.
+    Supports Ethernet UDP (primary) and UART Serial (fallback/mock).
     """
     HEADER_B1 = 0x5A
     HEADER_B2 = 0xA5
@@ -62,9 +68,9 @@ class FPGABridge:
 
     def __init__(
         self,
-        port: str = "/dev/fpga",
+        port: str = "udp://127.0.0.1:8080",
         baudrate: int = 115200,
-        timeout: float = 0.05,
+        timeout: float = 0.03,  # 30 ms timeout as per pipeline architecture
         mock: bool = False
     ):
         self.port = port
@@ -72,27 +78,50 @@ class FPGABridge:
         self.timeout = timeout
         self.mock = mock
 
+        self.is_udp = self.port.startswith("udp://") or ":" in self.port
+        self.udp_sock: Optional[socket.socket] = None
+        self.udp_target: Optional[Tuple[str, int]] = None
         self.ser: Optional[serial.Serial] = None
+
         self._connect()
 
     def _connect(self) -> None:
-        if self.mock or serial is None:
-            logger.warning("FPGABridge operating in MOCK mode (serial unavailable or mock=True)")
-            self.mock = True
+        if self.mock:
+            logger.warning("FPGABridge operating in MOCK mode (mock=True)")
             return
 
-        try:
-            self.ser = serial.Serial(
-                port=self.port,
-                baudrate=self.baudrate,
-                timeout=self.timeout,
-                write_timeout=self.timeout
-            )
-            logger.info(f"Connected to DE10-Nano FPGA on {self.port} @ {self.baudrate} bps")
-        except Exception as e:
-            logger.warning(f"Could not open {self.port}: {e}. Falling back to MOCK FPGA accelerator.")
-            self.mock = True
-            self.ser = None
+        if self.is_udp:
+            # Parse UDP host and port
+            addr_str = self.port.replace("udp://", "")
+            parts = addr_str.split(":")
+            host = parts[0] if parts[0] else "127.0.0.1"
+            port_num = int(parts[1]) if len(parts) > 1 else 8080
+            self.udp_target = (host, port_num)
+
+            try:
+                self.udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                self.udp_sock.settimeout(self.timeout)
+                logger.info(f"FPGABridge initialized over Ethernet UDP targeting {self.udp_target}")
+            except Exception as e:
+                logger.warning(f"Could not open UDP socket: {e}. Falling back to MOCK mode.")
+                self.mock = True
+        else:
+            if serial is None:
+                logger.warning("pyserial unavailable. Falling back to MOCK mode.")
+                self.mock = True
+                return
+            try:
+                self.ser = serial.Serial(
+                    port=self.port,
+                    baudrate=self.baudrate,
+                    timeout=self.timeout,
+                    write_timeout=self.timeout
+                )
+                logger.info(f"Connected to DE10-Nano FPGA on {self.port} @ {self.baudrate} bps")
+            except Exception as e:
+                logger.warning(f"Could not open serial {self.port}: {e}. Falling back to MOCK mode.")
+                self.mock = True
+                self.ser = None
 
     def infer(self, observation_74: np.ndarray) -> np.ndarray:
         """
@@ -114,10 +143,8 @@ class FPGABridge:
             # Emulate FPGA inference: evaluate simple reactive brake if frontal beam is close
             min_lidar = float(np.min(observation_74[:64])) if len(observation_74) >= 64 else 1.0
             if min_lidar < 0.35:
-                # Strong reverse brake
                 return np.array([-0.9, 0.0, 0.0], dtype=np.float32)
             elif min_lidar < 0.60:
-                # Gentle braking
                 return np.array([-0.4, 0.0, 0.0], dtype=np.float32)
             return np.array([0.0, 0.0, 0.0], dtype=np.float32)
 
@@ -131,11 +158,16 @@ class FPGABridge:
         tx_packet = header_cmd_len + payload + bytes([crc])
 
         try:
-            self.ser.reset_input_buffer()
-            self.ser.write(tx_packet)
+            if self.is_udp and self.udp_sock and self.udp_target:
+                self.udp_sock.sendto(tx_packet, self.udp_target)
+                rx_buf, _ = self.udp_sock.recvfrom(64)
+            elif self.ser and self.ser.is_open:
+                self.ser.reset_input_buffer()
+                self.ser.write(tx_packet)
+                rx_buf = self.ser.read(11)
+            else:
+                return np.array([0.0, 0.0, 0.0], dtype=np.float32)
 
-            # Read response: 11 bytes
-            rx_buf = self.ser.read(11)
             if len(rx_buf) < 11:
                 logger.warning(f"FPGA read timeout (expected 11 bytes, got {len(rx_buf)})")
                 return np.array([0.0, 0.0, 0.0], dtype=np.float32)
@@ -144,7 +176,6 @@ class FPGABridge:
                 logger.warning(f"Invalid FPGA response header: {rx_buf[:3].hex()}")
                 return np.array([0.0, 0.0, 0.0], dtype=np.float32)
 
-            # Check CRC
             expected_crc = checksum_crc8(rx_buf[2:10])
             if rx_buf[10] != expected_crc:
                 logger.warning(f"FPGA CRC mismatch: got {rx_buf[10]}, expected {expected_crc}")
@@ -160,10 +191,17 @@ class FPGABridge:
 
             return np.clip(actions, -1.0, 1.0)
         except Exception as e:
-            logger.error(f"FPGA communication error: {e}")
+            logger.debug(f"FPGA communication error: {e}")
             return np.array([0.0, 0.0, 0.0], dtype=np.float32)
 
     def close(self) -> None:
+        if self.udp_sock:
+            try:
+                self.udp_sock.close()
+            except Exception:
+                pass
+            self.udp_sock = None
+
         if self.ser and self.ser.is_open:
             try:
                 self.ser.close()
