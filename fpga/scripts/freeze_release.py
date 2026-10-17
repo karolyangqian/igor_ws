@@ -135,7 +135,7 @@ def check():
         path = (ROOT.parent / name.replace('\\', '/')).resolve()
         if not path.is_relative_to(ROOT.parent / 'src') or not path.is_file() or sha(path) != expected:
             raise RuntimeError(f'Original software model reference changed: {name}')
-    print(f"PASS release: {len(doc['files'])} files, both source-bound SOFs, all timing corners and pins")
+    print(f"PASS release integrity: {len(doc['files'])} files; FPGA source-bound SOFs, timing and pins verified. Imported ASIC sign-off is assessed separately.")
 
 def check_parallel8():
     path=ROOT/'experiments/parallel8/artifacts/acceptance.json'
@@ -230,11 +230,23 @@ def freeze():
         tracked.add(parallel_receipt)
         tracked.update(local(name) for name in fast['sha256'])
         tracked.add(ROOT/'experiments/parallel8/output_files/igor_src_policy.sof')
+    external_evidence={}
+    for receipt in sorted((ROOT/'evidence/asic_import').glob('*/manifest.json')):
+        imported=json.loads(receipt.read_text(encoding='utf-8'))
+        for name,expected in imported.items():
+            path=(receipt.parent/name).resolve()
+            if not path.is_relative_to(receipt.parent.resolve()) or not path.is_file() or sha(path)!=expected:
+                raise RuntimeError('Imported evidence changed: '+name)
+            tracked.add(path)
+        tracked.add(receipt)
+        external_evidence[receipt.parent.name]={'manifest':receipt.relative_to(ROOT).as_posix(),
+            'kind':'User-supplied evidence import, not a new ASIC sign-off run'}
     provenance = json.loads((ROOT / 'verification/src_policy/artifacts/model_provenance.json').read_text(encoding='utf-8'))
     references = {name.replace('\\', '/'): value for name, value in provenance['sha256'].items()
                   if name.replace('\\', '/').startswith('src/')}
     doc = {'schema': 1, 'generated_utc': datetime.now(timezone.utc).isoformat(),
-           'scope': 'Digital simulation, source-bound Quartus build and handoff images; no physical FPGA/robot acceptance',
+           'scope': 'FPGA simulation/build/handoff and user-supplied ASIC evidence; no physical FPGA/robot acceptance or new ASIC sign-off',
+           'external_evidence':external_evidence,
            'hardware_tests_executed': False, 'projects': projects,
            'reference_sha256': references,
            'files': {path.relative_to(ROOT).as_posix(): metadata(path) for path in sorted(tracked)}}

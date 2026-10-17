@@ -7,6 +7,12 @@ planning, bukti simulasi dan software integrasi tersedia di dalam paket ini.
 
 ## Resource, area, latensi, kuantisasi dan power
 
+[Bennaya.md](Bennaya.md) merangkum keunggulan IGOR Chip untuk pengendalian
+protokol industri, dengan fokus pada efisiensi energi dan proteksi operasi
+I/O di hardware. [power.md](power.md) menampilkan estimasi daya ASIC
+`tt_um_igorchip` / `ihp-sg13cmos5l`: Typical **2,037372 mW**, lengkap dengan
+sumber angka dan bukti functional gate-level **PASS**.
+
 **Varian cepat untuk target core <0,16 ms sudah tervalidasi:** buka
 [Parallel8 QPF](experiments/parallel8/igor_src_policy.qpf), dengan
 [README dan bukti lengkap](experiments/parallel8/README.md).
