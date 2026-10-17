@@ -167,12 +167,21 @@
     "fpga_de10_nano/quartus/output_files/igor.asm.rpt": "8033eade2bec65092f4b6794f85cc2aee020d2ced1b8d77c4d9ab6829d4bac1b",
     "fpga_de10_nano/quartus/output_files/igor.fit.rpt": "4263e19c8862f9d2159d9857cda1f51f002912536ae9e42cf18df93a4bfa032a",
     "fpga_de10_nano/quartus/output_files/igor.fit.summary": "3e05fa2b79701600eecb69432d291c74bd4770941c2bd0aa9d38d47c7260d0da",
-    "fpga_de10_nano/quartus/output_files/igor.flow.rpt": "1eefd415483189b16af736a9265114987650a1edaba1e80c215bcb48d354242a",
+    "fpga_de10_nano/quartus/output_files/igor.flow.rpt": "e9e535840732be1ddb6967aec9a5d11f6b4e01315d7e402182a929c1da787c81",
     "fpga_de10_nano/quartus/output_files/igor.map.rpt": "204de29f9feb0ccb00bd063357b6cac889f6e6161863de5289ec0bf1dc9ebe00",
     "fpga_de10_nano/quartus/output_files/igor.map.summary": "fb8deccfd3c4481cc0829b3940f4ba3da38cf9dafcab2f28024ec0104a4d7090",
     "fpga_de10_nano/quartus/output_files/igor.pin": "6242e6f719cb4e22d88f9b3443938cf11ef2260f0b93e9b01a22af1f340c7f0b",
     "fpga_de10_nano/quartus/output_files/igor.sof": "84295ae937ab4a759efa1e4d21ebda09805559038bc4fef971894a8946d701d2",
     "fpga_de10_nano/quartus/output_files/igor.sta.rpt": "0e05eb0551c8934c96290bcc44efcb4b751e26009ca947168690532c88d88a02",
     "fpga_de10_nano/quartus/output_files/igor.sta.summary": "2e8ad555c8144a93a1645eb70c19da55a8a941a087cff441418b027ae5020158"
+  },
+  "post_compile_flow_update": {
+    "tool": "quartus_pow",
+    "reason": "Tool regenerated flow summary to append Power Analyzer stage; source, SOF, fitter, STA and compile log unchanged.",
+    "original_flow_sha256": "1eefd415483189b16af736a9265114987650a1edaba1e80c215bcb48d354242a",
+    "updated_flow_sha256": "e9e535840732be1ddb6967aec9a5d11f6b4e01315d7e402182a929c1da787c81",
+    "original_compile_receipt": "evidence/current_metrics/power/planner_vectorless/pre_power_compile_receipt.json",
+    "tool_log": "evidence/current_metrics/power/planner_vectorless/initial_run.log",
+    "tool_log_sha256": "c992c90c6a52420638c864b43ea752bb104ec507e354455f9a839a2ec3ac787c"
   }
 }

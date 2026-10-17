@@ -1,8 +1,8 @@
 {
   "status": "PASS",
-  "started_utc": "2026-10-16T10:54:21.518628+00:00",
+  "started_utc": "2026-10-17T01:16:07.110244+00:00",
   "suites": [
-    "host"
+    "policy"
   ],
   "evidence_kind": "Software and RTL simulation; no physical FPGA or motor measurement",
   "hardware_tests_executed": false,
@@ -10,47 +10,34 @@
   "runner_sha256": "5e7b03382c64288c125a793c796525b9668a29c08ba828d57d68952b793ad965",
   "steps": [
     {
-      "name": "host",
+      "name": "policy_core_uart",
       "command": [
         "C:\\Users\\William Anthony\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
-        "verification/run_host_regression.py"
+        "verification/src_policy/run.py",
+        "--check"
       ],
       "cwd": ".",
-      "started_utc": "2026-10-16T10:54:21.519627+00:00",
+      "started_utc": "2026-10-17T01:16:07.115737+00:00",
       "status": "PASS",
-      "log": "host.log",
+      "log": "policy_core_uart.log",
       "returncode": 0,
-      "elapsed_seconds": 0.531,
-      "log_sha256": "b7dcfba215506f95550c1ce3bc1c649a4b8919f6d7f6a7d6905fd7e42db52ddf"
+      "elapsed_seconds": 270.625,
+      "log_sha256": "a7c427766db3b71559f881f2632d94ca2921370a47d4847681d703554b2084db"
     },
     {
-      "name": "lidar",
+      "name": "policy_board_wrapper",
       "command": [
         "C:\\Users\\William Anthony\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
-        "verification/run_lidar_regression.py"
+        "verification/run_board_wrapper.py"
       ],
       "cwd": ".",
-      "started_utc": "2026-10-16T10:54:22.067022+00:00",
+      "started_utc": "2026-10-17T01:20:37.753607+00:00",
       "status": "PASS",
-      "log": "lidar.log",
+      "log": "policy_board_wrapper.log",
       "returncode": 0,
-      "elapsed_seconds": 0.344,
-      "log_sha256": "acd3354f6ecfc9fa4f24d1d9868ab6e3751fa79654cbc151168c59f532a5d00b"
-    },
-    {
-      "name": "hardware_capture_fixtures",
-      "command": [
-        "C:\\Users\\William Anthony\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
-        "verification/test_capture_hardware_safety.py"
-      ],
-      "cwd": ".",
-      "started_utc": "2026-10-16T10:54:22.417815+00:00",
-      "status": "PASS",
-      "log": "hardware_capture_fixtures.log",
-      "returncode": 0,
-      "elapsed_seconds": 0.125,
-      "log_sha256": "a2e696858cc8b4ba2bb9edaa21a9030c678af611a15d8a819dda5a0984c793e9"
+      "elapsed_seconds": 11.86,
+      "log_sha256": "c3e8911e7fee373d1ca9cd04a2142164d103726a8465661e41962f7e637ca0e7"
     }
   ],
-  "completed_utc": "2026-10-16T10:54:22.547674+00:00"
+  "completed_utc": "2026-10-17T01:20:49.634102+00:00"
 }

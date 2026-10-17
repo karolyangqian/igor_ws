@@ -1,7 +1,17 @@
 # Jawaban untuk Bennaya — IGOR, RTL, bukti, dan kesiapan demo
 
 **Acuan utama: [README.md workspace](../README.md) dan software asli `../src`.**
-Jawaban ini menanggapi seluruh bagian dokumen internal “IGOR: Kekuatan, Demo, dan To-do Menuju Top 3”, versi 15 Oktober 2026, berdasarkan paket yang diperiksa pada **16 Oktober 2026**. Lampiran dipakai sebagai daftar pertanyaan dan kebutuhan; label rencana “Jumat” di lampiran tidak dianggap sebagai hasil uji fisik.
+
+**Pembaruan target latensi 17 Oktober 2026:** varian
+[Parallel8](experiments/parallel8/README.md) lulus regresi integer/safety,
+full compilation, 13 fitted pins dan seluruh timing corner pada 50 MHz.
+Core **0,13832 ms**, memakai **3.303 ALM / 64 M10K / 8 DSP**.
+Power estimasi **476,18 mW Typical**, **937,55 mW Maximum/Tj100°C**,
+confidence Low, HPS Off. Buka
+[QPF varian cepat](experiments/parallel8/igor_src_policy.qpf); handoff
+[SOF Parallel8](bitstreams/igor_src_policy_parallel8.sof) terpisah dari baseline.
+Target ini tidak mencakup UART; belum ada programming/pengukuran hardware fisik.
+Jawaban ini menanggapi seluruh bagian dokumen internal “IGOR: Kekuatan, Demo, dan To-do Menuju Top 3”, versi 15 Oktober 2026, berdasarkan paket yang diperiksa pada **17 Oktober 2026**. Lampiran dipakai sebagai daftar pertanyaan dan kebutuhan; label rencana “Jumat” di lampiran tidak dianggap sebagai hasil uji fisik.
 
 **Jawaban langsung: ya, RTL policy utama dirancang mengikuti README workspace dan bobot software `src`: PPO residual 74 → 128 → 64 → 3.** Project yang dibuka adalah [igor_src_policy.qpf](fpga_de10_nano/src_policy/igor_src_policy.qpf). Model 24 → 64 → 64 → 4 dalam lampiran adalah profil legacy yang disimpan terpisah. Angka dan keluaran kedua profil tidak dapat dipertukarkan.
 
@@ -73,7 +83,7 @@ Klaim keamanan harus spesifik: CRC mendeteksi kerusakan transmisi; urutan/commit
 | Suite | Hasil yang tercatat | Jenis bukti |
 |---|---|---|
 | Policy PPO | 236 vektor; seluruh 128+64 hidden activation dan 3 output diperiksa per vektor; 8.364 kasus aktivasi; 54.399 assertion core | Simulasi terhadap oracle integer independen. |
-| UART policy | 177 transaksi directed, 237 assertion | Framing/header/opcode/length/CRC, batas domain, frame parsial, busy, E-stop, freshness/watchdog dan recovery sesuai kontrak. |
+| UART policy | 184 transaksi directed, 268 assertion | Framing/header/opcode/length/CRC, batas domain, frame parsial, busy, E-stop, freshness/watchdog dan recovery sesuai kontrak. |
 | Deviasi terhadap floating point | Max absolute error sampel normalized action **0,014571763897103157** | Karakterisasi sampel; bukan batas error formal semua input dan bukan persentase keberhasilan navigasi. |
 | Safety planner | 111.210 pembandingan, outcome 0–11 semua terjangkau; checkpoint gate 12 + units 31 + top 29 + UART 39 = 111 | [Ringkasan dan batas cakupan](evidence/current_safety/summary.json). |
 | Wrapper DE10-Nano policy | 18 checkpoint, UART divider 54 dengan clock model 50 MHz | [Hasil wrapper](evidence/current_board_wrapper/summary.json); masih simulasi wrapper, bukan board fisik. |
@@ -85,6 +95,10 @@ Klaim keamanan harus spesifik: CRC mendeteksi kerusakan transmisi; urutan/commit
 | Wrapper programming | 8 kasus dengan executable fixture terisolasi | [Hasil tooling](evidence/current_programming/tooling_tests.json); seleksi chain/hash/WhatIf/penolakan kesalahan, tanpa akses hardware. |
 
 Tidak menjumlahkan vektor, assertion, checkpoint dan testcase menjadi satu angka “total tes”. Enumerasi kontrol dan domain numerik yang diuji bukan pembuktian formal semua peta, semua input, semua interleaving waktu, kondisi analog atau dinamika pengereman robot.
+
+## Metrik terukur tool terbaru
+
+Lihat [resource, area, latensi, kuantisasi dan power](docs/METRICS_AND_POWER.md). Power policy dari tool: 464,21 mW Typical, 812,05 mW Maximum/Tj85?C, 925,69 mW Maximum/Tj100?C; confidence Low, HPS tidak dimodelkan dan belum diukur pada board. Error output sample maksimum 0,0145717638971 = 3,73037156 LSB pada 153 input valid. Area FPGA tersedia sebagai resource; ASIC mm? belum tersedia. [CSV sumber/baris/hash](evidence/current_metrics/metric_evidence.csv) mengikat asal angka.
 
 ## 3. Jawaban manfaat PERURI, Indonesia, dan bisnis
 
@@ -255,7 +269,7 @@ Build receipt membandingkan hash input sebelum/sesudah kompilasi. Perubahan RTL/
 | Waktu AI mengikuti README | **54.348 siklus = 1,08696 ms** | [PPO current](verification/src_policy/artifacts/results.json); UART tidak termasuk. |
 | Waktu AI legacy | 18.192 siklus = 0,36384 ms | [Neural legacy](verification/neural_cocotb_results.json); bukan latency PPO. |
 | AI bit-exact | PPO: 236 vektor dan hidden/output sesuai oracle integer; legacy: 400/400 output dari 100 vektor | Simulasi; bit-exact terhadap FP32 seluruh domain dan board **TIDAK DIKLAIM**. |
-| Pemeriksaan RTL | Policy 54.399 assertion core, 237 UART; gate 111.210 pembandingan oracle | Satuan berbeda, tidak dijumlahkan. Angka 29.382 pada lampiran adalah ringkasan historis. |
+| Pemeriksaan RTL | Policy 54.399 assertion core, 268 UART; gate 111.210 pembandingan oracle | Satuan berbeda, tidak dijumlahkan. Angka 29.382 pada lampiran adalah ringkasan historis. |
 | Gate / outcome | 111.210 / 12 outcome (0 PASS + 11 kode penolakan) | [Current safety](evidence/current_safety/summary.json). Arsip 13.078 tersimpan pada coverage legacy. |
 | Injeksi fault output nol | 111 checkpoint regresi mencakup kontrol positif, fault, reset dan recovery; jumlah/subset injeksi fault-tertolak harus dibaca dari rincian kasus | [Cases](evidence/current_safety/cases.csv). Tidak semua 111 checkpoint adalah fault/output nol. Ringkasan historis 9/9 bukan 9 uji board baru. |
 | Resource policy | 3.249/41.910 ALM (8%), 5.996 register, 64/553 M10K, 1/112 DSP, 13 pin | [Quartus policy](evidence/current_builds/source_policy.json). |
@@ -306,13 +320,13 @@ Policy LED0 = residual permit, LED1 = reset released, LED2 = response pulse, LED
 
 ```text
 igor_src_policy.sof
-SHA256 f10cba9f03bb4a62c92bf4718544a874f476a8988c130f90a9759b3c64d7599a
+SHA256 fb9fcd28136b647492d2284fef82beca34b97f8300ce0579c25e0745fa88cf4a
 
 igor_planner.sof
 SHA256 84295ae937ab4a759efa1e4d21ebda09805559038bc4fef971894a8946d701d2
 ```
 
-[SHA256SUMS](bitstreams/SHA256SUMS.txt) dan manifest adalah rujukan pemeriksaan file. Hash file lokal bukan readback dari FPGA. Build selesai 16 Oktober 2026 pukul 18:00:52 WIB untuk policy dan 18:01:03 WIB untuk planner. Tiga warning policy berupa port tulis internal ROM read-only; sembilan warning planner mencakup port ROM, read-during-write pass-through dan SW unused. Review lengkap ada pada [BUILD_STATUS](BUILD_STATUS.md); tidak ada critical warning atau timing gagal pada build diterima.
+[SHA256SUMS](bitstreams/SHA256SUMS.txt) dan manifest adalah rujukan pemeriksaan file. Hash file lokal bukan readback dari FPGA. Build policy setelah perbaikan audit counter selesai 17 Oktober 2026 pukul 08:22:09 WIB; build planner tetap 16 Oktober 2026 pukul 18:01:03 WIB. Tiga warning policy berupa port tulis internal ROM read-only; sembilan warning planner mencakup port ROM, read-during-write pass-through dan SW unused. Review lengkap ada pada [BUILD_STATUS](BUILD_STATUS.md); tidak ada critical warning atau timing gagal pada build diterima.
 
 ### 8.3 Prosedur saat hardware tersedia nanti
 
@@ -321,6 +335,8 @@ Ikuti [BOARD_PROGRAMMING.md](docs/BOARD_PROGRAMMING.md): buka project → periks
 Inspeksi sebelumnya mencatat **No JTAG hardware available**. Tidak ada command programming atau gerak motor yang dijalankan untuk menjawab dokumen ini.
 
 ## 9. Titik persis GTKWave dan bukti yang traceable
+
+Koreksi inspeksi 17 Oktober: [bukti visual](docs/SIMULATION_EVIDENCE.md) menjelaskan offset marker sebelum pergantian stimulus/dump-off pada timestamp CSV yang sama. Gate memakai sampel stabil 10,999/11,999 ns untuk absolute/delta; policy UART memakai waktu CSV dikurangi 1 ps. Nilai marker diperiksa langsung dari VCD sebelum capture.
 
 Jalankan dari folder `fpga`; pulihkan VCD dari arsip bila belum ada:
 
@@ -345,8 +361,8 @@ gtkwave verification/src_policy/artifacts/uart.vcd verification/src_policy/uart.
 | `top.vcd`, instance lease sesuai CSV | 3945511 | Tepat lease=10000: output nol, fault=8; logger di 3945531. |
 | `top.vcd`, core map sequence | 4759921 | Commit map seq 2 menarik hasil seq lama: permit=0, fault=9; log di 4759931. |
 | Sama | 4918711 | Run baru map seq 2 kembali permit=1, v=15. |
-| `gate.vcd` | 11 | Pelanggaran absolut: output nol, fault=10. |
-| `gate.vcd` | 12 | Pelanggaran delta: output nol, fault=11. |
+| `gate.vcd` | 10.999 | Pelanggaran absolut: output nol, fault=10. |
+| `gate.vcd` | 11.999 | Pelanggaran delta: output nol, fault=11. |
 
 Semua checkpoint dan instance rinci: [cases.csv](evidence/current_safety/cases.csv), [top_checkpoints.csv](evidence/current_safety/top_checkpoints.csv). Pasangkan output kombinatorial dengan edge pencatatan logger; keduanya tidak harus berubah pada waktu yang sama.
 

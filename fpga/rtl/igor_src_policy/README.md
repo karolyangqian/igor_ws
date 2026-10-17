@@ -31,6 +31,14 @@ E-stop melewati dua flip-flop sinkronisasi. Observasi baru yang lengkap dan sah
 diperlukan untuk mendapatkan residual valid kembali. Ini bukan rangkaian E-stop
 bersertifikasi; pemutusan daya/enable motor harus independen pada robot fisik.
 
+Counter debug `accepted_frames` dan `rejected_frames` bersifat saturating pada
+`0xffffffff`; CRC reject dan E-stop tetap diproses ketika counter penuh.
+Reset menghapus kedua counter. Tujuh kasus batas/recovery tambahan lulus
+bersama regresi UART penuh (184 transaksi, 268 assertion). Counter debug
+tidak otomatis tersedia sebagai query UART pada image board standar.
+Lihat [bukti visual](../../docs/SIMULATION_EVIDENCE.md) dan
+[perbaikan tervalidasi](../../docs/RTL_IMPROVEMENTS.md).
+
 ## Arsitektur dan kontrak numerik
 
 ```mermaid

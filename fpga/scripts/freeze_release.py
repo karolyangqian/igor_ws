@@ -98,7 +98,10 @@ def write_build_status(records):
               'Planner juga mencatat RAM read-during-write pass-through logic dan dua input SW0/SW1 '
               'yang tidak mempengaruhi output. Referensi lengkap adalah warning pada `compile_current.log` '
               'dan `igor.map.rpt`. Tidak ada warning missing drive/slew sesudah pinplan eksplisit. '
-              'Tidak ada critical warning atau timing gagal pada build rilis yang diterima.', '',
+              'Tidak ada critical warning atau timing gagal pada flow kompilasi rilis yang diterima. '
+              'Pernyataan ini tidak mencakup Power Analyzer; analisis power terpisah mempunyai '
+              'Critical Warning HPS dan confidence Low yang dijelaskan pada '
+              '[METRICS_AND_POWER.md](docs/METRICS_AND_POWER.md).', '',
               '## Pemeriksaan paket', '',
               '```powershell', 'python scripts/freeze_release.py --check', '```', '',
               'Manifest [current_release/manifest.json](evidence/current_release/manifest.json) mengikat '
@@ -122,12 +125,26 @@ def check():
         if sha(sof) != sha(local(doc['projects'][name]['handoff_sof'])):
             raise RuntimeError('Handoff image differs from compiled image')
     verify_software_model()
+    if 'source_policy_parallel8' in doc['projects']:
+        check_parallel8()
+        item=doc['projects']['source_policy_parallel8']
+        if sha(local(item['sof'])) != sha(local(item['handoff_sof'])):
+            raise RuntimeError('Parallel8 handoff differs from accepted SOF')
     # Pure software references are read-only external inputs, not release writes.
     for name, expected in doc.get('reference_sha256', {}).items():
         path = (ROOT.parent / name.replace('\\', '/')).resolve()
         if not path.is_relative_to(ROOT.parent / 'src') or not path.is_file() or sha(path) != expected:
             raise RuntimeError(f'Original software model reference changed: {name}')
     print(f"PASS release: {len(doc['files'])} files, both source-bound SOFs, all timing corners and pins")
+
+def check_parallel8():
+    path=ROOT/'experiments/parallel8/artifacts/acceptance.json'
+    record=json.loads(path.read_text(encoding='utf-8'))
+    if record['status']!='PASS' or record['latency_ms']>=0.16 or min(record['timing_slack_ns'].values())<0:
+        raise RuntimeError('Parallel8 candidate has not passed latency/timing acceptance')
+    check_mapping(record['sha256'])
+    check_mapping({'experiments/parallel8/output_files/igor_src_policy.sof':record['sof_sha256']})
+    return record
 
 def freeze():
     records = {name: verify_build(name) for name in ('source_policy', 'planner')}
@@ -148,6 +165,17 @@ def freeze():
                           'minimum_slack_ns': min(record['slacks_ns'].values()),
                           'assigned_pins': len(record['pin_assignments']),
                           'device': '5CSEBA6U23I7', 'clock_hz': 50000000}
+    parallel_receipt=ROOT/'experiments/parallel8/artifacts/acceptance.json'
+    if parallel_receipt.exists():
+        fast=check_parallel8()
+        source=ROOT/'experiments/parallel8/output_files/igor_src_policy.sof'
+        target=bitstreams/'igor_src_policy_parallel8.sof'
+        shutil.copyfile(source,target)
+        projects['source_policy_parallel8']={'sof':source.relative_to(ROOT).as_posix(),
+            'handoff_sof':target.relative_to(ROOT).as_posix(),'sha256':sha(target),
+            'build_receipt':parallel_receipt.relative_to(ROOT).as_posix(),
+            'minimum_slack_ns':min(fast['timing_slack_ns'].values()),
+            'assigned_pins':len(fast['pins']),'device':'5CSEBA6U23I7','clock_hz':50000000}
     (bitstreams / 'SHA256SUMS.txt').write_text(''.join(f"{sha(path)}  {path.name}\n" for path in sorted(bitstreams.glob('*.sof'))), encoding='ascii')
     waveform_roots = [ROOT / 'evidence/current_safety', ROOT / 'evidence/current_board_wrapper',
                       ROOT / 'verification/src_policy/artifacts']
@@ -178,9 +206,15 @@ def freeze():
                    ROOT / 'evidence/current_host', ROOT / 'evidence/current_lidar',
                    ROOT / 'evidence/current_checks', ROOT / 'evidence/current_builds',
                    ROOT / 'evidence/current_acceptance', ROOT / 'evidence/current_programming',
+                   ROOT / 'evidence/current_metrics',
                    ROOT / 'verification/src_policy/artifacts']:
         if folder.exists():
-            tracked.update(p for p in folder.rglob('*') if p.is_file() and p.suffix in {'.json','.csv','.log','.hex','.gtkw','.gz'})
+            tracked.update(p for p in folder.rglob('*') if p.is_file() and p.suffix in {'.json','.csv','.log','.hex','.gtkw','.gz','.rpt','.summary','.png'})
+    # Native GTKWave captures plus checkpoint/build identity and capture scripts.
+    visual = ROOT / 'evidence/visual_review'
+    if visual.exists():
+        tracked.update(p for p in visual.rglob('*') if p.is_file() and
+                       p.suffix in {'.png','.html','.json','.log','.tcl','.gtkw'})
     for record in records.values():
         tracked.update(local(name) for name in record['source_sha256'])
         tracked.update(local(name) for name in record['report_sha256'])
@@ -192,6 +226,10 @@ def freeze():
     tracked.update((ROOT / 'docs').glob('*.md'))
     tracked.update((ROOT / 'software_integration').glob('*.md'))
     tracked.update((ROOT / 'scripts').glob('*.ps1'))
+    if parallel_receipt.exists():
+        tracked.add(parallel_receipt)
+        tracked.update(local(name) for name in fast['sha256'])
+        tracked.add(ROOT/'experiments/parallel8/output_files/igor_src_policy.sof')
     provenance = json.loads((ROOT / 'verification/src_policy/artifacts/model_provenance.json').read_text(encoding='utf-8'))
     references = {name.replace('\\', '/'): value for name, value in provenance['sha256'].items()
                   if name.replace('\\', '/').startswith('src/')}

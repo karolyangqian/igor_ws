@@ -11,8 +11,8 @@ Seluruh corner setup/hold/recovery/removal/minimum-pulse-width yang dilaporkan n
 
 ## Identitas build
 
-- **source_policy** selesai 2026-10-16 18:00:52 WIB; receipt [JSON](evidence/current_builds/source_policy.json).
-  SOF SHA256: `f10cba9f03bb4a62c92bf4718544a874f476a8988c130f90a9759b3c64d7599a`.
+- **source_policy** selesai 2026-10-17 08:22:09 WIB; receipt [JSON](evidence/current_builds/source_policy.json).
+  SOF SHA256: `fb9fcd28136b647492d2284fef82beca34b97f8300ce0579c25e0745fa88cf4a`.
 - **planner** selesai 2026-10-16 18:01:03 WIB; receipt [JSON](evidence/current_builds/planner.json).
   SOF SHA256: `84295ae937ab4a759efa1e4d21ebda09805559038bc4fef971894a8946d701d2`.
 
@@ -20,7 +20,7 @@ Seluruh corner setup/hold/recovery/removal/minimum-pulse-width yang dilaporkan n
 
 Tiga warning policy berasal dari port tulis internal ROM (`data_a`, `waddr_a`, `we_a`) yang tidak memiliki driver karena memori digunakan read-only. Model parameter diinisialisasi dari MEM, dibandingkan dengan source, dan diuji melalui oracle integer. Ini bukan warning bahwa bobot aktif tidak terisi.
 
-Planner juga mencatat RAM read-during-write pass-through logic dan dua input SW0/SW1 yang tidak mempengaruhi output. Referensi lengkap adalah warning pada `compile_current.log` dan `igor.map.rpt`. Tidak ada warning missing drive/slew sesudah pinplan eksplisit. Tidak ada critical warning atau timing gagal pada build rilis yang diterima.
+Planner juga mencatat RAM read-during-write pass-through logic dan dua input SW0/SW1 yang tidak mempengaruhi output. Referensi lengkap adalah warning pada `compile_current.log` dan `igor.map.rpt`. Tidak ada warning missing drive/slew sesudah pinplan eksplisit. Tidak ada critical warning atau timing gagal pada flow kompilasi rilis yang diterima. Pernyataan ini tidak mencakup Power Analyzer; analisis power terpisah mempunyai Critical Warning HPS dan confidence Low yang dijelaskan pada [METRICS_AND_POWER.md](docs/METRICS_AND_POWER.md).
 
 ## Pemeriksaan paket
 

@@ -5,6 +5,37 @@ Seluruh implementasi dan keluaran baru berada di folder **`igor_ws/fpga`**.
 sebagai referensi rancangan dan checklist. Proyek Quartus, RTL, bobot, pin
 planning, bukti simulasi dan software integrasi tersedia di dalam paket ini.
 
+## Resource, area, latensi, kuantisasi dan power
+
+**Varian cepat untuk target core <0,16 ms sudah tervalidasi:** buka
+[Parallel8 QPF](experiments/parallel8/igor_src_policy.qpf), dengan
+[README dan bukti lengkap](experiments/parallel8/README.md).
+Hasilnya **0,13832 ms**, 3.303 ALM, 64 M10K, 8 DSP; semua timing corner dan
+13 fitted pins lulus. Power estimasi Typical **476,18 mW**, Maximum/Tj100°C
+**937,55 mW**, confidence Low/HPS Off. Handoff:
+[`bitstreams/igor_src_policy_parallel8.sof`](bitstreams/igor_src_policy_parallel8.sof).
+Angka di bawah tetap menjelaskan baseline serial yang terpisah. Target
+0,16 ms adalah inferensi core, bukan round-trip UART.
+
+[Metrik lengkap beserta sumber/baris bukti](docs/METRICS_AND_POWER.md) dan
+[CSV provenance](evidence/current_metrics/metric_evidence.csv) tersedia untuk
+setiap angka. Policy memakai 3.249 ALM, 64 M10K, 1 DSP; latensi core 1,08696 ms.
+Power Analyzer: **464,21 mW Typical**, **812,05 mW Maximum/Tj85°C**,
+**925,69 mW Maximum/Tj100°C**, seluruhnya estimasi FPGA ber-confidence Low,
+HPS tidak dimodelkan dan bukan pengukuran board. Area ASIC mm² belum tersedia.
+[Grafik power](evidence/current_metrics/power_estimates.png) memisahkan static,
+dynamic dan I/O; angka dynamic 38,51 mW bukan total power.
+
+## Screenshot, penjelasan RTL dan perbaikan tervalidasi
+
+Hasil review 17 Oktober 2026: [galeri 15 screenshot GTKWave dan dua gambar laporan Quartus](evidence/visual_review/index.html),
+[titik penting dan alasan simulasi/kompilasi lulus](docs/SIMULATION_EVIDENCE.md),
+[fungsi setiap modul RTL](docs/RTL_MODULE_GUIDE.md), serta
+[perbaikan counter dan rencana peningkatan](docs/RTL_IMPROVEMENTS.md).
+Gambar Quartus merupakan ekstrak laporan asli berlabel, bukan screenshot GUI.
+Perbaikan counter policy sudah lulus 184 transaksi/268 assertion UART,
+regresi core/wrapper dan build ulang Quartus; model/latency tetap sama.
+
 ## Buka proyek dan pilih bitstream
 
 | Kebutuhan | Proyek Quartus 25 siap dibuka | Image hasil build |
@@ -128,7 +159,7 @@ workflow dijelaskan pada [ci/README.md](ci/README.md).
 | Suite | Domain yang diperiksa | Bukti aktual |
 |---|---|---|
 | Source policy | 236 vektor, seluruh 192 hidden activation dan 3 output; 8.364 batas aktivasi; 54.399 assertion core | `verification/src_policy/artifacts/results.json`, `core.log` |
-| UART policy | 177 kasus, 237 assertion; CRC, framing, 148 pelanggaran domain, busy, timeout, E-stop pada beberapa fase | `uart.log`, `uart_checkpoints.csv` |
+| UART policy | 184 kasus, 268 assertion; CRC, framing, 148 pelanggaran domain, busy, timeout, E-stop pada beberapa fase | `uart.log`, `uart_checkpoints.csv` |
 | Safety | 111.210 perbandingan oracle, seluruh kode 0–11, 111 checkpoint map/config/logger/deadline/UART | `evidence/current_safety/summary.json`, `cases.csv` |
 | Wrapper board | 18 checkpoint, UART aktual divider 54, KEY1 latched sampai KEY0 reset | `evidence/current_board_wrapper/summary.json` |
 | Host | 29 tes: transport fault, lease, CBF/envelope, IMU/scan invalid atau usang, STOP motor | `evidence/current_host/results.json` |

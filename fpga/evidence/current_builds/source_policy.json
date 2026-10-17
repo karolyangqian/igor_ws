@@ -2,7 +2,7 @@
   "schema": 1,
   "project": "source_policy",
   "revision": "igor_src_policy",
-  "started_utc": "2026-10-16T10:55:52.243626+00:00",
+  "started_utc": "2026-10-17T01:16:22.718044+00:00",
   "tool_version": "Quartus Prime Shell\nVersion 25.1std.0 Build 1129 10/21/2025 SC Standard Edition\nCopyright (C) 2025  Altera Corporation. All rights reserved.",
   "source_sha256": {
     "fpga_de10_nano/src_policy/igor_src_policy.qpf": "ebc0446cac9ec52e23f6751309881e00212eab5298b745212e17b5dbc7a1ab18",
@@ -12,7 +12,7 @@
     "fpga_de10_nano/src_policy/pin_assignment.tcl": "9c72ec63fee5d7064273212ed614b288ade217b8709944068ea7c99ebac03e20",
     "rtl/igor_src_policy/igor_src_policy_core.v": "3f566c285f468d7a148d3226eb3ff2344c3e617dc5f544b7f94994efb6973726",
     "rtl/igor_src_policy/igor_src_policy_rom.v": "310f769eb8752d04920cebd8ac58c6ba2afcbfa5aabc442cca91dbb6e797c2f0",
-    "rtl/igor_src_policy/igor_src_policy_uart.v": "a3c595bcb6419668e88f07acfb5ceca44802d2fa875b459be6c999af4278e075",
+    "rtl/igor_src_policy/igor_src_policy_uart.v": "8c03e18a3a22afa550f387e74cb78c3b0d66df8a8efac1def37682e159e0e38a",
     "rtl/igor_src_policy/policy_weights.mem": "55a647207c0b670901fe8074716331ac2876886bbbe1ca44aff9bbb942426e2d",
     "rtl/igor_uart_rx.v": "4197e40b03ff6bf2db0c7381d372ad500b1bea2f287a879bcadee67ea628fe39",
     "rtl/igor_uart_tx.v": "1856fd56edcdd3c0528eb7bbd5c8aa8acdd2d0053d993cf14b2c31bc5d282d28"
@@ -26,7 +26,7 @@
     "igor_src_policy"
   ],
   "exit_code": 0,
-  "finished_utc": "2026-10-16T11:00:52.820840+00:00",
+  "finished_utc": "2026-10-17T01:22:09.910883+00:00",
   "source_unchanged": true,
   "slacks_ns": {
     "Slow 1100mV 100C Model Setup 'FPGA_CLK1_50'": 6.531,
@@ -118,19 +118,28 @@
     }
   },
   "sof": "fpga_de10_nano/src_policy/output_files/igor_src_policy.sof",
-  "sof_sha256": "f10cba9f03bb4a62c92bf4718544a874f476a8988c130f90a9759b3c64d7599a",
+  "sof_sha256": "fb9fcd28136b647492d2284fef82beca34b97f8300ce0579c25e0745fa88cf4a",
   "log": "fpga_de10_nano/src_policy/compile.log",
-  "log_sha256": "7784aef3143336331bdf7a6d700798c6ecddeb473d6d99a026eaa1f1f2619f6f",
+  "log_sha256": "d8338406b8862a34b06a9b92b0e2a1d6a49a18cb294d40513447e600e457e54b",
   "report_sha256": {
-    "fpga_de10_nano/src_policy/output_files/igor_src_policy.asm.rpt": "1a17aa162cb8a43d9ec1823d68511781ff874883fcf225826b0ba14fdf1b76a8",
-    "fpga_de10_nano/src_policy/output_files/igor_src_policy.fit.rpt": "658f4933a6aaaa8fa6d43378698eea5a0ddb0865940688df42ff84eff3421d9e",
-    "fpga_de10_nano/src_policy/output_files/igor_src_policy.fit.summary": "eb344d9140d734153ddfdae9e1bf909ad138fabcb7f882dbce6fc896a04e4c6b",
-    "fpga_de10_nano/src_policy/output_files/igor_src_policy.flow.rpt": "fe52a51d589b90029e314a50af22da48a4f1a27213ff29238f8fb59f1848cfd1",
-    "fpga_de10_nano/src_policy/output_files/igor_src_policy.map.rpt": "f3c92d6103a56166d710bb7462096a979e0acd25ed9363f388610f8f2ff6d7ff",
-    "fpga_de10_nano/src_policy/output_files/igor_src_policy.map.summary": "a9a7b46bf4b060e8d33d6165adb627bba808b5fdc0507e0f5fef8434d061362e",
+    "fpga_de10_nano/src_policy/output_files/igor_src_policy.asm.rpt": "55288762c03e160d5b25b33691fb1a1a7f2490b642d5b5eaf37e2cd82b60e0a8",
+    "fpga_de10_nano/src_policy/output_files/igor_src_policy.fit.rpt": "a3f753378c3227e0cb4750c977c4a911f15ededde3537c1abc6eabaa95a29322",
+    "fpga_de10_nano/src_policy/output_files/igor_src_policy.fit.summary": "f4c3e002d867998aaa4d841c10a8fb30d71c21d4e6d079b9a97e772fdc3604d9",
+    "fpga_de10_nano/src_policy/output_files/igor_src_policy.flow.rpt": "594d0f44e7292ae4a7fdb59969361987183e7dcf5a7e0658648bf5297a49057d",
+    "fpga_de10_nano/src_policy/output_files/igor_src_policy.map.rpt": "da31059f0c24640012c0ecc9a08bfcdbd9ec99cb4c6b1e78600d1395e9e0f0a8",
+    "fpga_de10_nano/src_policy/output_files/igor_src_policy.map.summary": "b8fa9fab24a73b4d45a568791c04feb12da165c6e3fcef1c7f27328db0e664e9",
     "fpga_de10_nano/src_policy/output_files/igor_src_policy.pin": "56a6db6f924d425b0c2087f18b88c33fb3c01f36e3f009fd93057b582e8594fe",
-    "fpga_de10_nano/src_policy/output_files/igor_src_policy.sof": "f10cba9f03bb4a62c92bf4718544a874f476a8988c130f90a9759b3c64d7599a",
-    "fpga_de10_nano/src_policy/output_files/igor_src_policy.sta.rpt": "f94f80ad66712baa2c92cdd6d8bc1670f567df654b63d3d660ca56e72098e3c0",
+    "fpga_de10_nano/src_policy/output_files/igor_src_policy.sof": "fb9fcd28136b647492d2284fef82beca34b97f8300ce0579c25e0745fa88cf4a",
+    "fpga_de10_nano/src_policy/output_files/igor_src_policy.sta.rpt": "d7e817c8ffc453ad78db86649b8b6ca806143e24382089c49b19ad9b866c20fb",
     "fpga_de10_nano/src_policy/output_files/igor_src_policy.sta.summary": "d0fcf959bdce4592ddc86fb1ad606a1c08987936d1a409c3835b35655d5526ae"
+  },
+  "post_compile_flow_update": {
+    "tool": "quartus_pow",
+    "reason": "Tool regenerated flow summary to append Power Analyzer stage; source, SOF, fitter, STA and compile log unchanged.",
+    "original_flow_sha256": "e939a12d4b77264a6d61b11305db86cef566a6ab60dec84a34f7f5169f2cdab2",
+    "updated_flow_sha256": "594d0f44e7292ae4a7fdb59969361987183e7dcf5a7e0658648bf5297a49057d",
+    "original_compile_receipt": "evidence/current_metrics/power/source_policy_vectorless/pre_power_compile_receipt.json",
+    "tool_log": "evidence/current_metrics/power/source_policy_vectorless/initial_run.log",
+    "tool_log_sha256": "9275ca70c039af0f24a00452ddc129b3667613b6fe5f269ba6b26f44b024f9b1"
   }
 }
