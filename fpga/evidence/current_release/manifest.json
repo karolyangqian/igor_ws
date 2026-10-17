@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_utc": "2026-10-17T12:57:41.923876+00:00",
+  "generated_utc": "2026-10-17T13:03:57.267199+00:00",
   "scope": "FPGA simulation/build/handoff and user-supplied ASIC evidence; no physical FPGA/robot acceptance or new ASIC sign-off",
   "external_evidence": {
     "gatelevel_test_results": {
@@ -179,6 +179,14 @@
       "sha256": "ce89eb27d484acc98039183163b8f3db04479cea32f164ddaf417f5eae428d3a",
       "bytes": 18369
     },
+    "docs/assets/parallel8_neural_calculation.png": {
+      "sha256": "4dda28510e5eda8d5a0139f36e7bbfe573b9f40fc7bd45ef164bdd192575a5f2",
+      "bytes": 194904
+    },
+    "docs/assets/parallel8_neural_calculation.svg": {
+      "sha256": "f847b8d3db57bfa88769b08038d5b8a8682bd477451adddb2d69402e386b7283",
+      "bytes": 16824
+    },
     "docs/assets/parallel8_system.dot": {
       "sha256": "108e65d859f559e99e25bd62c9846bc65d40981442806416bb83da1e70772bad",
       "bytes": 3272
@@ -255,9 +263,13 @@
       "sha256": "d1060ddea82ba693334504d149282655679bae5df245a8dfcd849f3c0ddd6c9a",
       "bytes": 23873
     },
+    "docs/NEURAL_CALCULATION_SIMPLE.md": {
+      "sha256": "f7755f18cc565b268805aea406e6f508d354808dd63dd2ed6b1d9bc050dcb09b",
+      "bytes": 3514
+    },
     "docs/PARALLEL8_BLOCK_DIAGRAM.md": {
-      "sha256": "6b55b415f2b452ea77dabf4ef757a2c2549159f646fabf0c4512cea0860b72f3",
-      "bytes": 22604
+      "sha256": "7ac4ed82e865a1fa278b1a2442c57278b67920dc1fc4f16e04651bb2c4ac7e4d",
+      "bytes": 22831
     },
     "docs/PERFORMANCE.md": {
       "sha256": "36f51e40ae11d5559a99ab105566f96f0e1b947c5c98a170bd010ca2f9eb2ae1",
@@ -2760,7 +2772,7 @@
       "bytes": 1144
     },
     "evidence/current_acceptance/audit.json": {
-      "sha256": "086d0773888130befe5deaa4d1e2ae4cffb3eff1aed3b4d7d6e2b5f58ca2da19",
+      "sha256": "f760992fc1ab4f21a0cd257b049d862097c73a537532ecbb93ab6db444669bb3",
       "bytes": 3877
     },
     "evidence/current_board_wrapper/board.gtkw": {
@@ -3139,9 +3151,13 @@
       "sha256": "2c6b1855df38f71c9fd0dda6b9331b52db4ae025fc7b7436e8f4b7b369336fd9",
       "bytes": 1502
     },
+    "evidence/parallel8_architecture/neuron_example.json": {
+      "sha256": "08ff68229e970a1b618d60dc9bddcd5b9b12adaccec1e6b02d81169bd428aadd",
+      "bytes": 665
+    },
     "evidence/parallel8_architecture/rtl_map.json": {
-      "sha256": "ba5da3a90d4dd9c5dcb23e35f9738374864faf42b749432e0b38a8b3a5a19d07",
-      "bytes": 3210
+      "sha256": "3615e6a4751bcb89c9aebef9a47ab524a0da03d5f6e861a582ca35e0d2e9e636",
+      "bytes": 3813
     },
     "evidence/visual_review/01_planner_estop_and_logger.gtkw": {
       "sha256": "263118b66c3729e4a1a619a3d1484719fc3d5e92e96d93891c57e5de6ec8fad3",
@@ -4350,6 +4366,10 @@
     "scripts/release_integrity.py": {
       "sha256": "7c0fc051e754e0d416e872a0008c31ab151770da82e39c4a5c2839d597f550ef",
       "bytes": 638
+    },
+    "scripts/render_neural_calculation.py": {
+      "sha256": "ad55e8623ac863d47151fc29479af9e0a785d1bad5480718092821bf2426b9eb",
+      "bytes": 4137
     },
     "scripts/render_parallel8_diagrams.py": {
       "sha256": "fd10aab5984bfc5e1cac9503f54562b3de5c5b066432a7b58a3b2e443a21dacd",

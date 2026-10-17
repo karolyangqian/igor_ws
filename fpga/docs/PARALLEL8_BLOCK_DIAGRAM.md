@@ -6,6 +6,8 @@ Dokumen ini mengikuti sumber yang benar-benar dipakai oleh [QSF Parallel8](../ex
 
 ## 1. Lihat alurnya terlebih dahulu
 
+Untuk mengenalkan matematika neuronnya dahulu, buka [ilustrasi sederhana perhitungan neural RTL](NEURAL_CALCULATION_SIMPLE.md): input × bobot → accumulator → aktivasi, dengan contoh angka dan pemetaan ke tiga layer IGOR.
+
 ![Diagram antarmodul Parallel8](assets/parallel8_system.svg)
 
 [Buka SVG untuk zoom](assets/parallel8_system.svg) · [PNG berikon](assets/parallel8_system.png) · [versi teknis rinci](assets/parallel8_system_technical.svg) · [DOT teknis](assets/parallel8_system.dot).

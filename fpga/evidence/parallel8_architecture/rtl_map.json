@@ -50,6 +50,8 @@
     "docs/assets/parallel8_datapath.svg": "789a06d04ff6173867ce73c0ad313ba193d5ec85d03fbd9d004416a804f23e94",
     "docs/assets/parallel8_datapath_technical.png": "a6e591d664910d3943102c467256112d4a6922f6731a06501a4c61b7c45e9d07",
     "docs/assets/parallel8_datapath_technical.svg": "ce89eb27d484acc98039183163b8f3db04479cea32f164ddaf417f5eae428d3a",
+    "docs/assets/parallel8_neural_calculation.png": "4dda28510e5eda8d5a0139f36e7bbfe573b9f40fc7bd45ef164bdd192575a5f2",
+    "docs/assets/parallel8_neural_calculation.svg": "f847b8d3db57bfa88769b08038d5b8a8682bd477451adddb2d69402e386b7283",
     "docs/assets/parallel8_system.dot": "108e65d859f559e99e25bd62c9846bc65d40981442806416bb83da1e70772bad",
     "docs/assets/parallel8_system.png": "d314c3df8354d3278dd15841a7f26a66934c7f0a8d8397faae8f2829d79a56f5",
     "docs/assets/parallel8_system.svg": "c7aac92c43d8388d606f73900fb6dd663861135249a161e260c0efd0d528a4aa",
@@ -64,5 +66,11 @@
     "style": "Native SVG line icons, six numbered process steps, separate host/FPGA boundary, data/control colors",
     "width_px": 2080,
     "technical_views_preserved": true
+  },
+  "neuron_calculation_illustration": {
+    "generator": "scripts/render_neural_calculation.py",
+    "generator_sha256": "ad55e8623ac863d47151fc29479af9e0a785d1bad5480718092821bf2426b9eb",
+    "example": "evidence/parallel8_architecture/neuron_example.json",
+    "scope": "Educational two-input neuron example, not a sample from trained IGOR weights"
   }
 }

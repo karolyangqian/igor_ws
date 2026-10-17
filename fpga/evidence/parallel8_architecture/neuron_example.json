@@ -1,0 +1,28 @@
+{
+  "kind": "Educational two-input neuron example, not a sample from trained IGOR weights",
+  "rtl_source": "experiments/parallel8/igor_src_policy_core.v",
+  "rtl_sha256": "0aff96cf9638582ab0bc6eabaf1462baa25a41196e1e73abc1aa4786cddc5d34",
+  "input_q8_8": [
+    128,
+    256
+  ],
+  "weight_q8_8": [
+    128,
+    -64
+  ],
+  "bias_q8_8": 32,
+  "product_q16_16": [
+    16384,
+    -16384
+  ],
+  "accumulator_steps": [
+    8192,
+    24576,
+    8192
+  ],
+  "scaled_floor_q8_8": 32,
+  "relu_result_q8_8": 32,
+  "real_result": 0.125,
+  "generator_sha256": "ad55e8623ac863d47151fc29479af9e0a785d1bad5480718092821bf2426b9eb",
+  "status": "PASS"
+}
