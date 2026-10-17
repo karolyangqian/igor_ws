@@ -53,6 +53,11 @@ class MiniDWAShieldController(CLDRLController):
             robot_pose=robot_pose
         )
 
+        # If operator command is idle, maintain zero velocity
+        is_cmd_active = (abs(cmd_vel[0]) > 0.01 or abs(cmd_vel[1]) > 0.01 or abs(cmd_vel[2]) > 0.02)
+        if not is_cmd_active:
+            return 0.0, 0.0, 0.0, info
+
         pose = robot_pose if robot_pose is not None else (0.0, 0.0, 0.0)
         rx, ry, ryaw = pose
         dt = self.sim_time / self.sim_steps

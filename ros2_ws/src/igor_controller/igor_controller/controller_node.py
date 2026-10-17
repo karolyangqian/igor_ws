@@ -108,6 +108,8 @@ class IgorControllerNode(Node):
             max_range=3.50
         )
         self.latest_ranges: Optional[np.ndarray] = None
+        self.latest_scan_angle_min = -np.pi
+        self.latest_scan_angle_max = np.pi
 
         # STM32 MCU Driver
         self.mcu = STM32Driver(
@@ -179,8 +181,10 @@ class IgorControllerNode(Node):
         self.get_logger().info(f"IgorControllerNode successfully started at {self.control_rate_hz:.1f} Hz.")
 
     def _scan_callback(self, msg: LaserScan) -> None:
-        """Stores latest 360 deg range array."""
+        """Stores latest 360 deg range array and angular bounds."""
         self.latest_ranges = np.array(msg.ranges, dtype=np.float32)
+        self.latest_scan_angle_min = float(msg.angle_min)
+        self.latest_scan_angle_max = float(msg.angle_max)
 
     def _cmd_vel_callback(self, msg: Twist) -> None:
         """Stores commanded velocities."""
@@ -200,9 +204,17 @@ class IgorControllerNode(Node):
             self.cmd_linear_y = 0.0
             self.cmd_angular_z = 0.0
 
-        # 1. Process LiDAR scan to 64 frontal beams
+        is_cmd_active = (abs(self.cmd_linear_x) > 0.01 or 
+                         abs(self.cmd_linear_y) > 0.01 or 
+                         abs(self.cmd_angular_z) > 0.02)
+
+        # 1. Process LiDAR scan to 64 frontal beams using dynamic angle bounds
         if self.latest_ranges is not None and len(self.latest_ranges) > 0:
-            beams_m = self.lidar_subsampler.subsample_from_laserscan(self.latest_ranges, angle_min=0.0, angle_max=2.0 * np.pi)
+            beams_m = self.lidar_subsampler.subsample_from_laserscan(
+                self.latest_ranges,
+                angle_min=self.latest_scan_angle_min,
+                angle_max=self.latest_scan_angle_max
+            )
             beams_norm = np.clip(beams_m / 3.50, 0.0, 1.0).astype(np.float32)
             d_min = float(np.min(beams_m))
         else:
@@ -211,6 +223,7 @@ class IgorControllerNode(Node):
 
         # 2. Process IMU Telemetry & Heading
         (ax, ay, az), (gx, gy, gz), imu_t = self.mcu.get_latest_imu()
+        gz_rad_s = math.radians(gz)
         self.heading_engine.update_imu(gz, current_time=now)
         self.heading_engine.update_command(self.cmd_angular_z, dt=dt)
 
@@ -223,28 +236,33 @@ class IgorControllerNode(Node):
         self.pub_heading.publish(heading_msg)
 
         # 3. Assemble 74-Element Observation Vector
+        # Match Gym V3 training distribution:
         # obs[0..63]  : 64 frontal LiDAR beams in [0, 1]
-        # obs[64..66] : ax/3.0, ay/3.0, az/3.0
-        # obs[67..69] : gx/2.0, gy/2.0, gz/2.0 (in rad/s)
+        # obs[64..65] : ax/3.0, ay/3.0
+        # obs[66..68] : 0.0, 0.0, 0.0 (gravity Z, pitch, roll zeroed during 2D training)
+        # obs[69]     : gz in rad/s / 2.0
         # obs[70..72] : vx_cmd/0.60, vy_cmd/0.50, wz_cmd/2.0
         # obs[73]     : delta_theta / pi in [-1, 1]
         obs = np.zeros(74, dtype=np.float32)
         obs[0:64] = beams_norm
-        obs[64] = float(ax) / 3.0
-        obs[65] = float(ay) / 3.0
-        obs[66] = float(az) / 3.0
-        obs[67] = math.radians(gx) / 2.0
-        obs[68] = math.radians(gy) / 2.0
-        obs[69] = math.radians(gz) / 2.0
-        obs[70] = float(self.cmd_linear_x) / 0.60
-        obs[71] = float(self.cmd_linear_y) / 0.50
-        obs[72] = float(self.cmd_angular_z) / 2.0
+        obs[64] = float(np.clip(float(ax) / 3.0, -1.0, 1.0))
+        obs[65] = float(np.clip(float(ay) / 3.0, -1.0, 1.0))
+        obs[66] = 0.0
+        obs[67] = 0.0
+        obs[68] = 0.0
+        obs[69] = float(np.clip(gz_rad_s / 2.0, -1.0, 1.0))
+        obs[70] = float(np.clip(float(self.cmd_linear_x) / 0.60, -1.0, 1.0))
+        obs[71] = float(np.clip(float(self.cmd_linear_y) / 0.50, -1.0, 1.0))
+        obs[72] = float(np.clip(float(self.cmd_angular_z) / 2.0, -1.0, 1.0))
         obs[73] = norm_delta_theta
 
-        # 4. Action Computation & Safety Gating
+        # 4. Action Computation & Safety Gating (Shared Autonomy Contract)
         v_cmd = np.array([self.cmd_linear_x, self.cmd_linear_y, self.cmd_angular_z], dtype=np.float32)
 
-        if self.use_fpga:
+        if not is_cmd_active:
+            # Idle Guard: When operator sends no velocity command, robot stays still
+            v_safe = np.zeros(3, dtype=np.float32)
+        elif self.use_fpga:
             # FPGA Accelerated Path
             raw_action = self.fpga.infer(obs)
             # Apply Asymmetric Braking Authority
@@ -253,8 +271,8 @@ class IgorControllerNode(Node):
             delta_wz = raw_action[2] * 0.80
             v_exec_drl = v_cmd + np.array([delta_vx, delta_vy, delta_wz], dtype=np.float32)
 
-            # Apply Gating Blending
-            alpha = float(np.clip((1.40 - d_min) / (1.40 - 0.35), 0.0, 1.0))
+            # Apply Gating Blending (d_safe=0.70m, d_crit=0.30m)
+            alpha = float(np.clip((0.70 - d_min) / (0.70 - 0.30), 0.0, 1.0))
             v_blended = (1.0 - alpha) * v_cmd + alpha * v_exec_drl
 
             allowed_max_vx = self.cpu_controller.compute_speed_envelope(d_min) if self.cpu_controller else 0.60
@@ -280,7 +298,7 @@ class IgorControllerNode(Node):
             exec_vx, exec_vy, exec_wz, _ = self.cpu_controller.predict(
                 lidar_ranges=beams_norm,
                 cmd_vel=(self.cmd_linear_x, self.cmd_linear_y, self.cmd_angular_z),
-                imu_data=(ax, ay, az, gx, gy, gz),
+                imu_data=(ax, ay, 0.0, 0.0, 0.0, gz_rad_s),
                 heading_err=delta_theta
             )
             v_safe = np.array([exec_vx, exec_vy, exec_wz], dtype=np.float32)

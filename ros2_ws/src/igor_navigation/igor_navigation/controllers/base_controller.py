@@ -20,6 +20,8 @@ class BaseController(ABC):
         self.min_cmd_vx = -0.15       # Max reverse speed (m/s)
         self.max_cmd_vy = 0.50        # Max lateral strafe speed (m/s)
         self.max_cmd_omega = 2.00     # Max yaw rate (rad/s)
+        self.d_safe = 0.70            # Gating safe threshold (meters) - 100% manual above this
+        self.d_crit = 0.30            # Gating critical threshold (meters) - 100% AI below this
         self.last_latency_ms = 0.0
 
     @abstractmethod
@@ -67,8 +69,16 @@ class BaseController(ABC):
         else:
             return float(min(self.max_cmd_vx, 0.15 + (d_min - d_ramp) / (d_safe - d_ramp) * (self.max_cmd_vx - 0.15)))
 
-    def compute_gating_alpha(self, d_min: float, d_safe: float = 1.40, d_crit: float = 0.35) -> float:
+    def compute_gating_alpha(
+        self,
+        d_min: float,
+        d_safe: Optional[float] = None,
+        d_crit: Optional[float] = None
+    ) -> float:
         """
         Gating blending factor: 0.0 when safe (100% transparent), 1.0 when critical.
+        Default: safe at 0.70m (pure manual control), ramps up to 1.0 at 0.30m.
         """
-        return float(np.clip((d_safe - d_min) / (d_safe - d_crit), 0.0, 1.0))
+        safe_thresh = d_safe if d_safe is not None else self.d_safe
+        crit_thresh = d_crit if d_crit is not None else self.d_crit
+        return float(np.clip((safe_thresh - d_min) / (safe_thresh - crit_thresh), 0.0, 1.0))

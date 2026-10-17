@@ -137,13 +137,19 @@ class CLDRLController(BaseController):
 
         if imu_data is not None and len(imu_data) >= 6:
             ax, ay, az, gx, gy, gz = imu_data[:6]
+            # Safety check: if gyro is provided in deg/s (e.g. |gz| > 6.0), convert to rad/s
+            gz_rad_s = float(np.radians(gz)) if abs(gz) > 6.0 else float(gz)
+            # Match Gym V3 training contract:
+            # obs[64..65]: ax, ay / 3.0
+            # obs[66..68]: 0.0, 0.0, 0.0 (gravity Z, pitch, roll are 0.0 in 2D training)
+            # obs[69]: gz in rad/s / 2.0
             norm_imu = np.array([
                 np.clip(ax / 3.0, -1.0, 1.0),
                 np.clip(ay / 3.0, -1.0, 1.0),
-                np.clip(az / 9.81, -1.0, 1.0),
-                np.clip(gx / 2.0, -1.0, 1.0),
-                np.clip(gy / 2.0, -1.0, 1.0),
-                np.clip(gz / 2.0, -1.0, 1.0),
+                0.0,
+                0.0,
+                0.0,
+                np.clip(gz_rad_s / 2.0, -1.0, 1.0),
             ], dtype=np.float32)
         else:
             norm_imu = np.zeros(6, dtype=np.float32)
@@ -179,6 +185,29 @@ class CLDRLController(BaseController):
         # Dynamic Speed Envelope & Hard Zero-Stop
         allowed_vx = self.compute_speed_envelope(d_min)
         alpha = self.compute_gating_alpha(d_min)
+
+        # Check if teleop command is active (Shared Autonomy Contract)
+        is_cmd_active = (abs(cmd_vel[0]) > 0.01 or abs(cmd_vel[1]) > 0.01 or abs(cmd_vel[2]) > 0.02)
+        if not is_cmd_active:
+            latency_ms = (time.perf_counter() - t0) * 1000.0
+            self.last_latency_ms = latency_ms
+            self.last_alpha = 0.0
+            self.last_delta = (0.0, 0.0, 0.0)
+            self.last_allowed_vx = allowed_vx
+
+            info = {
+                "algorithm": self.name,
+                "d_min": d_min,
+                "alpha": 0.0,
+                "allowed_vx": allowed_vx,
+                "delta_twist": (0.0, 0.0, 0.0),
+                "raw_action": np.zeros(3, dtype=np.float32),
+                "latency_ms": latency_ms,
+                "shield_active": False,
+                "shield_type": "none",
+                "shield_message": "IDLE (ZERO COMMAND)"
+            }
+            return 0.0, 0.0, 0.0, info
 
         # Build observation and forward through policy
         obs74 = self.build_observation(ranges_m, cmd_vel, imu_data, heading_err)
