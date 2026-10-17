@@ -1,4 +1,4 @@
-﻿# IGOR — Intelligence, Guarded Outputs, Reconfigurable Interfaces
+# IGOR — Intelligence, Guarded Outputs, Reconfigurable Interfaces
 
 **Akselerasi AI di edge, proteksi kendali langsung di hardware, dan antarmuka industri yang dapat diprogram: IGOR membawa keputusan robot lebih dekat ke sensor dan aktuator.**
 
@@ -108,13 +108,106 @@ Tiny Tapeout memberi akses fabrikasi melalui pembagian area chip antardesain. Un
 | Ongkir: 1 × €15 | €15 | €15 |
 | **Total aritmetis sebelum pajak/bea** | **€1.995** | **€1.795** |
 
-Harga merupakan snapshot kalkulator, bukan quotation atau bukti pemesanan. Opsi subsidi mengikuti kelayakan dan ketersediaan saat checkout. Pajak, bea, tujuan pengiriman dan ketentuan shuttle perlu tercantum pada quotation final. Mata uang dipertahankan dalam EUR agar tidak mencampurkan asumsi kurs.
+Harga merupakan snapshot kalkulator, bukan quotation atau bukti pemesanan. Opsi subsidi mengikuti kelayakan dan ketersediaan saat checkout. Pajak, bea, tujuan pengiriman dan ketentuan shuttle perlu tercantum pada quotation final. Konversi IDR dan contoh bisnis dijelaskan pada bagian berikut dengan tanggal kurs yang eksplisit.
 
 Sumber resmi: [kalkulator IHP 24 tile / 1 PCB](https://app.tinytapeout.com/calculator?shuttle=ihp&tiles=24&pcbs=1), [penjelasan harga berdasarkan ukuran dan shuttle](https://tinytapeout.com/), serta [FAQ DevKit dan jumlah chip](https://tinytapeout.com/faq/#how-many-chips-will-i-receive-can-i-order-more). [Snapshot rumus tarif resmi](evidence/chip_highlights/tinytapeout_invoice_snapshot.js) dan [catatan sumber](evidence/chip_highlights/tinytapeout_pricing.json) disimpan agar perhitungan bisa diperiksa ulang.
 
 **Mengapa menarik secara bisnis:** biaya prototipe dapat dipetakan ke luas desain dan kebutuhan board; FPGA mendukung iterasi demonstrasi; programmable engine memungkinkan penyesuaian protokol melalui program. Nilai penawaran IGOR adalah paket IP, firmware, model referensi, verifikasi dan bukti implementasi yang saling mendukung.
 
 Biaya di atas adalah **biaya akses prototipe shared shuttle**, bukan harga produksi massal per unit atau biaya fabrikasi sistem gabungan. Perencanaan komersial memakai quotation terpisah untuk volume, packaging, pengujian, yield dan lisensi IP. Potensi pengurangan komponen atau biaya integrasi diposisikan sebagai tujuan desain sampai ada pembandingan BOM dan pengukuran proyek pelanggan.
+
+## 6A. Contoh anggaran fabrikasi dalam rupiah
+
+**Basis konversi: 1 EUR = Rp20.222,11**, kurs jual transaksi Bank Indonesia tanggal **16 Oktober 2026**, diperiksa 17 Oktober 2026. Kurs jual dipilih sebagai acuan anggaran pembelian EUR. Nilai settlement bank, biaya transfer, pajak dan bea mengikuti transaksi aktual. Sumber: [tabel Kurs Transaksi BI](https://www.bi.go.id/id/statistik/informasi-kurs/transaksi-bi/default.aspx).
+
+Rumus: **biaya IDR = biaya EUR ? Rp20.222,11**, dibulatkan ke rupiah terdekat; total dihitung sebelum pembulatan komponen.
+
+| Komponen prototipe IHP, 24 tile | EUR | Estimasi IDR |
+|---|---:|---:|
+| Area: 24 ? ?70 | ?1.680 | **Rp33.973.145** |
+| DevKit standar, 1 unit | ?300 | **Rp6.066.633** |
+| Ongkir dasar kalkulator, 1 PCB | ?15 | **Rp303.332** |
+| **Total standar sebelum pajak/bea** | **?1.995** | **Rp40.343.109** |
+| Total opsi individual bersubsidi | ?1.795 | **Rp36.298.687** |
+
+Anggaran awal untuk pos shuttle standar dapat dibulatkan menjadi **Rp46,40 juta**, yaitu Rp40,34 juta ditambah **cadangan perencanaan 15%**. Cadangan tersebut bukan tarif pajak dan tidak menjamin seluruh bea/ongkir tujuan tercakup. Konfigurasi serta syarat pengiriman IHP dikonfirmasi melalui quotation sebelum pembayaran. Pembelian DevKit mengikuti jumlah chip/board dalam penawaran Tiny Tapeout; anggaran ini tidak berarti memperoleh 24 chip.
+
+### Contoh anggaran proyek prototipe lengkap
+
+Pos berikut merupakan **asumsi internal untuk proposal**, bukan harga vendor atau biaya yang sudah dikeluarkan. Lingkupnya satu iterasi prototipe protocol engine 24 tile beserta kegiatan rekayasa dan board pendukung; integrasi ASIC AI/safety menggunakan estimasi area dan quotation tersendiri.
+
+| Pos proyek | Asumsi anggaran IDR |
+|---|---:|
+| Shuttle, DevKit dan ongkir dasar | Rp40.343.109 |
+| Rekayasa RTL/firmware dan verifikasi | Rp60.000.000 |
+| PCB pendukung, komponen dan perakitan | Rp10.000.000 |
+| Fixture pengujian dan kegiatan bring-up | Rp5.000.000 |
+| **Subtotal** | **Rp115.343.109** |
+| Cadangan proyek 15% dari subtotal | Rp17.301.466 |
+| **Total kebutuhan dana ilustratif** | **Rp132.644.575 ? Rp132,65 juta** |
+
+Cadangan dihitung satu kali pada subtotal, tidak ditumpuk dengan cadangan pos shuttle. Gaji, jam kerja, kebutuhan alat, pajak dan ongkir final harus dirinci kembali saat penawaran disusun.
+
+## 6B. Contoh model bisnis IGOR
+
+**Pelanggan awal:** integrator AGV, pembuat robot inspeksi, tim otomasi pabrik dan laboratorium industri. Penawarannya adalah paket akselerasi kendali dan integritas I/O, dilengkapi firmware, integrasi serta bukti uji yang dapat dibaca pelanggan. Performa core 0,13832 ms menjadi parameter teknis penawaran FPGA; fitur safety dan antarmuka dipilih sesuai konfigurasi yang benar-benar diserahkan.
+
+### Model 1 ? jasa pilot dan integrasi
+
+Contoh paket: konfigurasi FPGA IGOR, integrasi sensor/periferal, demo safety gate, pelatihan dan laporan pengujian dalam ruang lingkup kontrak. **Seluruh harga dan biaya berikut adalah asumsi simulasi bisnis**, belum merupakan harga pasar, pesanan atau pendapatan aktual.
+
+| Parameter | Skenario contoh |
+|---|---:|
+| Harga jasa per proyek pilot | Rp75.000.000 |
+| Biaya langsung per proyek: tenaga kerja, perjalanan, alat dan board | Rp40.000.000 |
+| **Kontribusi per proyek** | **Rp35.000.000** |
+| Rasio kontribusi terhadap pendapatan | **46,67%** |
+| Biaya pengembangan awal tetap | Rp150.000.000 |
+| Titik impas pengembangan | **5 proyek** |
+
+Perhitungan: `ceil(Rp150 juta / Rp35 juta) = 5 proyek`. Pada **10 proyek**, pendapatan Rp750 juta, biaya langsung Rp400 juta, kontribusi Rp350 juta, dan sisa setelah biaya pengembangan awal **Rp200 juta**, sebelum overhead lain dan pajak. Biaya awal dicatat satu kali; jangan memasukkannya kembali ke biaya langsung proyek.
+
+Contoh arus kas per pilot: **40% / 40% / 20%**, masing-masing **Rp30 juta / Rp30 juta / Rp15 juta**, pada kickoff, penerimaan demo, dan serah terima. Milestone kontrak perlu menyebut konfigurasi, metrik yang diukur, batas lingkup latency core/komunikasi, serta kriteria penerimaan.
+
+### Model 2 ? modul kendali komersial setelah validasi produk
+
+Untuk produk volume, contoh penawaran adalah **modul/board kendali**, bukan bare die Tiny Tapeout. Asumsi berikut menggambarkan cara mengevaluasi kelayakan setelah ada quotation produksi, hasil uji dan BOM produk.
+
+| Parameter | Asumsi IDR |
+|---|---:|
+| Harga jual per modul | Rp1.500.000 |
+| HPP landed per modul: chip, PCB, assembly dan pengujian | Rp900.000 |
+| Biaya variabel penjualan/dukungan per modul | Rp100.000 |
+| **Kontribusi per modul** | **Rp500.000** |
+| NRE/pengembangan tetap | Rp500.000.000 |
+| **Titik impas** | **1.000 modul** |
+
+Pada **2.000 modul terjual**, pendapatan Rp3 miliar, HPP Rp1,8 miliar, biaya variabel Rp200 juta, dan sisa setelah NRE **Rp500 juta**, sebelum overhead lain dan pajak. HPP Rp900.000 adalah target skenario yang harus diganti quotation, bukan hasil membagi biaya shuttle dengan jumlah modul. Skenario ini terpisah dari model jasa pilot agar biaya pengembangan tidak dihitung ganda.
+
+Sensitivitas: bila HPP naik menjadi **Rp1.100.000**, kontribusi turun menjadi **Rp300.000** dan titik impas menjadi **1.667 modul**. Rumus umum: `kontribusi = harga jual ? HPP ? biaya variabel`, lalu `unit impas = ceil(biaya tetap / kontribusi)` untuk kontribusi positif.
+
+**Nilai jual yang konkret:** komputasi core lebih cepat, proteksi operasi yang dapat diuji, satu engine untuk beberapa protokol, dan paket bukti untuk mempercepat evaluasi pelanggan. Penghematan downtime, pengurangan BOM dan ROI pelanggan dihitung dari data pilot masing-masing; angka pendapatan di atas merupakan simulasi perencanaan.
+
+## 6C. Cara membangun alur fabrikasi IGOR
+
+Model operasionalnya **fabless**: tim IGOR mendesain dan memverifikasi IP, shuttle/foundry membuat silicon, mitra assembly/test menyiapkan kemasan atau board, lalu tim menguji fungsi dan menyerahkan produk. Tim tidak perlu membangun fasilitas wafer sendiri untuk menjalankan prototipe ini.
+
+| Tahap | Pekerjaan dan keluaran yang disiapkan | Kriteria melanjutkan |
+|---|---|---|
+| 1. Tetapkan produk | Pilih protocol engine 24 tile atau lingkup integrasi AI/safety; susun spesifikasi pin, clock, tegangan, protokol, security dan anggaran | Spesifikasi dan kriteria penerimaan disepakati |
+| 2. Bekukan desain | Simpan commit RTL, parameter, firmware, model bobot, constraints dan daftar IP | Versi serta hash sumber dapat ditelusuri |
+| 3. Verifikasi RTL | Uji nominal, E-stop, frame invalid, timeout, konflik GPIO dan kasus tepi sesuai blok; simpan log/waveform | Seluruh tes wajib pada lingkup desain lulus |
+| 4. Implementasi IHP | Jalankan synthesis, floorplan, placement, clock tree dan routing dengan PDK/library yang cocok dengan shuttle | Area, pin, clock dan kebutuhan memori sesuai konfigurasi |
+| 5. Sign-off fisik | Periksa DRC, LVS, antenna, timing setup/hold, slew/capacitance, overlap serta power dengan aktivitas representatif | Semua kriteria sign-off shuttle dan desain terpenuhi; tidak mengubah batas agar sekadar terlihat lulus |
+| 6. Siapkan paket rilis | GDS/OASIS sesuai permintaan, netlist, constraints, laporan, konfigurasi, pinout, test plan, hash dan provenance | Artefak fabrikasi cocok dengan versi yang diuji |
+| 7. Quotation dan pemesanan | Konfirmasi area, shuttle, harga, pajak/bea, pengiriman Indonesia, jumlah chip/board, jadwal dan hak penggunaan | Quotation tertulis dan persetujuan anggaran |
+| 8. Fabrikasi dan assembly | Penyedia menjalankan proses wafer, packaging/COB dan perakitan sesuai layanan | Identitas lot/board dan hasil inspeksi tercatat |
+| 9. Bring-up dan karakterisasi | Uji rail/clock/reset, host readback, protokol, safety pada konfigurasi terkait, latency serta daya terukur | Hasil silicon memenuhi acceptance produk |
+| 10. Pilot pelanggan dan produksi | Uji lapangan, revisi BOM, quotation volume, yield dan test coverage; siapkan dukungan dan pelacakan versi | Produksi dirilis dari hasil pilot dan perhitungan biaya aktual |
+
+Alur kerja tim: **engineering mengelola versi dan sign-off ? procurement mengelola quotation/lot ? manufaktur merakit ? QA melakukan acceptance ? tim bisnis menyerahkan paket produk serta dukungan**. Setiap board mempunyai identitas, versi firmware/program, hasil uji dan catatan pengukuran.
+
+CI membantu mereproduksi simulasi, build, laporan dan pemeriksaan artefak. **Pemesanan, pembayaran dan pengiriman desain untuk fabrikasi dilakukan setelah paket rilis serta quotation disetujui**, terpisah dari push repository biasa. Permintaan ini menyusun rencana bisnis/fabrikasi; tidak menjalankan pemesanan atau pembayaran.
 
 ## 7. Bukti yang membuat presentasi meyakinkan
 
