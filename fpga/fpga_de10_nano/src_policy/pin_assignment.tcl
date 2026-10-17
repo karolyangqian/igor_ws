@@ -17,3 +17,8 @@ foreach port {FPGA_CLK1_50 KEY[0] KEY[1] UART_RX UART_TX LED[0] LED[1] LED[2] LE
  set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to $port
 }
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to UART_RX
+# Make output electrical settings explicit (Cyclone V 3.3-V LVTTL).
+foreach port {UART_TX LED[0] LED[1] LED[2] LED[3] LED[4] LED[5] LED[6] LED[7]} {
+ set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to $port
+ set_instance_assignment -name SLEW_RATE 1 -to $port
+}

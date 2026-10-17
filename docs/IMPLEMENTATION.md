@@ -1,7 +1,7 @@
 # Implementation status
 
-The integrated top is `tt_um_igorchip` in `src-chip/igorchip_top.v`,
-with `src-chip/program_host.v` providing its synchronized mode-0 SPI transport.
+The integrated top is `tt_um_igorchip` in `src/igorchip_top.v`,
+with `src/program_host.v` providing its synchronized mode-0 SPI transport.
 It implements four deterministic round-robin contexts; host-loadable 256 x
 16-bit storage; X/Y and receive registers; full-byte cycle waits and pin waits;
 conditional branches; masked push-pull/open-drain GPIO; synchronized inputs;

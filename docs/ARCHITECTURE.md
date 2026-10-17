@@ -1,8 +1,8 @@
 # Architecture
 
-The integrated design is `tt_um_igorchip` in `src-chip/igorchip_top.v`,
-with the synchronized SPI register transport in `src-chip/program_host.v`.
-`src-chip/top.v` is a compatibility wrapper. The Tiny Tapeout source list includes
+The integrated design is `tt_um_igorchip` in `src/igorchip_top.v`,
+with the synchronized SPI register transport in `src/program_host.v`.
+`src/top.v` is a compatibility wrapper. The Tiny Tapeout source list includes
 the integrated design, transport, memory wrapper, SRAM black box, and defines header.
 
 Four contexts share 256 x 16-bit program storage. Each context has an 8-bit PC,

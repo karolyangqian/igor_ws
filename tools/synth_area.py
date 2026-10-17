@@ -18,7 +18,7 @@ def quoted(path: Path) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--liberty', type=Path, required=True)
-    parser.add_argument('--source-directory', type=Path, default=Path('src-chip'))
+    parser.add_argument('--source-directory', type=Path, default=Path('src'))
     parser.add_argument('--output', type=Path, default=Path('build/area/compact'))
     parser.add_argument('--core-area', type=float, default=902417.242)
     parser.add_argument('--max-utilization', type=float, default=60.0)

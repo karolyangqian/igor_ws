@@ -107,7 +107,10 @@ module igor_src_policy_uart #(
         input [7:0] code;
         begin
             error_code<=code; error_history<=error_history | (12'h1 << (code[3:0]-1'b1));
-            rejected_frames<=rejected_frames+1'b1;
+            // Audit counters saturate: long-running faults must never look like
+            // a fresh/reset device after wrapping through zero.
+            if (rejected_frames!=32'hffffffff)
+                rejected_frames<=rejected_frames+1'b1;
             result_valid<=0; position<=0; mode<=RX;
             rx_timer<=0; infer_timer<=0;
             core_abort<=1; core_start<=0; core_load<=0;
@@ -140,7 +143,8 @@ module igor_src_policy_uart #(
                 core_abort<=1; tx_cancel<=1;
                 if (!estop_previous) begin
                     error_code<=1; error_history<=error_history | 12'h001;
-                    rejected_frames<=rejected_frames+1'b1;
+                    if (rejected_frames!=32'hffffffff)
+                        rejected_frames<=rejected_frames+1'b1;
                 end
             end else if (core_fault && mode!=RX) reject(8'd10);
             else if (rx_error) reject(8'd2);
@@ -169,7 +173,8 @@ module igor_src_policy_uart #(
                             if (rx_data!=crc) reject(8'd6);
                             else if (invalid_observation) reject(8'd8);
                             else begin
-                                accepted_frames<=accepted_frames+1'b1;
+                                if (accepted_frames!=32'hffffffff)
+                                    accepted_frames<=accepted_frames+1'b1;
                                 load_index<=0; mode<=LOAD;
                             end
                         end

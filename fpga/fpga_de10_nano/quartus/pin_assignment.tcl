@@ -34,3 +34,8 @@ set_location_assignment PIN_V12 -to UART_RX
 set_location_assignment PIN_E8 -to UART_TX
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_RX
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to UART_TX
+# Explicit drive and slew match the standard board output defaults.
+foreach port {UART_TX LED[0] LED[1] LED[2] LED[3] LED[4] LED[5] LED[6] LED[7]} {
+ set_instance_assignment -name CURRENT_STRENGTH_NEW 16MA -to $port
+ set_instance_assignment -name SLEW_RATE 1 -to $port
+}

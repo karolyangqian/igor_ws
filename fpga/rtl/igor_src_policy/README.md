@@ -12,7 +12,8 @@ FPGA menerima **observasi yang telah dinormalisasi**, lalu mengembalikan tiga
 **residual aksi**. Residual bukan kecepatan roda, bukan keluaran kinematika
 Mecanum, dan bukan izin motor. Blending teleop, hard-stop envelope, CBF,
 mini-DWA, pemetaan rintangan, serta konversi roda tetap tanggung jawab controller
-host di `./src`. Protokol observasi ini tidak membawa peta; karena itu tidak
+host di `fpga/software_integration/src`; `igor_ws/src` tetap referensi asli.
+Protokol observasi ini tidak membawa peta; karena itu tidak
 boleh diklaim telah menguji invalidasi peta melalui target ini. Pengujian peta
 berada pada target gate/planner legacy yang terpisah.
 
@@ -29,6 +30,14 @@ inferensi, membuang observasi parsial, dan mereset serializer TX. Pelepasan
 E-stop melewati dua flip-flop sinkronisasi. Observasi baru yang lengkap dan sah
 diperlukan untuk mendapatkan residual valid kembali. Ini bukan rangkaian E-stop
 bersertifikasi; pemutusan daya/enable motor harus independen pada robot fisik.
+
+Counter debug `accepted_frames` dan `rejected_frames` bersifat saturating pada
+`0xffffffff`; CRC reject dan E-stop tetap diproses ketika counter penuh.
+Reset menghapus kedua counter. Tujuh kasus batas/recovery tambahan lulus
+bersama regresi UART penuh (184 transaksi, 268 assertion). Counter debug
+tidak otomatis tersedia sebagai query UART pada image board standar.
+Lihat [bukti visual](../../docs/SIMULATION_EVIDENCE.md) dan
+[perbaikan tervalidasi](../../docs/RTL_IMPROVEMENTS.md).
 
 ## Arsitektur dan kontrak numerik
 
@@ -141,12 +150,14 @@ hanya setelah CRC/range sah; `rejected_frames` menghitung event fault,
 termasuk stale/E-stop/watchdog, sehingga bukan hanya jumlah paket salah.
 `response_valid` berpulse satu siklus ketika hasil baru selesai dicapture;
 pengiriman UART menyusul. `last_latency_cycles` mencatat core latency.
-Status debug ini tersedia sebagai sinyal FPGA/SignalTap, bukan respons
-opcode status serial tambahan.
+Status debug ini tersedia pada port RTL dan waveform simulasi, bukan respons
+opcode status serial tambahan. Build board standar dapat mengoptimalkan node
+debug yang tidak terhubung ke LED. Pengukuran dengan SignalTap memerlukan build
+instrumentasi tersendiri dengan node tersebut dipertahankan, serta hash SOF baru.
 
 ## Regresi mandiri dan hasil numerik
 
-Dari `peruri-iseedesign`:
+Dari `igor_ws/fpga`:
 
 ```powershell
 python verification/src_policy/run.py --check

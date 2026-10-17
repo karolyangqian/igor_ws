@@ -17,11 +17,11 @@ class PowerProgramSRAM(OpenROADStep):
     config_vars = OpenROADStep.config_vars + [
         Variable("PROGRAM_SRAM_GEOMETRY", ConfigPath,
                  "SRAM power-column geometry helper",
-                 default=ConfigPath(str(Path(__file__).resolve().parent / "src-chip" / "sram_geometry.tcl")))
+                 default=ConfigPath(str(Path(__file__).resolve().parent / "src" / "sram_geometry.tcl")))
     ]
 
     def get_script_path(self):
-        return str(Path(__file__).resolve().parent / "src-chip" / "power_sram.tcl")
+        return str(Path(__file__).resolve().parent / "src" / "power_sram.tcl")
 
 
 @Step.factory.register()

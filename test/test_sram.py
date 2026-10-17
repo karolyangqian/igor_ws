@@ -19,7 +19,7 @@ class SRAMTests(unittest.TestCase):
             sources = [ROOT / "test/ihp_sram/RM_IHPSG13_1P_core_behavioral_bm_bist.v",
                        ROOT / "test/ihp_sram/RM_IHPSG13_1P_256x16_c2_bm_bist.v", *extra_sources]
             compiled = subprocess.run(["iverilog", "-g2012", "-DSIM", "-DFUNCTIONAL",
-                                       f"-I{ROOT / 'src-chip'}", "-s", "tb", "-o", str(p / "sim"),
+                                       f"-I{ROOT / 'src'}", "-s", "tb", "-o", str(p / "sim"),
                                        str(p / "tb.v"), *map(str, sources)], capture_output=True, text=True)
             self.assertEqual(compiled.returncode, 0, compiled.stderr)
             result = subprocess.run(["vvp", str(p / "sim")], capture_output=True, text=True, timeout=15)
@@ -67,4 +67,4 @@ class SRAMTests(unittest.TestCase):
             program_memory memory(.clk(clk), .rst_n(rst_n), .address(addr),
               .write_enable(we), .high_byte(high), .write_data(d), .read_data(q));
             task tick; begin #5; clk=0; #5; clk=1; end endtask
-        ''', [ROOT / "src-chip/program_memory.v"])
+        ''', [ROOT / "src/program_memory.v"])

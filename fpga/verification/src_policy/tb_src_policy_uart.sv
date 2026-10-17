@@ -219,7 +219,37 @@ module tb_src_policy_uart;
         test_id=1200;reset_all();packet(1,0,73,-16'sd32768);expect_error(8);
         test_id=1201;reset_all();packet(1,0,0,16'sd32767);expect_error(8);
         $dumpon;test_id=1300;reset_all();packet(1,0,-1,0);expect_response(1,0);
-        checkpoint("final_recovery");$fclose(checkpoints);
+        checkpoint("final_recovery");
+        // Boundary-state injection avoids billions of packets. The actual
+        // increment paths still run through valid UART, bad CRC and raw E-stop.
+        test_id=1400;reset_all();
+        @(negedge clk);dut.accepted_frames=32'hfffffffe;
+        packet(1,0,-1,0);expect_response(1,0);
+        if(accepted_frames!==32'hffffffff)$fatal(1,"Accepted count did not reach MAX");
+        checks=checks+1;checkpoint("accepted_counter_reaches_max");
+        test_id=1401;packet(2,0,-1,0);expect_response(2,11);
+        if(accepted_frames!==32'hffffffff)$fatal(1,"Accepted audit counter wrapped");
+        checks=checks+1;checkpoint("accepted_counter_saturates");
+        test_id=1402;reset_all();
+        @(negedge clk);dut.rejected_frames=32'hfffffffe;
+        packet(1,1,-1,0);expect_error(6);
+        if(rejected_frames!==32'hffffffff)$fatal(1,"Rejected count did not reach MAX");
+        checks=checks+1;checkpoint("rejected_counter_reaches_max");
+        test_id=1403;packet(1,1,-1,0);expect_error(6);
+        if(rejected_frames!==32'hffffffff)$fatal(1,"CRC reject audit counter wrapped");
+        checks=checks+1;checkpoint("rejected_counter_crc_saturates");
+        test_id=1404;assert_estop();
+        if(rejected_frames!==32'hffffffff)$fatal(1,"E-stop audit counter wrapped");
+        checks=checks+1;checkpoint("rejected_counter_estop_saturates");
+        test_id=1405;reset_all();
+        if(accepted_frames!==0||rejected_frames!==0||safety_permit)
+            $fatal(1,"Reset did not clear saturated counters and residual permit");
+        checks=checks+1;case_count=case_count+1;checkpoint("saturated_counters_reset_clear");
+        test_id=1406;packet(1,0,-1,0);expect_response(1,0);
+        if(accepted_frames!==1||rejected_frames!==0)
+            $fatal(1,"Post-reset counting or recovery failed");
+        checks=checks+1;checkpoint("post_saturation_reset_recovery");
+        $fclose(checkpoints);
         $display("PASS uart: %0d directed transactions, %0d assertions, all 74 field range boundaries, independent wire decode, E-stop/parser/inference/TX/reset/stale/watchdog recovery",case_count,checks);
         $finish;
     end

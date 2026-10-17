@@ -11,9 +11,8 @@ jobs:
     steps:
       - name: checkout repo
         uses: actions/checkout@v6
-
-      - name: Stage Tiny Tapeout source directory
-        run: cp -a src-chip src
+        with:
+          lfs: true
 
       - name: Select FPGA block RAM
         run: |

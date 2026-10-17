@@ -16,9 +16,8 @@ jobs:
     steps:
       - name: checkout repo
         uses: actions/checkout@v6
-
-      - name: Stage Tiny Tapeout source directory
-        run: cp -a src-chip src
+        with:
+          lfs: true
 
       - name: Build GDS
         timeout-minutes: 150
@@ -60,6 +59,8 @@ jobs:
     steps:
       - name: checkout repo
         uses: actions/checkout@v6
+        with:
+          lfs: true
 
       - name: GL test
         uses: TinyTapeout/tt-gds-action/gl_test@ihp-cmos5l

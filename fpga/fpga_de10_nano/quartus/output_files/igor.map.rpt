@@ -1,5 +1,5 @@
 Analysis & Synthesis report for igor
-Fri Oct 16 12:54:55 2026
+Fri Oct 16 17:56:42 2026
 Quartus Prime Version 25.1std.0 Build 1129 10/21/2025 SC Standard Edition
 
 
@@ -93,7 +93,7 @@ on the Quartus Prime software download page.
 +---------------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                          ;
 +---------------------------------+-----------------------------------------------------+
-; Analysis & Synthesis Status     ; Successful - Fri Oct 16 12:54:54 2026               ;
+; Analysis & Synthesis Status     ; Successful - Fri Oct 16 17:56:42 2026               ;
 ; Quartus Prime Version           ; 25.1std.0 Build 1129 10/21/2025 SC Standard Edition ;
 ; Revision Name                   ; igor                                                ;
 ; Top-level Entity Name           ; igor_uart_top                                       ;
@@ -214,50 +214,50 @@ on the Quartus Prime software download page.
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;   0.0%      ;
-;     Processor 3            ;   0.0%      ;
+;     Processor 2            ;   0.1%      ;
+;     Processor 3            ;   0.1%      ;
 ;     Processor 4            ;   0.0%      ;
 +----------------------------+-------------+
 
 
-+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Analysis & Synthesis Source Files Read                                                                                                                                                        ;
-+---------------------------------------+-----------------+------------------------------+--------------------------------------------------------------------------------------------+---------+
-; File Name with User-Entered Path      ; Used in Netlist ; File Type                    ; File Name with Absolute Path                                                               ; Library ;
-+---------------------------------------+-----------------+------------------------------+--------------------------------------------------------------------------------------------+---------+
-; ../rtl/igor_best_candidate_selector.v ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_best_candidate_selector.v ;         ;
-; ../rtl/igor_candidate_generator.v     ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_candidate_generator.v     ;         ;
-; ../rtl/igor_config_registers.v        ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_config_registers.v        ;         ;
-; ../rtl/igor_costmap_bank.v            ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_costmap_bank.v            ;         ;
-; ../rtl/igor_costmap_manager.v         ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_costmap_manager.v         ;         ;
-; ../rtl/igor_kinematic_step.v          ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_kinematic_step.v          ;         ;
-; ../rtl/igor_rollout_tile.v            ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_rollout_tile.v            ;         ;
-; ../rtl/igor_safety_security_gate.v    ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_safety_security_gate.v    ;         ;
-; ../rtl/igor_score_accumulator.v       ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_score_accumulator.v       ;         ;
-; ../rtl/igor_status_logger.v           ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_status_logger.v           ;         ;
-; ../rtl/igor_top.v                     ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v                     ;         ;
-; ../rtl/igor_trig_lut.v                ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_trig_lut.v                ;         ;
-; ../rtl/igor_neural_core.v             ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_core.v             ;         ;
-; ../rtl/igor_neural_rom.v              ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_rom.v              ;         ;
-; ../rtl/igor_uart_protocol.v           ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_protocol.v           ;         ;
-; ../rtl/igor_uart_rx.v                 ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_rx.v                 ;         ;
-; ../rtl/igor_uart_top.v                ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_top.v                ;         ;
-; ../rtl/igor_uart_tx.v                 ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_tx.v                 ;         ;
-; altsyncram.tdf                        ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/altsyncram.tdf                          ;         ;
-; stratix_ram_block.inc                 ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/stratix_ram_block.inc                   ;         ;
-; lpm_mux.inc                           ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/lpm_mux.inc                             ;         ;
-; lpm_decode.inc                        ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/lpm_decode.inc                          ;         ;
-; aglobal251.inc                        ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/aglobal251.inc                          ;         ;
-; a_rdenreg.inc                         ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/a_rdenreg.inc                           ;         ;
-; altrom.inc                            ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/altrom.inc                              ;         ;
-; altram.inc                            ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/altram.inc                              ;         ;
-; altdpram.inc                          ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/altdpram.inc                            ;         ;
-; db/altsyncram_43n1.tdf                ; yes             ; Auto-Generated Megafunction  ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/quartus/db/altsyncram_43n1.tdf     ;         ;
-; db/altsyncram_e3n1.tdf                ; yes             ; Auto-Generated Megafunction  ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/quartus/db/altsyncram_e3n1.tdf     ;         ;
-; db/altsyncram_lap1.tdf                ; yes             ; Auto-Generated Megafunction  ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/quartus/db/altsyncram_lap1.tdf     ;         ;
-; db/decode_8la.tdf                     ; yes             ; Auto-Generated Megafunction  ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/quartus/db/decode_8la.tdf          ;         ;
-; db/mux_ofb.tdf                        ; yes             ; Auto-Generated Megafunction  ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/quartus/db/mux_ofb.tdf             ;         ;
-+---------------------------------------+-----------------+------------------------------+--------------------------------------------------------------------------------------------+---------+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                                       ;
++------------------------------------------+-----------------+------------------------------+----------------------------------------------------------------------------------------+---------+
+; File Name with User-Entered Path         ; Used in Netlist ; File Type                    ; File Name with Absolute Path                                                           ; Library ;
++------------------------------------------+-----------------+------------------------------+----------------------------------------------------------------------------------------+---------+
+; ../../rtl/igor_best_candidate_selector.v ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_best_candidate_selector.v            ;         ;
+; ../../rtl/igor_candidate_generator.v     ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_candidate_generator.v                ;         ;
+; ../../rtl/igor_config_registers.v        ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_config_registers.v                   ;         ;
+; ../../rtl/igor_costmap_bank.v            ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_costmap_bank.v                       ;         ;
+; ../../rtl/igor_costmap_manager.v         ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_costmap_manager.v                    ;         ;
+; ../../rtl/igor_kinematic_step.v          ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_kinematic_step.v                     ;         ;
+; ../../rtl/igor_rollout_tile.v            ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_rollout_tile.v                       ;         ;
+; ../../rtl/igor_safety_security_gate.v    ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_safety_security_gate.v               ;         ;
+; ../../rtl/igor_score_accumulator.v       ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_score_accumulator.v                  ;         ;
+; ../../rtl/igor_status_logger.v           ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_status_logger.v                      ;         ;
+; ../../rtl/igor_top.v                     ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v                                ;         ;
+; ../../rtl/igor_trig_lut.v                ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_trig_lut.v                           ;         ;
+; ../../rtl/igor_neural_core.v             ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_neural_core.v                        ;         ;
+; ../../rtl/igor_neural_rom.v              ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_neural_rom.v                         ;         ;
+; ../../rtl/igor_uart_protocol.v           ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_protocol.v                      ;         ;
+; ../../rtl/igor_uart_rx.v                 ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_rx.v                            ;         ;
+; ../../rtl/igor_uart_top.v                ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_top.v                           ;         ;
+; ../../rtl/igor_uart_tx.v                 ; yes             ; User Verilog HDL File        ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_tx.v                            ;         ;
+; altsyncram.tdf                           ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/altsyncram.tdf                      ;         ;
+; stratix_ram_block.inc                    ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/stratix_ram_block.inc               ;         ;
+; lpm_mux.inc                              ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/lpm_mux.inc                         ;         ;
+; lpm_decode.inc                           ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/lpm_decode.inc                      ;         ;
+; aglobal251.inc                           ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/aglobal251.inc                      ;         ;
+; a_rdenreg.inc                            ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/a_rdenreg.inc                       ;         ;
+; altrom.inc                               ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/altrom.inc                          ;         ;
+; altram.inc                               ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/altram.inc                          ;         ;
+; altdpram.inc                             ; yes             ; Megafunction                 ; d:/quartus-program/quartus/libraries/megafunctions/altdpram.inc                        ;         ;
+; db/altsyncram_43n1.tdf                   ; yes             ; Auto-Generated Megafunction  ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/quartus/db/altsyncram_43n1.tdf ;         ;
+; db/altsyncram_e3n1.tdf                   ; yes             ; Auto-Generated Megafunction  ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/quartus/db/altsyncram_e3n1.tdf ;         ;
+; db/altsyncram_lap1.tdf                   ; yes             ; Auto-Generated Megafunction  ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/quartus/db/altsyncram_lap1.tdf ;         ;
+; db/decode_8la.tdf                        ; yes             ; Auto-Generated Megafunction  ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/quartus/db/decode_8la.tdf      ;         ;
+; db/mux_ofb.tdf                           ; yes             ; Auto-Generated Megafunction  ; D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/quartus/db/mux_ofb.tdf         ;         ;
++------------------------------------------+-----------------+------------------------------+----------------------------------------------------------------------------------------+---------+
 
 
 +------------------------------------------------------------------+
@@ -1634,7 +1634,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 +----------------+--------------+
 ; Partition Name ; Elapsed Time ;
 +----------------+--------------+
-; Top            ; 00:00:35     ;
+; Top            ; 00:00:22     ;
 +----------------+--------------+
 
 
@@ -1644,83 +1644,83 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 25.1std.0 Build 1129 10/21/2025 SC Standard Edition
-    Info: Processing started: Fri Oct 16 12:53:47 2026
+    Info: Processing started: Fri Oct 16 17:55:54 2026
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off igor -c igor
 Info (20032): Parallel compilation is enabled and will use up to 4 processors
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_best_candidate_selector.v
-    Info (12023): Found entity 1: igor_best_candidate_selector File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_best_candidate_selector.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_candidate_generator.v
-    Info (12023): Found entity 1: igor_candidate_generator File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_candidate_generator.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_config_registers.v
-    Info (12023): Found entity 1: igor_config_registers File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_config_registers.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_costmap_bank.v
-    Info (12023): Found entity 1: igor_costmap_bank File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_costmap_bank.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_costmap_manager.v
-    Info (12023): Found entity 1: igor_costmap_manager File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_costmap_manager.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_de10_nano_wrapper.v
-    Info (12023): Found entity 1: igor_de10_nano_wrapper File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_de10_nano_wrapper.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_kinematic_step.v
-    Info (12023): Found entity 1: igor_kinematic_step File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_kinematic_step.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_rollout_tile.v
-    Info (12023): Found entity 1: igor_rollout_tile File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_rollout_tile.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_safety_security_gate.v
-    Info (12023): Found entity 1: igor_safety_security_gate File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_safety_security_gate.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_score_accumulator.v
-    Info (12023): Found entity 1: igor_score_accumulator File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_score_accumulator.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_status_logger.v
-    Info (12023): Found entity 1: igor_status_logger File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_status_logger.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v
-    Info (12023): Found entity 1: igor_top File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_trig_lut.v
-    Info (12023): Found entity 1: igor_trig_lut File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_trig_lut.v Line: 6
-Info (12021): Found 2 design units, including 2 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_core.v
-    Info (12023): Found entity 1: igor_neural_core File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_core.v Line: 6
-    Info (12023): Found entity 2: igor_neural_datapath File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_core.v Line: 20
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_rom.v
-    Info (12023): Found entity 1: igor_neural_rom File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_rom.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_protocol.v
-    Info (12023): Found entity 1: igor_uart_protocol File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_protocol.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_rx.v
-    Info (12023): Found entity 1: igor_uart_rx File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_rx.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_top.v
-    Info (12023): Found entity 1: igor_uart_top File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_top.v Line: 6
-Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_tx.v
-    Info (12023): Found entity 1: igor_uart_tx File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_tx.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_best_candidate_selector.v
+    Info (12023): Found entity 1: igor_best_candidate_selector File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_best_candidate_selector.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_candidate_generator.v
+    Info (12023): Found entity 1: igor_candidate_generator File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_candidate_generator.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_config_registers.v
+    Info (12023): Found entity 1: igor_config_registers File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_config_registers.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_costmap_bank.v
+    Info (12023): Found entity 1: igor_costmap_bank File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_costmap_bank.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_costmap_manager.v
+    Info (12023): Found entity 1: igor_costmap_manager File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_costmap_manager.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_de10_nano_wrapper.v
+    Info (12023): Found entity 1: igor_de10_nano_wrapper File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_de10_nano_wrapper.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_kinematic_step.v
+    Info (12023): Found entity 1: igor_kinematic_step File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_kinematic_step.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_rollout_tile.v
+    Info (12023): Found entity 1: igor_rollout_tile File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_rollout_tile.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_safety_security_gate.v
+    Info (12023): Found entity 1: igor_safety_security_gate File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_safety_security_gate.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_score_accumulator.v
+    Info (12023): Found entity 1: igor_score_accumulator File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_score_accumulator.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_status_logger.v
+    Info (12023): Found entity 1: igor_status_logger File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_status_logger.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_top.v
+    Info (12023): Found entity 1: igor_top File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_trig_lut.v
+    Info (12023): Found entity 1: igor_trig_lut File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_trig_lut.v Line: 6
+Info (12021): Found 2 design units, including 2 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_neural_core.v
+    Info (12023): Found entity 1: igor_neural_core File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_neural_core.v Line: 6
+    Info (12023): Found entity 2: igor_neural_datapath File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_neural_core.v Line: 20
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_neural_rom.v
+    Info (12023): Found entity 1: igor_neural_rom File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_neural_rom.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_uart_protocol.v
+    Info (12023): Found entity 1: igor_uart_protocol File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_protocol.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_uart_rx.v
+    Info (12023): Found entity 1: igor_uart_rx File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_rx.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_uart_top.v
+    Info (12023): Found entity 1: igor_uart_top File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_top.v Line: 6
+Info (12021): Found 1 design units, including 1 entities, in source file /linkedinprojects/igor_ws/igor_ws/fpga/rtl/igor_uart_tx.v
+    Info (12023): Found entity 1: igor_uart_tx File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_tx.v Line: 6
 Info (12127): Elaborating entity "igor_uart_top" for the top level hierarchy
-Info (12128): Elaborating entity "igor_uart_protocol" for hierarchy "igor_uart_protocol:serial" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_top.v Line: 15
-Info (12128): Elaborating entity "igor_uart_rx" for hierarchy "igor_uart_protocol:serial|igor_uart_rx:receiver" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_protocol.v Line: 12
-Info (12128): Elaborating entity "igor_uart_tx" for hierarchy "igor_uart_protocol:serial|igor_uart_tx:transmitter" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_protocol.v Line: 13
-Info (12128): Elaborating entity "igor_top" for hierarchy "igor_top:core" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_top.v Line: 40
-Info (12128): Elaborating entity "igor_config_registers" for hierarchy "igor_top:core|igor_config_registers:cfg" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v Line: 17
-Info (12128): Elaborating entity "igor_costmap_manager" for hierarchy "igor_top:core|igor_costmap_manager:maps" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v Line: 19
-Info (12128): Elaborating entity "igor_costmap_bank" for hierarchy "igor_top:core|igor_costmap_bank:tiles[0].memory" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v Line: 31
-Info (12128): Elaborating entity "igor_rollout_tile" for hierarchy "igor_top:core|igor_rollout_tile:tiles[0].tile" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v Line: 32
-Info (12128): Elaborating entity "igor_candidate_generator" for hierarchy "igor_top:core|igor_rollout_tile:tiles[0].tile|igor_candidate_generator:gen" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_rollout_tile.v Line: 17
-Info (12128): Elaborating entity "igor_kinematic_step" for hierarchy "igor_top:core|igor_rollout_tile:tiles[0].tile|igor_kinematic_step:stepper" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_rollout_tile.v Line: 18
-Info (12128): Elaborating entity "igor_trig_lut" for hierarchy "igor_top:core|igor_rollout_tile:tiles[0].tile|igor_kinematic_step:stepper|igor_trig_lut:s" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_kinematic_step.v Line: 12
-Info (12128): Elaborating entity "igor_score_accumulator" for hierarchy "igor_top:core|igor_rollout_tile:tiles[0].tile|igor_score_accumulator:acc" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_rollout_tile.v Line: 21
-Info (12128): Elaborating entity "igor_rollout_tile" for hierarchy "igor_top:core|igor_rollout_tile:tiles[1].tile" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v Line: 32
-Info (12128): Elaborating entity "igor_rollout_tile" for hierarchy "igor_top:core|igor_rollout_tile:tiles[2].tile" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v Line: 32
-Info (12128): Elaborating entity "igor_rollout_tile" for hierarchy "igor_top:core|igor_rollout_tile:tiles[3].tile" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v Line: 32
-Info (12128): Elaborating entity "igor_best_candidate_selector" for hierarchy "igor_top:core|igor_best_candidate_selector:selector" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v Line: 35
-Info (12128): Elaborating entity "igor_safety_security_gate" for hierarchy "igor_top:core|igor_safety_security_gate:gate" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v Line: 46
-Info (12128): Elaborating entity "igor_status_logger" for hierarchy "igor_top:core|igor_status_logger:logger" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_top.v Line: 52
-Info (12128): Elaborating entity "igor_neural_rom" for hierarchy "igor_neural_rom:inspection_rom" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_top.v Line: 42
-Warning (10030): Net "memory.data_a" at igor_neural_rom.v(8) has no driver or initial value, using a default initial value '0' File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_rom.v Line: 8
-Warning (10030): Net "memory.waddr_a" at igor_neural_rom.v(8) has no driver or initial value, using a default initial value '0' File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_rom.v Line: 8
-Warning (10030): Net "memory.we_a" at igor_neural_rom.v(8) has no driver or initial value, using a default initial value '0' File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_rom.v Line: 8
-Info (12128): Elaborating entity "igor_neural_core" for hierarchy "igor_neural_core:neural" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_top.v Line: 43
-Info (12128): Elaborating entity "igor_neural_datapath" for hierarchy "igor_neural_core:neural|igor_neural_datapath:core" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_core.v Line: 14
+Info (12128): Elaborating entity "igor_uart_protocol" for hierarchy "igor_uart_protocol:serial" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_top.v Line: 15
+Info (12128): Elaborating entity "igor_uart_rx" for hierarchy "igor_uart_protocol:serial|igor_uart_rx:receiver" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_protocol.v Line: 12
+Info (12128): Elaborating entity "igor_uart_tx" for hierarchy "igor_uart_protocol:serial|igor_uart_tx:transmitter" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_protocol.v Line: 13
+Info (12128): Elaborating entity "igor_top" for hierarchy "igor_top:core" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_top.v Line: 40
+Info (12128): Elaborating entity "igor_config_registers" for hierarchy "igor_top:core|igor_config_registers:cfg" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v Line: 17
+Info (12128): Elaborating entity "igor_costmap_manager" for hierarchy "igor_top:core|igor_costmap_manager:maps" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v Line: 19
+Info (12128): Elaborating entity "igor_costmap_bank" for hierarchy "igor_top:core|igor_costmap_bank:tiles[0].memory" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v Line: 31
+Info (12128): Elaborating entity "igor_rollout_tile" for hierarchy "igor_top:core|igor_rollout_tile:tiles[0].tile" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v Line: 32
+Info (12128): Elaborating entity "igor_candidate_generator" for hierarchy "igor_top:core|igor_rollout_tile:tiles[0].tile|igor_candidate_generator:gen" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_rollout_tile.v Line: 17
+Info (12128): Elaborating entity "igor_kinematic_step" for hierarchy "igor_top:core|igor_rollout_tile:tiles[0].tile|igor_kinematic_step:stepper" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_rollout_tile.v Line: 18
+Info (12128): Elaborating entity "igor_trig_lut" for hierarchy "igor_top:core|igor_rollout_tile:tiles[0].tile|igor_kinematic_step:stepper|igor_trig_lut:s" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_kinematic_step.v Line: 12
+Info (12128): Elaborating entity "igor_score_accumulator" for hierarchy "igor_top:core|igor_rollout_tile:tiles[0].tile|igor_score_accumulator:acc" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_rollout_tile.v Line: 21
+Info (12128): Elaborating entity "igor_rollout_tile" for hierarchy "igor_top:core|igor_rollout_tile:tiles[1].tile" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v Line: 32
+Info (12128): Elaborating entity "igor_rollout_tile" for hierarchy "igor_top:core|igor_rollout_tile:tiles[2].tile" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v Line: 32
+Info (12128): Elaborating entity "igor_rollout_tile" for hierarchy "igor_top:core|igor_rollout_tile:tiles[3].tile" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v Line: 32
+Info (12128): Elaborating entity "igor_best_candidate_selector" for hierarchy "igor_top:core|igor_best_candidate_selector:selector" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v Line: 35
+Info (12128): Elaborating entity "igor_safety_security_gate" for hierarchy "igor_top:core|igor_safety_security_gate:gate" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v Line: 46
+Info (12128): Elaborating entity "igor_status_logger" for hierarchy "igor_top:core|igor_status_logger:logger" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_top.v Line: 52
+Info (12128): Elaborating entity "igor_neural_rom" for hierarchy "igor_neural_rom:inspection_rom" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_top.v Line: 42
+Warning (10030): Net "memory.data_a" at igor_neural_rom.v(8) has no driver or initial value, using a default initial value '0' File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_neural_rom.v Line: 8
+Warning (10030): Net "memory.waddr_a" at igor_neural_rom.v(8) has no driver or initial value, using a default initial value '0' File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_neural_rom.v Line: 8
+Warning (10030): Net "memory.we_a" at igor_neural_rom.v(8) has no driver or initial value, using a default initial value '0' File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_neural_rom.v Line: 8
+Info (12128): Elaborating entity "igor_neural_core" for hierarchy "igor_neural_core:neural" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_top.v Line: 43
+Info (12128): Elaborating entity "igor_neural_datapath" for hierarchy "igor_neural_core:neural|igor_neural_datapath:core" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_neural_core.v Line: 14
 Warning (276020): Inferred RAM node "igor_neural_core:neural|igor_neural_datapath:core|inputs_rtl_0" from synchronous design logic.  Pass-through logic has been added to match the read-during-write behavior of the original design.
 Warning (276020): Inferred RAM node "igor_neural_core:neural|igor_neural_datapath:core|h1_rtl_0" from synchronous design logic.  Pass-through logic has been added to match the read-during-write behavior of the original design.
 Warning (276020): Inferred RAM node "igor_neural_core:neural|igor_neural_datapath:core|h2_rtl_0" from synchronous design logic.  Pass-through logic has been added to match the read-during-write behavior of the original design.
 Info (276014): Found 6 instances of uninferred RAM logic
-    Info (276007): RAM logic "igor_neural_core:neural|igor_neural_datapath:core|outputs" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_core.v Line: 26
-    Info (276007): RAM logic "igor_neural_rom:inspection_rom|memory" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_neural_rom.v Line: 8
-    Info (276007): RAM logic "igor_top:core|igor_rollout_tile:tiles[3].tile|igor_kinematic_step:stepper|igor_trig_lut:c|Ram0" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_trig_lut.v Line: 8
-    Info (276007): RAM logic "igor_top:core|igor_rollout_tile:tiles[2].tile|igor_kinematic_step:stepper|igor_trig_lut:c|Ram0" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_trig_lut.v Line: 8
-    Info (276007): RAM logic "igor_top:core|igor_rollout_tile:tiles[1].tile|igor_kinematic_step:stepper|igor_trig_lut:c|Ram0" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_trig_lut.v Line: 8
-    Info (276007): RAM logic "igor_top:core|igor_rollout_tile:tiles[0].tile|igor_kinematic_step:stepper|igor_trig_lut:c|Ram0" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_trig_lut.v Line: 8
+    Info (276007): RAM logic "igor_neural_core:neural|igor_neural_datapath:core|outputs" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_neural_core.v Line: 26
+    Info (276007): RAM logic "igor_neural_rom:inspection_rom|memory" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_neural_rom.v Line: 8
+    Info (276007): RAM logic "igor_top:core|igor_rollout_tile:tiles[3].tile|igor_kinematic_step:stepper|igor_trig_lut:c|Ram0" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_trig_lut.v Line: 8
+    Info (276007): RAM logic "igor_top:core|igor_rollout_tile:tiles[2].tile|igor_kinematic_step:stepper|igor_trig_lut:c|Ram0" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_trig_lut.v Line: 8
+    Info (276007): RAM logic "igor_top:core|igor_rollout_tile:tiles[1].tile|igor_kinematic_step:stepper|igor_trig_lut:c|Ram0" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_trig_lut.v Line: 8
+    Info (276007): RAM logic "igor_top:core|igor_rollout_tile:tiles[0].tile|igor_kinematic_step:stepper|igor_trig_lut:c|Ram0" is uninferred due to asynchronous read logic File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_trig_lut.v Line: 8
 Info (19000): Inferred 7 megafunctions from design logic
     Info (276029): Inferred altsyncram megafunction from the following design logic: "igor_neural_core:neural|igor_neural_datapath:core|inputs_rtl_0" 
         Info (286033): Parameter OPERATION_MODE set to DUAL_PORT
@@ -1905,8 +1905,8 @@ Info (17049): 21 registers lost all their fanouts during netlist optimizations.
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
 Warning (21074): Design contains 2 input pin(s) that do not drive logic
-    Warning (15610): No output dependent on input pin "SW[0]" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_top.v Line: 8
-    Warning (15610): No output dependent on input pin "SW[1]" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/fpga_de10_nano/rtl/igor_uart_top.v Line: 8
+    Warning (15610): No output dependent on input pin "SW[0]" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_top.v Line: 8
+    Warning (15610): No output dependent on input pin "SW[1]" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/rtl/igor_uart_top.v Line: 8
 Info (21057): Implemented 7543 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 8 input pins
     Info (21059): Implemented 9 output pins
@@ -1914,9 +1914,9 @@ Info (21057): Implemented 7543 device resources after synthesis - the final reso
     Info (21064): Implemented 176 RAM segments
     Info (21062): Implemented 10 DSP elements
 Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 9 warnings
-    Info: Peak virtual memory: 4949 megabytes
-    Info: Processing ended: Fri Oct 16 12:54:55 2026
-    Info: Elapsed time: 00:01:08
-    Info: Total CPU time (on all processors): 00:01:29
+    Info: Peak virtual memory: 4962 megabytes
+    Info: Processing ended: Fri Oct 16 17:56:42 2026
+    Info: Elapsed time: 00:00:48
+    Info: Total CPU time (on all processors): 00:01:12
 
 

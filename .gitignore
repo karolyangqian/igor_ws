@@ -1,10 +1,9 @@
-__pycache__/
-*.pyc
-sim.out
-*.fst
 build/
-.venv/
-test/sim_build/
-test/results.xml
 install/
 log/
+__pycache__/
+# Local reference repository, disconnected from the main project
+/peruri-iseedesign/
+install/
+log/
+.vscode/*
