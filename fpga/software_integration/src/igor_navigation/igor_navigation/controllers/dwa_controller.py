@@ -54,6 +54,25 @@ class DWAController(BaseController):
         cmd_vx, cmd_vy, cmd_omega = cmd_vel
         nom_vx = min(cmd_vx, allowed_vx)
 
+        is_cmd_active = (abs(cmd_vx) > 0.01 or abs(cmd_vy) > 0.01 or abs(cmd_omega) > 0.02)
+        if not is_cmd_active:
+            latency_ms = (time.perf_counter() - t0) * 1000.0
+            self.last_latency_ms = latency_ms
+            info = {
+                "algorithm": self.name,
+                "d_min": d_min,
+                "alpha": 0.0,
+                "allowed_vx": allowed_vx,
+                "delta_twist": (0.0, 0.0, 0.0),
+                "best_action": [0.0, 0.0, 0.0],
+                "cost": 0.0,
+                "latency_ms": latency_ms,
+                "shield_active": False,
+                "shield_type": "none",
+                "shield_message": "IDLE (ZERO COMMAND)"
+            }
+            return 0.0, 0.0, 0.0, info
+
         pose = robot_pose if robot_pose is not None else (0.0, 0.0, 0.0)
         rx, ry, ryaw = pose
 

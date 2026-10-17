@@ -1070,22 +1070,23 @@ def evaluate_and_generate_artifacts(
 # ==============================================================================
 
 def sync_to_ros2_workspace():
-    """Synchronizes weights and evaluations to igor_ws if present."""
-    ws_pkg_weights = "/home/karol/ITB/lomba/chip-peruri/peruri-ai-final/igor_ws/src/igor_navigation/igor_navigation/weights"
-    ws_pkg_eval = "/home/karol/ITB/lomba/chip-peruri/peruri-ai-final/igor_ws/src/igor_navigation/igor_navigation/evaluations"
+    """Synchronizes weights and evaluations to ros2_ws if present."""
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    ws_root = os.path.join(base_dir, "ros2_ws") if os.path.isdir(os.path.join(base_dir, "ros2_ws")) else base_dir
+    ws_pkg_weights = os.path.join(ws_root, "src/igor_navigation/igor_navigation/weights")
+    ws_pkg_eval = os.path.join(ws_root, "src/igor_navigation/igor_navigation/evaluations")
 
-    if os.path.exists(os.path.dirname(ws_pkg_weights)):
-        print("\n🔄 Menyinkronkan bobot dan evaluasi ke workspace ROS 2 igor_ws...")
+    if os.path.abspath(WEIGHTS_DIR) != os.path.abspath(ws_pkg_weights) and os.path.exists(os.path.dirname(ws_pkg_weights)):
+        print("\n🔄 Menyinkronkan bobot dan evaluasi ke workspace ROS 2...")
         shutil.copytree(WEIGHTS_DIR, ws_pkg_weights, dirs_exist_ok=True)
         shutil.copytree(EVALUATIONS_DIR, ws_pkg_eval, dirs_exist_ok=True)
-        print("✔ Berkas berhasil disalin ke igor_ws/src/igor_navigation.")
+        print(f"✔ Berkas berhasil disalin ke {ws_pkg_weights}.")
 
-        # Trigger colcon build
-        ws_root = "/home/karol/ITB/lomba/chip-peruri/peruri-ai-final/igor_ws"
+    if os.path.exists(os.path.join(ws_root, "src/igor_navigation/package.xml")):
         cmd = f'bash -c "source /opt/ros/humble/setup.bash && cd {ws_root} && colcon build --symlink-install --packages-select igor_navigation"'
         ret = os.system(cmd)
         if ret == 0:
-            print("✔ Colcon build berhasil meregistrasi bobot baru di workspace igor_ws!")
+            print(f"✔ Colcon build berhasil meregistrasi bobot baru di workspace {ws_root}!")
         else:
             print(f"⚠ Catatan: Colcon build mengembalikan kode keluar {ret}.")
 

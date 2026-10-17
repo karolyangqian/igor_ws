@@ -52,6 +52,23 @@ class APFController(BaseController):
         cmd_vx, cmd_vy, cmd_omega = cmd_vel
         nom_vx = min(cmd_vx, allowed_vx)
 
+        is_cmd_active = (abs(cmd_vx) > 0.01 or abs(cmd_vy) > 0.01 or abs(cmd_omega) > 0.02)
+        if not is_cmd_active:
+            latency_ms = (time.perf_counter() - t0) * 1000.0
+            self.last_latency_ms = latency_ms
+            info = {
+                "algorithm": self.name,
+                "d_min": d_min,
+                "alpha": 0.0,
+                "allowed_vx": allowed_vx,
+                "delta_twist": (0.0, 0.0, 0.0),
+                "latency_ms": latency_ms,
+                "shield_active": False,
+                "shield_type": "none",
+                "shield_message": "IDLE (ZERO COMMAND)"
+            }
+            return 0.0, 0.0, 0.0, info
+
         # Compute repulsive force from all rays within d_safe
         f_rep_x = 0.0
         f_rep_y = 0.0

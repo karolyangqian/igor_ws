@@ -302,10 +302,10 @@ class IgorControllerNode(Node):
         obs[0:64] = beams_norm
         obs[64] = float(ax) / 3.0
         obs[65] = float(ay) / 3.0
-        obs[66] = float(az) / 3.0
-        obs[67] = math.radians(gx) / 2.0
-        obs[68] = math.radians(gy) / 2.0
-        obs[69] = math.radians(gz) / 2.0
+        obs[66] = 0.0  # Training Gym V3 had az=0 (gravity should not saturate neural network)
+        obs[67] = 0.0  # Training Gym V3 had roll=0
+        obs[68] = 0.0  # Training Gym V3 had pitch=0
+        obs[69] = math.radians(gz) / 2.0  # Gyro yaw rate in rad/s, normalized by 2.0
         obs[70] = float(self.cmd_linear_x) / 0.60
         obs[71] = float(self.cmd_linear_y) / 0.50
         obs[72] = float(self.cmd_angular_z) / 2.0
@@ -335,8 +335,8 @@ class IgorControllerNode(Node):
             delta_wz = raw_action[2] * 0.80
             v_exec_drl = v_cmd + np.array([delta_vx, delta_vy, delta_wz], dtype=np.float32)
 
-            # Apply Gating Blending
-            alpha = float(np.clip((1.40 - d_min) / (1.40 - 0.35), 0.0, 1.0))
+            # Apply Gating Blending (d_safe = 0.70m, d_crit = 0.30m)
+            alpha = float(np.clip((0.70 - d_min) / (0.70 - 0.30), 0.0, 1.0))
             v_blended = (1.0 - alpha) * v_cmd + alpha * v_exec_drl
 
             # If hybrid controller active, filter through CBF or enforce zero-stop
@@ -347,8 +347,8 @@ class IgorControllerNode(Node):
                     cand_omega=float(v_blended[2]),
                     robot_pose=(0.0, 0.0, 0.0),
                     obstacles=[{"x": float(r * np.cos(a)), "y": float(r * np.sin(a)), "radius": 0.0}
-                               for r, a in zip(beams_m, np.linspace(-np.pi/2, np.pi/2, 64))
-                               if r < 3.50],
+                                for r, a in zip(beams_m, np.linspace(-np.pi/2, np.pi/2, 64))
+                                if r < 3.50],
                     allowed_max_vx=allowed_max_vx
                 )
                 v_safe = np.array([safe_vx, safe_vy, safe_wz], dtype=np.float32)
@@ -362,7 +362,7 @@ class IgorControllerNode(Node):
             exec_vx, exec_vy, exec_wz, _ = self.cpu_controller.predict(
                 lidar_ranges=beams_norm,
                 cmd_vel=(self.cmd_linear_x, self.cmd_linear_y, self.cmd_angular_z),
-                imu_data=(ax, ay, az, gx, gy, gz),
+                imu_data=(ax, ay, 0.0, 0.0, 0.0, math.radians(gz)),
                 heading_err=delta_theta
             )
             v_safe = np.array([exec_vx, exec_vy, exec_wz], dtype=np.float32)

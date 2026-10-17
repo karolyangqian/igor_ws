@@ -130,6 +130,11 @@ class CBFFilterController(CLDRLController):
             robot_pose=robot_pose
         )
 
+        # If operator command is idle, maintain zero velocity
+        is_cmd_active = (abs(cmd_vel[0]) > 0.01 or abs(cmd_vel[1]) > 0.01 or abs(cmd_vel[2]) > 0.02)
+        if not is_cmd_active:
+            return 0.0, 0.0, 0.0, info
+
         allowed_vx = info["allowed_vx"]
         pose = robot_pose if robot_pose is not None else (0.0, 0.0, 0.0)
 

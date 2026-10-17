@@ -29,7 +29,6 @@ setup(
     maintainer_email='karol@todo.todo',
     description='IGOR Navigation Algorithms Package containing 5 obstacle avoidance controllers and weights.',
     license='Apache-2.0',
-    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'retrain_ai = igor_navigation.retrain_ai:main',

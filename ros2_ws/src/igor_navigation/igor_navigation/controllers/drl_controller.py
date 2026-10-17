@@ -227,9 +227,11 @@ class CLDRLController(BaseController):
         exec_vy = float(np.clip(nom_vy + alpha * delta_vy, -self.max_cmd_vy, self.max_cmd_vy))
         exec_omega = float(np.clip(nom_omega + alpha * delta_omega, -self.max_cmd_omega, self.max_cmd_omega))
 
-        # Critical zero-stop override
-        if d_min < 0.22 and exec_vx > 0.0:
+        # Critical zero-stop override (envelope <= 0.22m halts all motion)
+        if d_min <= 0.22:
             exec_vx = 0.0
+            exec_vy = 0.0
+            exec_omega = 0.0
 
         latency_ms = (time.perf_counter() - t0) * 1000.0
         self.last_latency_ms = latency_ms

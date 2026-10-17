@@ -51,6 +51,10 @@ def generate_launch_description():
         default_value='/dev/lidar',
         description='Serial port for Slamtec RPLiDAR A1/A2'
     )
+    fpga_baudrate_arg = DeclareLaunchArgument(
+        'fpga_baudrate', default_value='921600',
+        description='FPGA UART baud; match the current source-policy bitstream'
+    )
 
     launch_lidar_arg = DeclareLaunchArgument(
         'launch_lidar',
@@ -75,6 +79,7 @@ def generate_launch_description():
     use_fpga = LaunchConfiguration('use_fpga')
     mcu_port = LaunchConfiguration('mcu_port')
     fpga_port = LaunchConfiguration('fpga_port')
+    fpga_baudrate = LaunchConfiguration('fpga_baudrate')
     lidar_port = LaunchConfiguration('lidar_port')
     launch_lidar = LaunchConfiguration('launch_lidar')
     use_mock_serial = LaunchConfiguration('use_mock_serial')
@@ -106,6 +111,7 @@ def generate_launch_description():
             'use_fpga': use_fpga,
             'mcu_port': mcu_port,
             'fpga_port': fpga_port,
+            'fpga_baudrate': fpga_baudrate,
             'control_rate_hz': control_rate_hz,
             'use_mock_serial': use_mock_serial
         }]
@@ -116,6 +122,7 @@ def generate_launch_description():
         use_fpga_arg,
         mcu_port_arg,
         fpga_port_arg,
+        fpga_baudrate_arg,
         lidar_port_arg,
         launch_lidar_arg,
         use_mock_serial_arg,

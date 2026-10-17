@@ -13,7 +13,8 @@ Execution Pipeline:
 5. Assembles 74-dimension observation vector.
 6. Enforces STRICT FPGA GUARD:
    - If use_fpga=True and algorithm in ['dwa', 'apf'] -> FATAL ERROR & IMMEDIATE SHUTDOWN!
-   - If use_fpga=True and algorithm in ['cl_drl', 'cl_drl_cbf', 'cl_drl_dwa'] -> Calls FPGA bridge.
+   - If use_fpga=True and algorithm in ['cl_drl', 'cl_drl_cbf'] -> Calls FPGA bridge.
+   - FPGA + mini-DWA is rejected until that shield accepts the hardware residual.
    - If use_fpga=False -> Ingests CPU controller from igor_navigation.
 7. Computes 4-wheel Mecanum RPS with JetAuto physical right-side sign inversion.
 8. Transmits motor speeds to STM32 @ 1 Mbps and publishes /igor/cmd_vel_safe & /igor/heading.
@@ -39,11 +40,11 @@ from igor_navigation import create_controller
 
 from igor_controller.mcu_driver import STM32Driver
 from igor_controller.heading_estimator import HeadingEstimator
-from igor_controller.fpga_bridge import FPGABridge
+from igor_controller.fpga_bridge import FPGABridge, FPGACommunicationError
 
 
 class IgorControllerNode(Node):
-    VALID_FPGA_ALGORITHMS = {'cl_drl', 'cl_drl_cbf', 'cl_drl_dwa'}
+    VALID_FPGA_ALGORITHMS = {'cl_drl', 'cl_drl_cbf'}
 
     def __init__(self):
         super().__init__('igor_controller_node')
@@ -53,6 +54,7 @@ class IgorControllerNode(Node):
         self.declare_parameter('use_fpga', False)
         self.declare_parameter('mcu_port', '/dev/ttyACM0')
         self.declare_parameter('fpga_port', '/dev/fpga')
+        self.declare_parameter('fpga_baudrate', 921600)
         self.declare_parameter('control_rate_hz', 50.0)
         self.declare_parameter('use_mock_serial', False)
 
@@ -60,6 +62,7 @@ class IgorControllerNode(Node):
         self.use_fpga = bool(self.get_parameter('use_fpga').value)
         self.mcu_port = str(self.get_parameter('mcu_port').value)
         self.fpga_port = str(self.get_parameter('fpga_port').value)
+        self.fpga_baudrate = int(self.get_parameter('fpga_baudrate').value)
         self.control_rate_hz = float(self.get_parameter('control_rate_hz').value)
         self.use_mock_serial = bool(self.get_parameter('use_mock_serial').value)
 
@@ -80,9 +83,10 @@ class IgorControllerNode(Node):
                     f"\n"
                     f"********************************************************************************\n"
                     f"[FATAL CONFIGURATION ERROR] use_fpga=True is only supported for CL-DRL neural\n"
-                    f"network hardware acceleration ('cl_drl', 'cl_drl_cbf', 'cl_drl_dwa').\n"
+                    f"network hardware acceleration ('cl_drl', 'cl_drl_cbf').\n"
                     f"The requested algorithm '{self.algorithm}' is an iterative classical planner\n"
-                    f"(DWA/APF) and CANNOT run on the DE10-Nano FPGA accelerator IP core!\n\n"
+                    f"or an unsupported hybrid. The mini-DWA wrapper currently recomputes\n"
+                    f"a CPU policy and cannot shield the FPGA residual.\n\n"
                     f"SUGGESTED ACTIONS:\n"
                     f"  1. To run on FPGA: set algorithm:='cl_drl_cbf' or algorithm:='cl_drl'\n"
                     f"  2. To run {self.algorithm.upper()}: set use_fpga:=false\n"
@@ -108,8 +112,10 @@ class IgorControllerNode(Node):
             max_range=3.50
         )
         self.latest_ranges: Optional[np.ndarray] = None
-        self.latest_scan_angle_min = -np.pi
-        self.latest_scan_angle_max = np.pi
+        self.last_scan_time = None
+        self.scan_angle_min = 0.0
+        self.scan_angle_end = 2.0 * math.pi
+        self.scan_error = None
 
         # STM32 MCU Driver
         self.mcu = STM32Driver(
@@ -129,23 +135,29 @@ class IgorControllerNode(Node):
         self.fpga: Optional[FPGABridge] = None
         self.cpu_controller = None
 
-        if self.use_fpga:
-            self.fpga = FPGABridge(
-                port=self.fpga_port,
-                baudrate=115200,
-                mock=self.use_mock_serial
-            )
-            # If hybrid safety layer is active (CBF or mini-DWA), instantiate CPU wrapper
-            if self.algorithm in ['cl_drl_cbf', 'cl_drl_dwa']:
+        try:
+            if self.use_fpga:
+                self.fpga = FPGABridge(
+                    port=self.fpga_port,
+                    baudrate=self.fpga_baudrate,
+                    mock=self.use_mock_serial
+                )
+                if self.algorithm == 'cl_drl_cbf':
+                    self.cpu_controller = create_controller(algo_name=self.algorithm)
+            else:
                 self.cpu_controller = create_controller(algo_name=self.algorithm)
-        else:
-            self.cpu_controller = create_controller(algo_name=self.algorithm)
+        except Exception:
+            # MCU may already be open when FPGA/model initialization fails.
+            self.mcu.close()
+            if self.fpga:
+                self.fpga.close()
+            raise
 
         # Velocity State
         self.cmd_linear_x = 0.0
         self.cmd_linear_y = 0.0
         self.cmd_angular_z = 0.0
-        self.last_cmd_time = time.time()
+        self.last_cmd_time = time.monotonic()
 
         # ROS 2 Subscribers
         self.sub_scan = self.create_subscription(
@@ -181,40 +193,79 @@ class IgorControllerNode(Node):
         self.get_logger().info(f"IgorControllerNode successfully started at {self.control_rate_hz:.1f} Hz.")
 
     def _scan_callback(self, msg: LaserScan) -> None:
-        """Stores latest 360 deg range array and angular bounds."""
-        self.latest_ranges = np.array(msg.ranges, dtype=np.float32)
-        self.latest_scan_angle_min = float(msg.angle_min)
-        self.latest_scan_angle_max = float(msg.angle_max)
+        """Accept complete scans; invalid/missing samples cannot become free space."""
+        self.latest_ranges = None
+        self.last_scan_time = None
+        self.scan_error = 'SCAN_INVALID'
+        try:
+            ranges = np.asarray(msg.ranges, dtype=np.float32)
+            angle_min = float(msg.angle_min)
+            increment = float(msg.angle_increment)
+            if ranges.ndim != 1 or len(ranges) < 64:
+                return
+            if not math.isfinite(angle_min) or not math.isfinite(increment) or increment == 0:
+                return
+            # This model requires a full revolution, including both frontal sides.
+            if abs(abs(increment) * len(ranges) - 2.0 * math.pi) > 1.5 * abs(increment):
+                return
+            # +inf is the ROS no-return convention. NaN, -inf, zero/negative
+            # and too-near samples are unknown/unsafe rather than empty space.
+            if np.any(np.isnan(ranges)) or np.any(np.isneginf(ranges)) or np.any(ranges <= 0.05):
+                return
+            self.latest_ranges = ranges
+            self.scan_angle_min = angle_min
+            self.scan_angle_end = angle_min + len(ranges) * increment
+            self.last_scan_time = time.monotonic()
+            self.scan_error = None
+        except (TypeError, ValueError, OverflowError):
+            return
+
+    def _stop_for_fault(self, reason: str) -> None:
+        """A failed residual inference must zero the complete motor command."""
+        motor_tx = self.mcu.send_motor_speeds(0.0, 0.0, 0.0, 0.0)
+        self.pub_safe_twist.publish(Twist())
+        diag = String()
+        diag.data = json.dumps({"algo": self.algorithm, "fpga": self.use_fpga,
+                                "safe": [0.0, 0.0, 0.0], "rps": [0.0]*4,
+                                "safety_permit": False, "fault": reason,
+                                "motor_tx_confirmed": motor_tx is True,
+                                "timestamp": time.time()})
+        self.pub_diag.publish(diag)
 
     def _cmd_vel_callback(self, msg: Twist) -> None:
         """Stores commanded velocities."""
         self.cmd_linear_x = float(msg.linear.x)
         self.cmd_linear_y = float(msg.linear.y)
         self.cmd_angular_z = float(msg.angular.z)
-        self.last_cmd_time = time.time()
+        self.last_cmd_time = time.monotonic()
 
     def _control_loop(self) -> None:
         """Main 50 Hz control execution loop."""
-        now = time.time()
+        now = time.monotonic()
         dt = 1.0 / self.control_rate_hz
+        command_time = self.last_cmd_time
+        scan_time = self.last_scan_time
 
         # Watchdog: if no command received for > 0.5s, command zero
-        if now - self.last_cmd_time > 0.5:
+        if not 0.0 <= now - command_time < 0.5:
             self.cmd_linear_x = 0.0
             self.cmd_linear_y = 0.0
             self.cmd_angular_z = 0.0
+            self._stop_for_fault("COMMAND_STALE")
+            return
 
-        is_cmd_active = (abs(self.cmd_linear_x) > 0.01 or 
-                         abs(self.cmd_linear_y) > 0.01 or 
-                         abs(self.cmd_angular_z) > 0.02)
+        command = np.array([self.cmd_linear_x, self.cmd_linear_y, self.cmd_angular_z])
+        if not np.all(np.isfinite(command)) or np.any(np.abs(command) > [0.60, 0.50, 2.0]):
+            self._stop_for_fault("COMMAND_INVALID")
+            return
+        if not self.use_mock_serial and (scan_time is None or not 0.0 <= now - scan_time < 0.5):
+            self._stop_for_fault(self.scan_error or "SCAN_MISSING_OR_STALE")
+            return
 
-        # 1. Process LiDAR scan to 64 frontal beams using dynamic angle bounds
+        # 1. Process LiDAR scan to 64 frontal beams
         if self.latest_ranges is not None and len(self.latest_ranges) > 0:
             beams_m = self.lidar_subsampler.subsample_from_laserscan(
-                self.latest_ranges,
-                angle_min=self.latest_scan_angle_min,
-                angle_max=self.latest_scan_angle_max
-            )
+                self.latest_ranges, angle_min=self.scan_angle_min, angle_max=self.scan_angle_end)
             beams_norm = np.clip(beams_m / 3.50, 0.0, 1.0).astype(np.float32)
             d_min = float(np.min(beams_m))
         else:
@@ -223,7 +274,13 @@ class IgorControllerNode(Node):
 
         # 2. Process IMU Telemetry & Heading
         (ax, ay, az), (gx, gy, gz), imu_t = self.mcu.get_latest_imu()
-        gz_rad_s = math.radians(gz)
+        sensed = time.monotonic()
+        if not np.all(np.isfinite([ax, ay, az, gx, gy, gz])):
+            self._stop_for_fault("OBSERVATION_NONFINITE")
+            return
+        if not self.use_mock_serial and (not math.isfinite(imu_t) or imu_t <= 0 or not 0.0 <= sensed - imu_t < 0.5):
+            self._stop_for_fault("IMU_MISSING_OR_STALE")
+            return
         self.heading_engine.update_imu(gz, current_time=now)
         self.heading_engine.update_command(self.cmd_angular_z, dt=dt)
 
@@ -236,46 +293,51 @@ class IgorControllerNode(Node):
         self.pub_heading.publish(heading_msg)
 
         # 3. Assemble 74-Element Observation Vector
-        # Match Gym V3 training distribution:
         # obs[0..63]  : 64 frontal LiDAR beams in [0, 1]
-        # obs[64..65] : ax/3.0, ay/3.0
-        # obs[66..68] : 0.0, 0.0, 0.0 (gravity Z, pitch, roll zeroed during 2D training)
-        # obs[69]     : gz in rad/s / 2.0
+        # obs[64..66] : ax/3.0, ay/3.0, az/3.0
+        # obs[67..69] : gx/2.0, gy/2.0, gz/2.0 (in rad/s)
         # obs[70..72] : vx_cmd/0.60, vy_cmd/0.50, wz_cmd/2.0
         # obs[73]     : delta_theta / pi in [-1, 1]
         obs = np.zeros(74, dtype=np.float32)
         obs[0:64] = beams_norm
-        obs[64] = float(np.clip(float(ax) / 3.0, -1.0, 1.0))
-        obs[65] = float(np.clip(float(ay) / 3.0, -1.0, 1.0))
-        obs[66] = 0.0
-        obs[67] = 0.0
-        obs[68] = 0.0
-        obs[69] = float(np.clip(gz_rad_s / 2.0, -1.0, 1.0))
-        obs[70] = float(np.clip(float(self.cmd_linear_x) / 0.60, -1.0, 1.0))
-        obs[71] = float(np.clip(float(self.cmd_linear_y) / 0.50, -1.0, 1.0))
-        obs[72] = float(np.clip(float(self.cmd_angular_z) / 2.0, -1.0, 1.0))
+        obs[64] = float(ax) / 3.0
+        obs[65] = float(ay) / 3.0
+        obs[66] = 0.0  # Training Gym V3 had az=0 (gravity should not saturate neural network)
+        obs[67] = 0.0  # Training Gym V3 had roll=0
+        obs[68] = 0.0  # Training Gym V3 had pitch=0
+        obs[69] = math.radians(gz) / 2.0  # Gyro yaw rate in rad/s, normalized by 2.0
+        obs[70] = float(self.cmd_linear_x) / 0.60
+        obs[71] = float(self.cmd_linear_y) / 0.50
+        obs[72] = float(self.cmd_angular_z) / 2.0
         obs[73] = norm_delta_theta
+        # IMU can exceed training limits; saturate to the declared model domain.
+        obs[64:70] = np.clip(obs[64:70], -1.0, 1.0)
+        if not np.all(np.isfinite(obs)):
+            self._stop_for_fault("OBSERVATION_NONFINITE")
+            return
 
-        # 4. Action Computation & Safety Gating (Shared Autonomy Contract)
+        # 4. Action Computation & Safety Gating
         v_cmd = np.array([self.cmd_linear_x, self.cmd_linear_y, self.cmd_angular_z], dtype=np.float32)
+        # Same physical envelope for CPU, plain FPGA and FPGA+CBF. A filter
+        # returning its candidate unchanged cannot bypass these final limits.
+        allowed_max_vx = float(np.interp(d_min, [0.22, 0.40, 1.20], [0.0, 0.15, 0.60]))
 
-        if not is_cmd_active:
-            # Idle Guard: When operator sends no velocity command, robot stays still
-            v_safe = np.zeros(3, dtype=np.float32)
-        elif self.use_fpga:
+        if self.use_fpga:
             # FPGA Accelerated Path
-            raw_action = self.fpga.infer(obs)
+            try:
+                raw_action = self.fpga.infer(obs)
+            except FPGACommunicationError as exc:
+                self._stop_for_fault(f"FPGA_TRANSPORT: {exc}")
+                return
             # Apply Asymmetric Braking Authority
             delta_vx = raw_action[0] * 0.60 if raw_action[0] < 0.0 else raw_action[0] * 0.15
             delta_vy = raw_action[1] * 0.45
             delta_wz = raw_action[2] * 0.80
             v_exec_drl = v_cmd + np.array([delta_vx, delta_vy, delta_wz], dtype=np.float32)
 
-            # Apply Gating Blending (d_safe=0.70m, d_crit=0.30m)
+            # Apply Gating Blending (d_safe = 0.70m, d_crit = 0.30m)
             alpha = float(np.clip((0.70 - d_min) / (0.70 - 0.30), 0.0, 1.0))
             v_blended = (1.0 - alpha) * v_cmd + alpha * v_exec_drl
-
-            allowed_max_vx = self.cpu_controller.compute_speed_envelope(d_min) if self.cpu_controller else 0.60
 
             # If hybrid controller active, filter through CBF or enforce zero-stop
             if self.algorithm == 'cl_drl_cbf':
@@ -284,7 +346,9 @@ class IgorControllerNode(Node):
                     cand_vy=float(v_blended[1]),
                     cand_omega=float(v_blended[2]),
                     robot_pose=(0.0, 0.0, 0.0),
-                    obstacles=None,
+                    obstacles=[{"x": float(r * np.cos(a)), "y": float(r * np.sin(a)), "radius": 0.0}
+                                for r, a in zip(beams_m, np.linspace(-np.pi/2, np.pi/2, 64))
+                                if r < 3.50],
                     allowed_max_vx=allowed_max_vx
                 )
                 v_safe = np.array([safe_vx, safe_vy, safe_wz], dtype=np.float32)
@@ -298,10 +362,26 @@ class IgorControllerNode(Node):
             exec_vx, exec_vy, exec_wz, _ = self.cpu_controller.predict(
                 lidar_ranges=beams_norm,
                 cmd_vel=(self.cmd_linear_x, self.cmd_linear_y, self.cmd_angular_z),
-                imu_data=(ax, ay, 0.0, 0.0, 0.0, gz_rad_s),
+                imu_data=(ax, ay, 0.0, 0.0, 0.0, math.radians(gz)),
                 heading_err=delta_theta
             )
             v_safe = np.array([exec_vx, exec_vy, exec_wz], dtype=np.float32)
+
+        if v_safe.shape != (3,) or not np.all(np.isfinite(v_safe)):
+            self._stop_for_fault("CONTROLLER_OUTPUT_INVALID")
+            return
+        # Recheck leases after blocking inference/filter work and before motor TX.
+        completed = time.monotonic()
+        if not 0.0 <= completed - command_time < 0.5:
+            self._stop_for_fault("COMMAND_STALE_AFTER_COMPUTE")
+            return
+        if not self.use_mock_serial and (not 0.0 <= completed - scan_time < 0.5 or not 0.0 <= completed - imu_t < 0.5):
+            self._stop_for_fault("SENSOR_STALE_AFTER_COMPUTE")
+            return
+        if d_min <= 0.22 or not np.any(command):
+            v_safe = np.zeros(3, dtype=np.float32)
+        else:
+            v_safe = np.clip(v_safe, [-0.15, -0.50, -2.0], [allowed_max_vx, 0.50, 2.0])
 
         # 5. Inverse Kinematics for JetAuto Mecanum Chassis
         # Note: Right motors (FR M3, RR M4) have mechanical sign inversion
@@ -320,7 +400,9 @@ class IgorControllerNode(Node):
         rps4 = np.clip(v4 / circ, -self.kinematics.max_rps, self.kinematics.max_rps)
 
         # Transmit motor speed packet to STM32
-        self.mcu.send_motor_speeds(rps1, rps2, rps3, rps4)
+        if self.mcu.send_motor_speeds(rps1, rps2, rps3, rps4) is False:
+            self._stop_for_fault("MCU_TRANSPORT")
+            return
 
         # Publish Safe Twist
         twist_out = Twist()
@@ -366,6 +448,7 @@ class IgorControllerNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
+    node = None
     try:
         node = IgorControllerNode()
         rclpy.spin(node)
@@ -375,6 +458,8 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
+        if node is not None:
+            node.destroy_node()
         if rclpy.ok():
             rclpy.shutdown()
 

@@ -12,7 +12,7 @@ Features:
     Func 0x07: MPU-6050 IMU Telemetry (24 bytes: 6x float32 LE)
     Func 0x03: Motor Speed Command TX (SUB_CMD 0x01 + 4x [ID, float32 LE])
 - Robust CRC-8 validation on all frames.
-- Automatic mock/fallback mode when physical serial port is unavailable.
+- Explicit mock mode only; unavailable hardware fails startup.
 """
 
 import os
@@ -93,10 +93,11 @@ class STM32Driver:
         self._connect()
 
     def _connect(self) -> None:
-        if self.mock or serial is None:
-            logger.warning("STM32Driver operating in MOCK mode (serial unavailable or mock=True)")
-            self.mock = True
+        if self.mock:
+            logger.warning("STM32Driver operating in explicitly requested MOCK mode")
             return
+        if serial is None:
+            raise RuntimeError("pyserial is unavailable for the physical STM32 driver")
 
         try:
             self.ser = serial.Serial(
@@ -105,14 +106,18 @@ class STM32Driver:
                 timeout=0.05,
                 write_timeout=0.05
             )
+            if not self.send_motor_speeds(0.0, 0.0, 0.0, 0.0):
+                raise RuntimeError("Cannot transmit initial STM32 STOP")
             self._running = True
             self._rx_thread = threading.Thread(target=self._rx_loop, daemon=True)
             self._rx_thread.start()
             logger.info(f"Connected to STM32 sub-controller on {self.port} @ {self.baudrate} bps")
         except Exception as e:
-            logger.error(f"Failed to open {self.port}: {e}. Falling back to MOCK mode.")
-            self.mock = True
+            self._running = False
+            if self.ser is not None:
+                self.ser.close()
             self.ser = None
+            raise RuntimeError(f"Cannot initialize physical STM32 {self.port}: {e}") from e
 
     def _rx_loop(self) -> None:
         """Background state-machine thread reading incoming serial stream."""
@@ -157,7 +162,7 @@ class STM32Driver:
                                 ax, ay, az, gx, gy, gz = struct.unpack('<6f', bytes(buf[:24]))
                                 with self._imu_lock:
                                     self._latest_imu = (ax, ay, az, gx, gy, gz)
-                                    self._latest_imu_time = time.time()
+                                    self._latest_imu_time = time.monotonic()
                                     self.total_imu_packets += 1
                         else:
                             self.crc_errors += 1
@@ -169,11 +174,11 @@ class STM32Driver:
     def get_latest_imu(self) -> Tuple[Tuple[float, float, float], Tuple[float, float, float], float]:
         """
         Returns:
-            ((ax, ay, az) [g], (gx, gy, gz) [deg/s], timestamp)
+            ((ax, ay, az) [g], (gx, gy, gz) [deg/s], monotonic timestamp)
         """
         if self.mock:
             # In mock mode, return static 1g on Z and slight zero-noise
-            return ((0.0, 0.0, 1.0), (0.0, 0.0, 0.0), time.time())
+            return ((0.0, 0.0, 1.0), (0.0, 0.0, 0.0), time.monotonic())
 
         with self._imu_lock:
             ax, ay, az, gx, gy, gz = self._latest_imu
@@ -213,7 +218,10 @@ class STM32Driver:
 
         try:
             with self._lock:
-                self.ser.write(bytes(packet))
+                count = self.ser.write(bytes(packet))
+            if count != len(packet):
+                logger.error(f"Short STM32 write: {count}/{len(packet)}")
+                return False
             return True
         except Exception as e:
             logger.error(f"Failed to transmit motor speeds: {e}")

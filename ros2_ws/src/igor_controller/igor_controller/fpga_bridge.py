@@ -25,6 +25,10 @@ except ImportError:
 
 logger = logging.getLogger("fpga_bridge")
 
+
+class FPGACommunicationError(RuntimeError):
+    """No verified FPGA action is available; callers must stop the whole robot."""
+
 CRC8_TABLE = [
     0, 94, 188, 226, 97, 63, 221, 131, 194, 156, 126, 32, 163, 253, 31, 65,
     157, 195, 33, 127, 252, 162, 64, 30, 95, 1, 227, 189, 62, 96, 130, 220,
@@ -63,23 +67,27 @@ class FPGABridge:
     def __init__(
         self,
         port: str = "/dev/fpga",
-        baudrate: int = 115200,
-        timeout: float = 0.05,
+        baudrate: int = 921600,
+        timeout: float = 0.02,
         mock: bool = False
     ):
         self.port = port
         self.baudrate = baudrate
         self.timeout = timeout
         self.mock = mock
+        self.last_exchange_ok = False
+        self.last_error = None
+        self._fault_latched = False
 
         self.ser: Optional[serial.Serial] = None
         self._connect()
 
     def _connect(self) -> None:
-        if self.mock or serial is None:
-            logger.warning("FPGABridge operating in MOCK mode (serial unavailable or mock=True)")
-            self.mock = True
+        if self.mock:
+            logger.warning("FPGABridge operating in explicitly requested MOCK mode")
             return
+        if serial is None:
+            raise FPGACommunicationError("pyserial is unavailable in hardware mode")
 
         try:
             self.ser = serial.Serial(
@@ -90,9 +98,8 @@ class FPGABridge:
             )
             logger.info(f"Connected to DE10-Nano FPGA on {self.port} @ {self.baudrate} bps")
         except Exception as e:
-            logger.warning(f"Could not open {self.port}: {e}. Falling back to MOCK FPGA accelerator.")
-            self.mock = True
             self.ser = None
+            raise FPGACommunicationError(f"Cannot open FPGA {self.port}: {e}") from e
 
     def infer(self, observation_74: np.ndarray) -> np.ndarray:
         """
@@ -104,13 +111,20 @@ class FPGABridge:
         Returns:
             np.ndarray of shape (3,) with values in [-1.0, 1.0]
         """
-        if len(observation_74) != 74:
-            raise ValueError(f"Expected 74 observation elements, got {len(observation_74)}")
+        self.last_exchange_ok = False
+        if self._fault_latched:
+            raise FPGACommunicationError("FPGA transport fault latched; reset FPGA and restart bridge before retrying")
+        observation_74 = np.asarray(observation_74, dtype=np.float64)
+        if observation_74.shape != (74,) or not np.all(np.isfinite(observation_74)):
+            raise FPGACommunicationError("FPGA observation must contain 74 finite scalars")
+        if np.any(observation_74[:64] < 0) or np.any(observation_74[:64] > 1) or np.any(np.abs(observation_74[64:]) > 1):
+            raise FPGACommunicationError("FPGA observation is outside the normalized input contract")
 
         # Convert to Q8.8 fixed-point (int16)
         q8_8_data = [int(np.clip(round(float(v) * 256.0), -32768, 32767)) for v in observation_74]
 
         if self.mock:
+            self.last_exchange_ok = True
             # Emulate FPGA inference: evaluate simple reactive brake if frontal beam is close
             min_lidar = float(np.min(observation_74[:64])) if len(observation_74) >= 64 else 1.0
             if min_lidar < 0.35:
@@ -131,37 +145,50 @@ class FPGABridge:
         tx_packet = header_cmd_len + payload + bytes([crc])
 
         try:
+            deadline = time.monotonic() + self.timeout
             self.ser.reset_input_buffer()
-            self.ser.write(tx_packet)
+            written = self.ser.write(tx_packet)
+            if written != len(tx_packet):
+                raise FPGACommunicationError(f"Short FPGA write: {written}/{len(tx_packet)}")
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise FPGACommunicationError("FPGA exchange deadline expired during write")
+            self.ser.timeout = remaining
 
             # Read response: 11 bytes
             rx_buf = self.ser.read(11)
+            if time.monotonic() > deadline:
+                raise FPGACommunicationError("FPGA exchange exceeded its total deadline")
             if len(rx_buf) < 11:
-                logger.warning(f"FPGA read timeout (expected 11 bytes, got {len(rx_buf)})")
-                return np.array([0.0, 0.0, 0.0], dtype=np.float32)
+                raise FPGACommunicationError(f"FPGA read timeout: {len(rx_buf)}/11 bytes")
 
-            if rx_buf[0] != self.HEADER_B1 or rx_buf[1] != self.HEADER_B2 or rx_buf[2] != self.CMD_RX_ACT:
-                logger.warning(f"Invalid FPGA response header: {rx_buf[:3].hex()}")
-                return np.array([0.0, 0.0, 0.0], dtype=np.float32)
+            if rx_buf[:4] != bytes([self.HEADER_B1, self.HEADER_B2, self.CMD_RX_ACT, 6]):
+                raise FPGACommunicationError(f"Invalid FPGA response header: {rx_buf[:4].hex()}")
 
             # Check CRC
             expected_crc = checksum_crc8(rx_buf[2:10])
             if rx_buf[10] != expected_crc:
-                logger.warning(f"FPGA CRC mismatch: got {rx_buf[10]}, expected {expected_crc}")
-                return np.array([0.0, 0.0, 0.0], dtype=np.float32)
+                raise FPGACommunicationError(f"FPGA CRC mismatch: {rx_buf[10]} != {expected_crc}")
 
             # Unpack 3x int16 Q8.8
             a0_raw, a1_raw, a2_raw = struct.unpack("<3h", rx_buf[4:10])
+            if any(abs(v) > 256 for v in (a0_raw, a1_raw, a2_raw)):
+                raise FPGACommunicationError("FPGA residual exceeds Q8.8 [-256,256]")
             actions = np.array([
                 float(a0_raw) / 256.0,
                 float(a1_raw) / 256.0,
                 float(a2_raw) / 256.0
             ], dtype=np.float32)
 
-            return np.clip(actions, -1.0, 1.0)
+            self.last_exchange_ok = True
+            self.last_error = None
+            return actions
         except Exception as e:
-            logger.error(f"FPGA communication error: {e}")
-            return np.array([0.0, 0.0, 0.0], dtype=np.float32)
+            self.last_error = str(e)
+            # The protocol has no transaction ID. A late reply after any failed
+            # exchange must never be mistaken for a fresh action on retry.
+            self._fault_latched = True
+            raise FPGACommunicationError(f"FPGA exchange failed: {e}") from e
 
     def close(self) -> None:
         if self.ser and self.ser.is_open:
