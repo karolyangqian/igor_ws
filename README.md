@@ -131,7 +131,7 @@ Unlike software safety wrappers that can fail during operating system kernel pan
 *Directory: [`ros2_ws/`](ros2_ws/)*
 
 - **Dual-Tier Industrial Autonomy**: Decouples Tier 1 Strategic Corridor Navigation (adhering to authorized virtual routes between vaults and presses in high-security facilities like PERURI without floor markers) from Tier 2 Reactive Safety Co-Processing.
-- **Curriculum Residual Reinforcement Learning (CL-DRL)**: Trained over 300,000 timesteps using PPO across 3 progressive difficulty stages. Employs asymmetric residual action authority ($0.60\text{ m/s}$ emergency braking vs $0.15\text{ m/s}$ conservative forward boost), dynamic speed envelopes, and hard zero-stop at $0.22\text{ m}$.
+- **Curriculum Residual Reinforcement Learning (CL-DRL)**: Trained over 300,000 timesteps using PPO across 4 progressive curriculum stages (Sparse Static, Crossing Pedestrians, Choke Points 75cm, Level 4 Chaos & Domain Randomization) with 8-mode twist behavior sampling. Employs asymmetric residual action authority ($0.60\text{ m/s}$ emergency braking vs $0.15\text{ m/s}$ conservative forward boost), dynamic speed envelopes, and hard zero-stop at $0.22\text{ m}$.
 - **Control Barrier Functions (CBF)**: Quadratic programming safety filter providing formal Nagumo forward invariance guarantees ($100\%$ collision-free in dynamic clutter while completely eliminating the Freezing Robot Problem).
 - **Dual-Target Execution**: Seamlessly switch between local Jetson Orin CPU execution and DE10-Nano FPGA hardware acceleration using a single launch argument (`use_fpga:=true/false`).
 

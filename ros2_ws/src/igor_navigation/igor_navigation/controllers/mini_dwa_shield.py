@@ -188,3 +188,135 @@ class MiniDWAShieldController(CLDRLController):
         })
 
         return best_candidate[0], best_candidate[1], best_candidate[2], info
+
+    def filter_dwa(
+        self,
+        cand_vx: float,
+        cand_vy: float,
+        cand_omega: float,
+        scan_ranges: Optional[np.ndarray] = None,
+        obstacles: Optional[List[Any]] = None,
+        robot_pose: Tuple[float, float, float] = (0.0, 0.0, 0.0)
+    ) -> Tuple[float, float, float, bool]:
+        """
+        Standalone/Hybrid Mini-DWA Shield Evaluator.
+        Evaluates proposed candidate action and overrides with best evasive action if collision is imminent.
+        """
+        if not obstacles and scan_ranges is not None and len(scan_ranges) > 0:
+            obstacles = []
+            angles = np.linspace(-np.pi / 2.0, np.pi / 2.0, len(scan_ranges))
+            for dist, ang in zip(scan_ranges, angles):
+                if 0.05 < dist < 1.50:
+                    ox = float(dist * np.cos(ang))
+                    oy = float(dist * np.sin(ang))
+                    obstacles.append((ox, oy, 0.12))
+
+        rx, ry, ryaw = robot_pose
+        dt = self.sim_time / self.sim_steps
+        collision_predicted = False
+        min_dist = float("inf")
+        nearest_obs = None
+
+        curr_x, curr_y, curr_yaw = rx, ry, ryaw
+        for s in range(self.sim_steps):
+            t = (s + 1) * dt
+            curr_yaw += cand_omega * dt
+            curr_x += (cand_vx * np.cos(curr_yaw) - cand_vy * np.sin(curr_yaw)) * dt
+            curr_y += (cand_vx * np.sin(curr_yaw) + cand_vy * np.cos(curr_yaw)) * dt
+
+            if obstacles:
+                for obs in obstacles:
+                    if hasattr(obs, "pos"):
+                        ox, oy = obs.pos[0], obs.pos[1]
+                        ovx = obs.vel[0] if hasattr(obs, "vel") else 0.0
+                        ovy = obs.vel[1] if hasattr(obs, "vel") else 0.0
+                        oradius = obs.radius
+                    elif isinstance(obs, dict):
+                        ox, oy = obs["x"], obs["y"]
+                        ovx = obs.get("vx", 0.0)
+                        ovy = obs.get("vy", 0.0)
+                        oradius = obs.get("radius", 0.25)
+                    elif isinstance(obs, (tuple, list)):
+                        ox, oy = float(obs[0]), float(obs[1])
+                        oradius = float(obs[2]) if len(obs) > 2 else 0.25
+                        ovx = float(obs[3]) if len(obs) > 3 else 0.0
+                        ovy = float(obs[4]) if len(obs) > 4 else 0.0
+                    else:
+                        ox, oy = obs.x, obs.y
+                        ovx = getattr(obs, "vx", 0.0)
+                        ovy = getattr(obs, "vy", 0.0)
+                        oradius = getattr(obs, "radius", 0.25)
+
+                    fut_ox = ox + ovx * t
+                    fut_oy = oy + ovy * t
+                    d = np.hypot(curr_x - fut_ox, curr_y - fut_oy) - (oradius + self.robot_radius)
+                    if d < min_dist:
+                        min_dist = d
+                        nearest_obs = (ox, oy, ovx, ovy, oradius)
+                    if d <= self.safety_buffer:
+                        collision_predicted = True
+                        break
+            if collision_predicted:
+                break
+
+        if not collision_predicted:
+            return cand_vx, cand_vy, cand_omega, False
+
+        lateral_nudge = 0.45
+        if nearest_obs is not None:
+            nox, noy = nearest_obs[0], nearest_obs[1]
+            rel_y = np.sin(-ryaw) * (nox - rx) + np.cos(-ryaw) * (noy - ry)
+            lateral_nudge = -0.45 if rel_y >= 0.0 else 0.45
+
+        candidates = [
+            (0.0, cand_vy * 0.8, cand_omega),
+            (0.0, lateral_nudge, cand_omega),
+            (0.0, -lateral_nudge, cand_omega),
+            (-0.15, 0.0, cand_omega),
+            (-0.15, lateral_nudge, cand_omega),
+            (-0.15, -lateral_nudge, cand_omega)
+        ]
+        best_candidate = candidates[1]
+        best_clearance = -float("inf")
+
+        for c_vx, c_vy, c_w in candidates:
+            cand_min_d = float("inf")
+            cx, cy, cyaw = rx, ry, ryaw
+            for s in range(self.sim_steps):
+                t = (s + 1) * dt
+                cyaw += c_w * dt
+                cx += (c_vx * np.cos(cyaw) - c_vy * np.sin(cyaw)) * dt
+                cy += (c_vx * np.sin(cyaw) + c_vy * np.cos(cyaw)) * dt
+                if obstacles:
+                    for obs in obstacles:
+                        if hasattr(obs, "pos"):
+                            ox, oy = obs.pos[0], obs.pos[1]
+                            ovx = obs.vel[0] if hasattr(obs, "vel") else 0.0
+                            ovy = obs.vel[1] if hasattr(obs, "vel") else 0.0
+                            oradius = obs.radius
+                        elif isinstance(obs, dict):
+                            ox, oy = obs["x"], obs["y"]
+                            ovx = obs.get("vx", 0.0)
+                            ovy = obs.get("vy", 0.0)
+                            oradius = obs.get("radius", 0.25)
+                        elif isinstance(obs, (tuple, list)):
+                            ox, oy = float(obs[0]), float(obs[1])
+                            oradius = float(obs[2]) if len(obs) > 2 else 0.25
+                            ovx = float(obs[3]) if len(obs) > 3 else 0.0
+                            ovy = float(obs[4]) if len(obs) > 4 else 0.0
+                        else:
+                            ox, oy = obs.x, obs.y
+                            ovx = getattr(obs, "vx", 0.0)
+                            ovy = getattr(obs, "vy", 0.0)
+                            oradius = getattr(obs, "radius", 0.25)
+                        fut_ox = ox + ovx * t
+                        fut_oy = oy + ovy * t
+                        d = np.hypot(cx - fut_ox, cy - fut_oy) - (oradius + self.robot_radius)
+                        if d < cand_min_d:
+                            cand_min_d = d
+            if cand_min_d > best_clearance:
+                best_clearance = cand_min_d
+                best_candidate = (c_vx, c_vy, c_w)
+
+        return best_candidate[0], best_candidate[1], best_candidate[2], True
+

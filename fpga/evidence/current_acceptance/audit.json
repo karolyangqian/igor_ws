@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-17T17:34:13.058452+00:00",
+  "generated_utc": "2026-10-17T17:58:06.713137+00:00",
   "status": "FAIL",
   "source_evidence": {
     "policy": {
@@ -44,7 +44,7 @@
     },
     "host": {
       "summary": "evidence/current_host/results.json",
-      "summary_sha256": "ac87a34143eaec44e2ef3a74cb2541fb2c7f7ad4f6cbd8808a9fe0a52a1de790",
+      "summary_sha256": "379e5e9a8515b1e09c7954fa0592e534674ddee412a073552d678fcb7f7b37d8",
       "recorded_result_pass": true,
       "checked": 6,
       "mismatches": [],

@@ -650,6 +650,22 @@ def export_all_model_weights(model: PPO, target_weights_dir: str, total_timestep
     export_mem("layer3_b.mem", b3_q)
     print(f"✔ FPGA BRAM .mem Hex Files Exported: {hw_dir}")
 
+    # 6. Kompilasi otomatis file memori monolitik FPGA (policy_weights.mem)
+    try:
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        root_dir = os.path.dirname(base_dir) if os.path.basename(base_dir) == "ros2_ws" else base_dir
+        fpga_run_script = os.path.join(root_dir, "fpga/verification/src_policy/run.py")
+        if not os.path.exists(fpga_run_script):
+            fpga_run_script = "/home/karol/ITB/lomba/chip-peruri/peruri-ai-final/igor_ws/fpga/verification/src_policy/run.py"
+        if os.path.exists(fpga_run_script):
+            print("🔄 Mengompilasi berkas policy_weights.mem untuk FPGA DE10-Nano...")
+            ret = os.system(f"python3 {fpga_run_script}")
+            if ret == 0:
+                print("✔ Berkas fpga/rtl/igor_src_policy/policy_weights.mem berhasil diperbarui!")
+    except Exception as e:
+        print(f"⚠ Peringatan: Tidak dapat memperbarui policy_weights.mem secara otomatis: {e}")
+
+
 
 # ==============================================================================
 # 5. BENCHMARK EVALUATOR & FULL-DURATION GIF EXPORTER

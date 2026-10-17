@@ -269,8 +269,10 @@ class IgorControllerNode(Node):
             beams_norm = np.clip(beams_m / 3.50, 0.0, 1.0).astype(np.float32)
             d_min = float(np.min(beams_m))
         else:
+            beams_m = np.full(64, 3.50, dtype=np.float32)
             beams_norm = np.ones(64, dtype=np.float32)
             d_min = 3.50
+        self.latest_lidar_64 = beams_m
 
         # 2. Process IMU Telemetry & Heading
         (ax, ay, az), (gx, gy, gz), imu_t = self.mcu.get_latest_imu()
@@ -292,26 +294,34 @@ class IgorControllerNode(Node):
         heading_msg.data = float(delta_theta)
         self.pub_heading.publish(heading_msg)
 
+        # Ekstraksi rintangan lokal dari subsampled LiDAR (64 sinar) untuk batas barrier CBF/DWA
+        cbf_obstacles = []
+        if beams_m is not None:
+            angles = np.linspace(-math.pi / 2.0, math.pi / 2.0, len(beams_m))
+            for dist, ang in zip(beams_m, angles):
+                if 0.05 < dist < 1.50:
+                    obs_x = float(dist * math.cos(ang))
+                    obs_y = float(dist * math.sin(ang))
+                    cbf_obstacles.append((obs_x, obs_y, 0.12))
+
         # 3. Assemble 74-Element Observation Vector
         # obs[0..63]  : 64 frontal LiDAR beams in [0, 1]
-        # obs[64..66] : ax/3.0, ay/3.0, az/3.0
+        # obs[64..66] : ax/3.0, ay/3.0, az/9.81
         # obs[67..69] : gx/2.0, gy/2.0, gz/2.0 (in rad/s)
         # obs[70..72] : vx_cmd/0.60, vy_cmd/0.50, wz_cmd/2.0
         # obs[73]     : delta_theta / pi in [-1, 1]
         obs = np.zeros(74, dtype=np.float32)
         obs[0:64] = beams_norm
-        obs[64] = float(ax) / 3.0
-        obs[65] = float(ay) / 3.0
-        obs[66] = 0.0  # Training Gym V3 had az=0 (gravity should not saturate neural network)
-        obs[67] = 0.0  # Training Gym V3 had roll=0
-        obs[68] = 0.0  # Training Gym V3 had pitch=0
-        obs[69] = math.radians(gz) / 2.0  # Gyro yaw rate in rad/s, normalized by 2.0
-        obs[70] = float(self.cmd_linear_x) / 0.60
-        obs[71] = float(self.cmd_linear_y) / 0.50
-        obs[72] = float(self.cmd_angular_z) / 2.0
-        obs[73] = norm_delta_theta
-        # IMU can exceed training limits; saturate to the declared model domain.
-        obs[64:70] = np.clip(obs[64:70], -1.0, 1.0)
+        obs[64] = float(np.clip(float(ax) / 3.0, -1.0, 1.0))
+        obs[65] = float(np.clip(float(ay) / 3.0, -1.0, 1.0))
+        obs[66] = float(np.clip(float(az) / 9.81, -1.0, 1.0))
+        obs[67] = float(np.clip(math.radians(float(gx)) / 2.0, -1.0, 1.0))
+        obs[68] = float(np.clip(math.radians(float(gy)) / 2.0, -1.0, 1.0))
+        obs[69] = float(np.clip(math.radians(float(gz)) / 2.0, -1.0, 1.0))
+        obs[70] = float(np.clip(self.cmd_linear_x / 0.60, -1.0, 1.0))
+        obs[71] = float(np.clip(self.cmd_linear_y / 0.50, -1.0, 1.0))
+        obs[72] = float(np.clip(self.cmd_angular_z / 2.0, -1.0, 1.0))
+        obs[73] = float(np.clip(norm_delta_theta, -1.0, 1.0))
         if not np.all(np.isfinite(obs)):
             self._stop_for_fault("OBSERVATION_NONFINITE")
             return
@@ -339,19 +349,28 @@ class IgorControllerNode(Node):
             alpha = float(np.clip((0.70 - d_min) / (0.70 - 0.30), 0.0, 1.0))
             v_blended = (1.0 - alpha) * v_cmd + alpha * v_exec_drl
 
-            # If hybrid controller active, filter through CBF or enforce zero-stop
+            # If hybrid controller active, filter through CBF, DWA Shield, or enforce zero-stop
             if self.algorithm == 'cl_drl_cbf':
                 safe_vx, safe_vy, safe_wz, _ = self.cpu_controller.filter_cbf(
                     cand_vx=float(v_blended[0]),
                     cand_vy=float(v_blended[1]),
                     cand_omega=float(v_blended[2]),
                     robot_pose=(0.0, 0.0, 0.0),
-                    obstacles=[{"x": float(r * np.cos(a)), "y": float(r * np.sin(a)), "radius": 0.0}
-                                for r, a in zip(beams_m, np.linspace(-np.pi/2, np.pi/2, 64))
-                                if r < 3.50],
+                    obstacles=cbf_obstacles if len(cbf_obstacles) > 0 else None,
                     allowed_max_vx=allowed_max_vx
                 )
                 v_safe = np.array([safe_vx, safe_vy, safe_wz], dtype=np.float32)
+            elif self.algorithm in ['cl_drl_dwa', 'cl_drl_dwa_shield', 'mini_dwa']:
+                if hasattr(self, 'cpu_controller') and self.cpu_controller is not None:
+                    safe_vx, safe_vy, safe_wz, _ = self.cpu_controller.filter_dwa(
+                        cand_vx=float(v_blended[0]),
+                        cand_vy=float(v_blended[1]),
+                        cand_omega=float(v_blended[2]),
+                        scan_ranges=beams_m
+                    )
+                    v_safe = np.array([safe_vx, safe_vy, safe_wz], dtype=np.float32)
+                else:
+                    v_safe = v_blended
             else:
                 if d_min < 0.22:
                     v_safe = np.zeros(3, dtype=np.float32)
@@ -359,11 +378,15 @@ class IgorControllerNode(Node):
                     v_safe = v_blended
         else:
             # CPU Path (All 5 algorithms unified via predict)
+            gx_rad = math.radians(float(gx))
+            gy_rad = math.radians(float(gy))
+            gz_rad = math.radians(float(gz))
             exec_vx, exec_vy, exec_wz, _ = self.cpu_controller.predict(
                 lidar_ranges=beams_norm,
                 cmd_vel=(self.cmd_linear_x, self.cmd_linear_y, self.cmd_angular_z),
-                imu_data=(ax, ay, 0.0, 0.0, 0.0, math.radians(gz)),
-                heading_err=delta_theta
+                imu_data=(float(ax), float(ay), float(az), gx_rad, gy_rad, gz_rad),
+                heading_err=delta_theta,
+                obstacles=cbf_obstacles if len(cbf_obstacles) > 0 else None
             )
             v_safe = np.array([exec_vx, exec_vy, exec_wz], dtype=np.float32)
 
@@ -394,10 +417,17 @@ class IgorControllerNode(Node):
         v3 = -linear_x - linear_y - vp  # FR (Mirrored)
         v4 = -linear_x + linear_y - vp  # RR (Mirrored)
 
-        rps1 = np.clip(v1 / circ, -self.kinematics.max_rps, self.kinematics.max_rps)
-        rps2 = np.clip(v2 / circ, -self.kinematics.max_rps, self.kinematics.max_rps)
-        rps3 = np.clip(v3 / circ, -self.kinematics.max_rps, self.kinematics.max_rps)
-        rps4 = np.clip(v4 / circ, -self.kinematics.max_rps, self.kinematics.max_rps)
+        raw_rps = np.array([v1, v2, v3, v4], dtype=np.float32) / circ
+        max_r = float(np.max(np.abs(raw_rps)))
+
+        # Desaturasi proporsional: pertahankan arah gerak saat motor jenuh
+        if max_r > self.kinematics.max_rps:
+            scale = self.kinematics.max_rps / max_r
+            motor_rps = raw_rps * scale
+        else:
+            motor_rps = raw_rps
+
+        rps1, rps2, rps3, rps4 = float(motor_rps[0]), float(motor_rps[1]), float(motor_rps[2]), float(motor_rps[3])
 
         # Transmit motor speed packet to STM32
         if self.mcu.send_motor_speeds(rps1, rps2, rps3, rps4) is False:
