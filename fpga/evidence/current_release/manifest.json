@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_utc": "2026-10-17T09:57:04.195184+00:00",
+  "generated_utc": "2026-10-17T10:22:57.247587+00:00",
   "scope": "FPGA simulation/build/handoff and user-supplied ASIC evidence; no physical FPGA/robot acceptance or new ASIC sign-off",
   "external_evidence": {
     "gatelevel_test_results": {
@@ -132,8 +132,8 @@
       "bytes": 437
     },
     "CHIP_ADVANTAGES.md": {
-      "sha256": "fd1729e1ac06666aa911cadeee67913b1787d068f1ff3e9b2086a7715ea23585",
-      "bytes": 22483
+      "sha256": "b43818fb767b07784278ae256b78acd98b766a9a5c81961b07dd5274651fe43c",
+      "bytes": 30453
     },
     "ci/gds_user_reference.yml": {
       "sha256": "320acdd0aa91ebc6061ea75447e8520edfa4e56410ee3efa5830db0792b5948d",
@@ -2708,7 +2708,7 @@
       "bytes": 1144
     },
     "evidence/current_acceptance/audit.json": {
-      "sha256": "99dcb1a8ca9d63b83f8789e30ae18844c8ea543d7bdc45f76ea3b341f4ca9f10",
+      "sha256": "c951281cbe87b2295c17c106ae70ac05af6720922407ca0f1dfbc365f6c49289",
       "bytes": 3877
     },
     "evidence/current_board_wrapper/board.gtkw": {
