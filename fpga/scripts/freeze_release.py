@@ -58,7 +58,9 @@ def verify_build(name):
 
 def verify_software_model():
     relative = Path('igor_navigation/igor_navigation/weights/model_weights.json')
-    original = json.loads((ROOT.parent / 'src' / relative).read_text(encoding='utf-8'))
+    candidate = ROOT.parent / 'ros2_ws' / 'src' / relative
+    source_path = candidate if candidate.exists() else (ROOT.parent / 'src' / relative)
+    original = json.loads(source_path.read_text(encoding='utf-8'))
     deployed = json.loads((ROOT / 'software_integration/src' / relative).read_text(encoding='utf-8'))
     if any(original[key] != deployed[key] for key in ('w1','b1','w2','b2','w3','b3')):
         raise RuntimeError('Integrated host model differs from the source model verified against RTL')
@@ -133,7 +135,8 @@ def check():
     # Pure software references are read-only external inputs, not release writes.
     for name, expected in doc.get('reference_sha256', {}).items():
         path = (ROOT.parent / name.replace('\\', '/')).resolve()
-        if not path.is_relative_to(ROOT.parent / 'src') or not path.is_file() or sha(path) != expected:
+        valid_parent = ROOT.parent / 'ros2_ws/src' if 'ros2_ws' in name else ROOT.parent / 'src'
+        if not path.is_relative_to(valid_parent) or not path.is_file() or sha(path) != expected:
             raise RuntimeError(f'Original software model reference changed: {name}')
     print(f"PASS release integrity: {len(doc['files'])} files; FPGA source-bound SOFs, timing and pins verified. Imported ASIC sign-off is assessed separately.")
 
@@ -248,7 +251,7 @@ def freeze():
             'kind':'User-supplied evidence import, not a new ASIC sign-off run'}
     provenance = json.loads((ROOT / 'verification/src_policy/artifacts/model_provenance.json').read_text(encoding='utf-8'))
     references = {name.replace('\\', '/'): value for name, value in provenance['sha256'].items()
-                  if name.replace('\\', '/').startswith('src/')}
+                  if name.replace('\\', '/').startswith('src/') or name.replace('\\', '/').startswith('ros2_ws/src/')}
     doc = {'schema': 1, 'generated_utc': datetime.now(timezone.utc).isoformat(),
            'scope': 'FPGA simulation/build/handoff and user-supplied ASIC evidence; no physical FPGA/robot acceptance or new ASIC sign-off',
            'external_evidence':external_evidence,
