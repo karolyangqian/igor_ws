@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_utc": "2026-10-17T11:23:56.679503+00:00",
+  "generated_utc": "2026-10-17T12:49:49.695892+00:00",
   "scope": "FPGA simulation/build/handoff and user-supplied ASIC evidence; no physical FPGA/robot acceptance or new ASIC sign-off",
   "external_evidence": {
     "gatelevel_test_results": {
@@ -100,8 +100,8 @@
       "bytes": 27599
     },
     "Bennaya.md": {
-      "sha256": "1716676a14b83a2901241fcd6d042c08555025db8cca7cc45358f79adbaf26d4",
-      "bytes": 31837
+      "sha256": "8b9ca9735b0e657522d3a8ca69bd6bd3ec343c2a3851224679bbc36fb5cf57b3",
+      "bytes": 32281
     },
     "bitstreams/igor_planner.sof": {
       "sha256": "84295ae937ab4a759efa1e4d21ebda09805559038bc4fef971894a8946d701d2",
@@ -159,6 +159,30 @@
       "sha256": "c65145824d9342888ae6df6c4c7ac497cdd790cb57054320cc75fb7f322a37fe",
       "bytes": 5129
     },
+    "docs/assets/parallel8_datapath.dot": {
+      "sha256": "095beb167dbc970edb9f642231357c1ef9a7f9232d229344f5a5de801d7f8e23",
+      "bytes": 2800
+    },
+    "docs/assets/parallel8_datapath.png": {
+      "sha256": "a6e591d664910d3943102c467256112d4a6922f6731a06501a4c61b7c45e9d07",
+      "bytes": 158009
+    },
+    "docs/assets/parallel8_datapath.svg": {
+      "sha256": "0c787de41e6e81ea485251d7e99de26bf468a7ce3165b6444c0785056a013534",
+      "bytes": 18573
+    },
+    "docs/assets/parallel8_system.dot": {
+      "sha256": "108e65d859f559e99e25bd62c9846bc65d40981442806416bb83da1e70772bad",
+      "bytes": 3272
+    },
+    "docs/assets/parallel8_system.png": {
+      "sha256": "313abdeecfd4ac12a594261430ce6336bbe116d7110a520daf8b106b2b6e2f77",
+      "bytes": 139560
+    },
+    "docs/assets/parallel8_system.svg": {
+      "sha256": "602194a1bac4529b51a981a8bc380e0069f719cbaafbd9c2b3c4ed9ca434540c",
+      "bytes": 19033
+    },
     "docs/BOARD_PROGRAMMING.md": {
       "sha256": "c439e6bf155e275c3208fbe8040b48e141c81ad8df867feeaa93e71e3ab02018",
       "bytes": 11114
@@ -215,6 +239,10 @@
       "sha256": "d1060ddea82ba693334504d149282655679bae5df245a8dfcd849f3c0ddd6c9a",
       "bytes": 23873
     },
+    "docs/PARALLEL8_BLOCK_DIAGRAM.md": {
+      "sha256": "807b88ccbd579835b9ac9c80c56c5f906e007582b45f6a3884c28367e20c7a4b",
+      "bytes": 21415
+    },
     "docs/PERFORMANCE.md": {
       "sha256": "36f51e40ae11d5559a99ab105566f96f0e1b947c5c98a170bd010ca2f9eb2ae1",
       "bytes": 3454
@@ -244,8 +272,12 @@
       "bytes": 9332
     },
     "docs/RTL_MODULES.md": {
-      "sha256": "a5f05a10d9a443daa160ae7f186ff05b6f5aeb227abf7f6f09881af0a4dadf5a",
-      "bytes": 3139
+      "sha256": "6c88b4139fc676240e1066aa66a6d3ca8db7d9e69da14e4e12fa5e0c4b147fd1",
+      "bytes": 3575
+    },
+    "docs/RTL_PORT_REFERENCE.md": {
+      "sha256": "9dc6092b070fae85a125ee0097d98dfa65ff28784ad4f40eead8cdbb50045581",
+      "bytes": 17460
     },
     "docs/SIMULATION_EVIDENCE.md": {
       "sha256": "477412281149842aaabb2ed7581c6f10809fb74e549aba2b77d9c3d05adcd735",
@@ -2712,7 +2744,7 @@
       "bytes": 1144
     },
     "evidence/current_acceptance/audit.json": {
-      "sha256": "0ed6cf3a39a59ea50d9400c2d343a23b3b458a3c6a476255bc356666418440fa",
+      "sha256": "82b21d545b93d4b17e160906ec3837bb77f5532c53da28f0589963d89fdce171",
       "bytes": 3877
     },
     "evidence/current_board_wrapper/board.gtkw": {
@@ -3090,6 +3122,10 @@
     "evidence/current_safety/units_checkpoints.csv": {
       "sha256": "2c6b1855df38f71c9fd0dda6b9331b52db4ae025fc7b7436e8f4b7b369336fd9",
       "bytes": 1502
+    },
+    "evidence/parallel8_architecture/rtl_map.json": {
+      "sha256": "0d074a0d41819e33249a9df0da3c10efbb4a3d3210d61cf83179b027f6413456",
+      "bytes": 2331
     },
     "evidence/visual_review/01_planner_estop_and_logger.gtkw": {
       "sha256": "263118b66c3729e4a1a619a3d1484719fc3d5e92e96d93891c57e5de6ec8fad3",
@@ -3836,8 +3872,8 @@
       "bytes": 5080
     },
     "README.md": {
-      "sha256": "9eb329798e0a829527131f55402c7d8214a07edab1605cc75feff06e79cebab9",
-      "bytes": 14688
+      "sha256": "36212ed47073666340310e734ad8845a3c0faf7117f40135c593d61c4fb58687",
+      "bytes": 15035
     },
     "reference_model/neural_reference.py": {
       "sha256": "88b45034827c71b00ca049b2284a1be64e5f34c070216edae3af7ebc3df1a347",
@@ -4272,12 +4308,16 @@
       "bytes": 2065
     },
     "scripts/freeze_release.py": {
-      "sha256": "57e9fddadff230674417f4f9e04259421acb273d0b0df92410c01dbc3075b21d",
-      "bytes": 16137
+      "sha256": "ff12f857d9dbb26d7069b3d74f08d80275349871ea6c346f7c0f9e9e527e2412",
+      "bytes": 16357
     },
     "scripts/generate_neural_logic_rom.py": {
       "sha256": "f9e5027dc46f499c28b0bf10fed09ee26615912ed3ddaee47ec24fd03156be7a",
       "bytes": 2412
+    },
+    "scripts/generate_rtl_port_reference.py": {
+      "sha256": "f72b4735337e4d8af78488a4d6f79e033ee0407554ed1f579f3d87cb11e80b73",
+      "bytes": 6806
     },
     "scripts/import_asic_diagnostics.py": {
       "sha256": "a9656f3f9232c79398ac833303e26bd9c84a8c06b4d6c36ec082c591ee4f22a9",

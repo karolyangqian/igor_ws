@@ -1,5 +1,13 @@
 # Top module dan breakdown RTL
 
+## Proyek source-policy cepat: Parallel8
+
+Untuk core **0,13832 ms**, gunakan [diagram dan alur Parallel8](PARALLEL8_BLOCK_DIAGRAM.md)
+serta [katalog deklarasi port aktual](RTL_PORT_REFERENCE.md). Top-nya
+`igor_src_policy_de10_nano` pada `experiments/parallel8`; core memiliki delapan
+bank bobot internal dan delapan lane MAC. Tabel common/board berikut membahas
+proyek legacy/alternatif yang identitasnya terpisah dari kandidat cepat.
+
 ## Top yang dipilih
 
 | Target | Top module | File |

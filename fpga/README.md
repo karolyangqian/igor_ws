@@ -27,6 +27,11 @@ Hasilnya **0,13832 ms**, 3.303 ALM, 64 M10K, 8 DSP; semua timing corner dan
 Angka di bawah tetap menjelaskan baseline serial yang terpisah. Target
 0,16 ms adalah inferensi core, bukan round-trip UART.
 
+[Block diagram dan alur input/output setiap RTL Parallel8](docs/PARALLEL8_BLOCK_DIAGRAM.md)
+menjelaskan frame observasi, koneksi antarmodul, delapan lane MAC, bank bobot,
+jadwal 6.916 clock, serta keluaran respons. [Katalog port RTL](docs/RTL_PORT_REFERENCE.md)
+memuat fungsi dan deklarasi 24 file / 27 modul pada common RTL serta kandidat.
+
 [Metrik lengkap beserta sumber/baris bukti](docs/METRICS_AND_POWER.md) dan
 [CSV provenance](evidence/current_metrics/metric_evidence.csv) tersedia untuk
 setiap angka. Policy memakai 3.249 ALM, 64 M10K, 1 DSP; latensi core 1,08696 ms.

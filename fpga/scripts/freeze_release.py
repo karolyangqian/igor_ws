@@ -209,6 +209,7 @@ def freeze():
                    ROOT / 'evidence/current_metrics',
                    ROOT / 'evidence/chip_highlights',
                    ROOT / 'evidence/bennaya_answers',
+                   ROOT / 'evidence/parallel8_architecture',
                    ROOT / 'verification/src_policy/artifacts']:
         if folder.exists():
             tracked.update(p for p in folder.rglob('*') if p.is_file() and p.suffix in {'.json','.csv','.log','.hex','.gtkw','.gz','.rpt','.summary','.png'})
@@ -226,6 +227,8 @@ def freeze():
     tracked.update(ROOT.glob('*.bat'))
     tracked.update(ROOT.glob('requirements*.txt'))
     tracked.update((ROOT / 'docs').glob('*.md'))
+    tracked.update(path for path in (ROOT / 'docs/assets').glob('parallel8_*')
+                   if path.is_file() and path.suffix in {'.dot','.svg','.png'})
     tracked.update((ROOT / 'software_integration').glob('*.md'))
     tracked.update((ROOT / 'scripts').glob('*.ps1'))
     if parallel_receipt.exists():

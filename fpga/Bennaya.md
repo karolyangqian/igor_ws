@@ -265,3 +265,8 @@ Cari ID Sxx di bawah. JSON S02 memuat `cycles`, `clock_hz`, `suites`, `fitter_su
 [Traceability JSON](evidence/bennaya_answers/traceability.json) menyimpan ID text field, cuplikan pendek dan posisi karakter pada lampiran asal, SHA256 dokumen sumber, lokasi jawaban serta hash sumber bukti. Dokumen internal lengkap tidak disalin ke naskah publikasi ini. Metadata menghubungkan pertanyaan asal dengan jawaban tanpa memperlakukan rencana sebagai hasil eksperimen.
 
 **Kalimat penutup presentasi:** “IGOR membawa kecerdasan robot ke hardware yang terukur: core neural 138,32 mikrodetik, bobot on-chip, proteksi operasi pada jalur kendali, dan jejak bukti dari Verilog sampai pengujian. Kami membangun IP lokal yang dapat dijelaskan, diprogram dan dikembangkan menuju aplikasi industri serta silicon.”
+
+
+## Block diagram core FPGA di bawah 0,16 ms
+
+[Diagram dan alur RTL Parallel8](docs/PARALLEL8_BLOCK_DIAGRAM.md) memperlihatkan input/output antarfile, frame UART, bank bobot, delapan lane MAC, aktivasi, jadwal 6.916 clock dan jalur fault. [Referensi port RTL](docs/RTL_PORT_REFERENCE.md) menjelaskan fungsi serta deklarasi 24 file / 27 modul common accelerator dan kandidat cepat. Diagram tersedia sebagai SVG dan PNG untuk penjelasan teknis.

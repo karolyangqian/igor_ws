@@ -1,0 +1,56 @@
+{
+  "generated_utc": "2026-10-17T12:49:40.162264+00:00",
+  "kind": "Documentation audit from existing RTL; no new RTL simulation or physical measurement",
+  "qsf": "experiments/parallel8/igor_src_policy.qsf",
+  "qsf_source_files": [
+    {
+      "path": "experiments/parallel8/igor_src_policy_de10_nano.v",
+      "sha256": "74238afb3675d3ebeea9d4290883197dd1dfce6402d18569fa7a5b4deea7ed81",
+      "instantiated": true
+    },
+    {
+      "path": "experiments/parallel8/igor_src_policy_core.v",
+      "sha256": "0aff96cf9638582ab0bc6eabaf1462baa25a41196e1e73abc1aa4786cddc5d34",
+      "instantiated": true
+    },
+    {
+      "path": "rtl/igor_src_policy/igor_src_policy_rom.v",
+      "sha256": "310f769eb8752d04920cebd8ac58c6ba2afcbfa5aabc442cca91dbb6e797c2f0",
+      "instantiated": false
+    },
+    {
+      "path": "rtl/igor_src_policy/igor_src_policy_uart.v",
+      "sha256": "8c03e18a3a22afa550f387e74cb78c3b0d66df8a8efac1def37682e159e0e38a",
+      "instantiated": true
+    },
+    {
+      "path": "rtl/igor_uart_rx.v",
+      "sha256": "4197e40b03ff6bf2db0c7381d372ad500b1bea2f287a879bcadee67ea628fe39",
+      "instantiated": true
+    },
+    {
+      "path": "rtl/igor_uart_tx.v",
+      "sha256": "1856fd56edcdd3c0528eb7bbd5c8aa8acdd2d0053d993cf14b2c31bc5d282d28",
+      "instantiated": true
+    }
+  ],
+  "listed_but_not_instantiated": [
+    "rtl/igor_src_policy/igor_src_policy_rom.v"
+  ],
+  "inline_weight_banks": 8,
+  "activation_instances": 8,
+  "catalog_files": 24,
+  "catalog_module_declarations": 27,
+  "clock_hz": 50000000,
+  "cycles": 6916,
+  "latency_ms": 0.13832,
+  "diagram_sha256": {
+    "docs/assets/parallel8_datapath.dot": "095beb167dbc970edb9f642231357c1ef9a7f9232d229344f5a5de801d7f8e23",
+    "docs/assets/parallel8_datapath.png": "a6e591d664910d3943102c467256112d4a6922f6731a06501a4c61b7c45e9d07",
+    "docs/assets/parallel8_datapath.svg": "0c787de41e6e81ea485251d7e99de26bf468a7ce3165b6444c0785056a013534",
+    "docs/assets/parallel8_system.dot": "108e65d859f559e99e25bd62c9846bc65d40981442806416bb83da1e70772bad",
+    "docs/assets/parallel8_system.png": "313abdeecfd4ac12a594261430ce6336bbe116d7110a520daf8b106b2b6e2f77",
+    "docs/assets/parallel8_system.svg": "602194a1bac4529b51a981a8bc380e0069f719cbaafbd9c2b3c4ed9ca434540c"
+  },
+  "checks": "PASS"
+}

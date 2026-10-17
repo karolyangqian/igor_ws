@@ -1,0 +1,32 @@
+digraph IGOR {
+  graph [rankdir=TB, bgcolor="white", pad="0.3", nodesep="0.45", ranksep="0.65", fontname="Arial", label="IGOR Parallel8 | koneksi RTL aktual | clock 50 MHz", labelloc=t, fontsize=23, compound=true];
+  node [shape=box, style="rounded,filled", fillcolor="#edf5ff", color="#3175b9", fontname="Arial", fontsize=13, margin="0.16,0.12"];
+  edge [fontname="Arial", fontsize=10, color="#33475b", arrowsize=0.75];
+  input [label="HOST / ROS (di luar FPGA)\n64 LiDAR + 6 IMU\n3 perintah + 1 heading\n74 nilai signed Q8.8\nframe observasi: 153 byte", fillcolor="#f1f3f5", color="#778899"];
+  output [label="HOST menerima frame 11 byte\nCRC + 3 residual Q8.8\nblending / filter / kinematika\nmenuju controller motor di host", fillcolor="#f1f3f5", color="#778899"];
+  subgraph cluster_board {
+    label="igor_src_policy_de10_nano.v | top-level DE10-Nano"; color="#9ab5ce"; style="rounded"; fontname="Arial"; fontsize=17;
+    keys [label="FPGA_CLK1_50 + KEY[1:0]\nreset_sync -> rst_n\nstop_sync + stop_latched\n-> stop_active", fillcolor="#fff3df", color="#bd8534"];
+    subgraph cluster_policy {
+      label="policy : igor_src_policy_uart.v | parser, supervisor, hasil, serial"; color="#78b5aa"; style="rounded"; fontname="Arial"; fontsize=16;
+      rx [label="receiver : igor_uart_rx.v\nUART_RX -> rx\n8N1 + sinkronisasi RX\nrx_data[7:0], rx_valid, rx_error"];
+      parser [label="Bagian parser + supervisor\nvalidasi header/opcode/length/CRC\nrange 74 observasi + timeout\nframe_observation[0:73]\nLOAD -> START -> RUN", fillcolor="#e8f6f1", color="#348f7c"];
+      core [label="core : igor_src_policy_core.v\n8 bank ROM + 8 lane MAC\n74 -> 128 -> 64 -> 3\n6.916 clock = 138,32 us\nstart diterima -> done", fillcolor="#dfeeff", color="#165a9e", penwidth=2];
+      result [label="Bagian CAP0/CAP1/CAP2 + TX\nsample0/1/2 + result_valid\nsafety_permit -> mask action0/1/2\nCRC + serialisasi 11 byte", fillcolor="#e8f6f1", color="#348f7c"];
+      tx [label="transmitter : igor_uart_tx.v\ntx_data[7:0], tx_send\ntx_busy -> pengatur TX\n8N1 -> UART_TX"];
+      rx -> parser [label="rx_data[7:0]\nrx_valid, rx_error"];
+      parser -> core [label="core_load, core_input_index[6:0]\ncore_input_value signed[15:0]\ncore_start, core_abort | estop_active"];
+      core -> result [label="core_done / core_fault\ncore_latency[31:0]\ncore_output_value signed[15:0]"];
+      result -> core [label="core_output_index[1:0]", color="#3175b9", constraint=false];
+      result -> tx [label="tx_data[7:0], tx_send"];
+      tx -> result [label="tx_busy", style=dashed, constraint=false];
+      parser -> result [label="reject / E-stop / lease\nresult_valid=0, tx_cancel=1", color="#b44b40", style=dashed, constraint=false];
+    }
+    leds [label="LED[7:0]\nerror_code[3:0] | stop_active\nresponse_valid | rst_n | permit", fillcolor="#fff3df", color="#bd8534"];
+    keys -> parser [label="clk, rst_n\nestop=stop_active", style=dashed, color="#b44b40"];
+    keys -> core [label="clk, rst_n\nabort bila E-stop", style=dashed, color="#b44b40", constraint=false];
+    result -> leds [label="permit, response_valid\nerror_code", style=dashed];
+  }
+  input -> rx [label="UART_RX : 1 bit\n921600 nominal / divider 54"];
+  tx -> output [label="UART_TX : 1 bit"];
+}

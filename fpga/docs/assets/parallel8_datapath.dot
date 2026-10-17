@@ -1,0 +1,31 @@
+digraph Datapath {
+  graph [rankdir=TB, bgcolor="white", pad="0.3", nodesep="0.5", ranksep="0.7", fontname="Arial", fontsize=23, label="Di dalam igor_src_policy_core.v | 8 neuron diproses per kelompok", labelloc=t];
+  node [shape=box, style="rounded,filled", fillcolor="#edf5ff", color="#3175b9", fontname="Arial", fontsize=13, margin="0.16,0.12"];
+  edge [fontname="Arial", fontsize=11, color="#33475b", arrowsize=0.75];
+  load [label="load_input + input_index[6:0]\ninput_value signed[15:0]\nobservations[0:73]\nloaded[73:0]"];
+  fsm [label="FSM + penjadwal\nlayer / neuron / k\nBIAS_ADDRESS -> WAIT -> TAKE\nWEIGHT_ADDRESS -> WAIT -> MAC\nACTIVATE\nbusy / done / fault / latency_cycles", fillcolor="#fff3df", color="#bd8534"];
+  operand [label="MUX input layer -> operand[15:0]\nlayer 0: observations[k]\nlayer 1: hidden1[k]\nlayer 2: hidden2[k]"];
+  banks [label="lane0.memory ... lane7.memory\n8 ROM bobot sinkron M10K\nmasing-masing 4096 x 16 bit\nbank0.mem ... bank7.mem\naddress[11:0] sama untuk semua bank", fillcolor="#e8f6f1", color="#348f7c"];
+  subgraph cluster_lanes {
+    label="8 lane paralel i=0..7 | operand sama, bobot berbeda"; fontname="Arial"; fontsize=16; color="#9ab5ce"; style=rounded;
+    mul [label="8 multiplier signed 16 x 16\nproduct[i] signed[31:0]"];
+    acc [label="8 register acc signed[39:0]\nBIAS_TAKE: bias << 8\nMAC: acc + sign_extend(product)"];
+    activation [label="8 x igor_src_policy_activation\naccumulator[39:0]\nscaled = accumulator[39:8]\nhidden: ReLU + saturasi\noutput: clamp [-256,+256]", fillcolor="#dfeeff", penwidth=2];
+    mul -> acc [label="product[i][31:0]\nsign-extend menjadi 40 bit"];
+    acc -> activation [label="accumulator[i][39:0]"];
+  }
+  hidden [label="8 bank aktivasi lokal\nlane i: h1[0:15], h2[0:7]\nhidden1[g*8+i] = lane_i.h1[g]\nhidden2[g*8+i] = lane_i.h2[g]", fillcolor="#e8f6f1", color="#348f7c"];
+  actions [label="actions[0:2] signed[15:0]\nlayer output memakai lane 0,1,2\noutput_index[1:0] memilih hasil\noutput_value = 0 bila tidak valid"];
+  load -> operand [label="74 observasi"];
+  load -> fsm [label="semua 74 loaded\nstart / abort", style=dashed];
+  fsm -> banks [label="address[11:0]", style=dashed];
+  fsm -> operand [label="layer, k", style=dashed];
+  fsm -> acc [label="BIAS_TAKE / MAC", style=dashed];
+  fsm -> activation [label="output_layer=(layer==2)", style=dashed];
+  banks -> mul [label="8 x weight[i] signed[15:0]"];
+  banks -> acc [label="bias pada BIAS_TAKE", color="#348f7c"];
+  operand -> mul [label="operand signed[15:0]\nbroadcast ke 8 lane"];
+  activation -> hidden [label="activated[0:7][15:0]\nACTIVATE, layer 0/1"];
+  hidden -> operand [label="aktivasi antar-layer", constraint=false];
+  activation -> actions [label="activated[0:2][15:0]\nACTIVATE, layer 2"];
+}
