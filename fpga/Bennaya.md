@@ -22,6 +22,22 @@ dikelola berdasarkan kepemilikan, dan SRAM program **256×16 bit**.
 
 [power.md](power.md) memuat rincian power dan sumber setiap angka.
 
+## Keunggulan tambahan yang sudah ditelusuri
+
+- **Multi-protocol dalam satu engine:** demo UART RX, UART TX, I²C dan SPI
+  memakai **254 word / 508 byte** dalam SRAM program.
+- **Empat context concurrent:** diuji bersama dan dibandingkan terhadap
+  model referensi setiap clock eksekusi.
+- **Penanganan bus yang eksplisit:** UART start/stop qualification, I²C
+  ACK/NACK, open-drain dan clock stretching mempunyai pengujian tersendiri.
+- **Program upload dengan readback:** driver host dapat memverifikasi
+  data program sebelum eksekusi.
+- **Bukti pengujian yang kuat untuk presentasi:** suite yang tersedia
+  dijalankan ulang pada 17 Oktober 2026, **42 tes PASS**, source tetap sama.
+
+[CHIP_ADVANTAGES.md](CHIP_ADVANTAGES.md) memetakan setiap poin ke RTL,
+firmware, nama tes, dan [log hasil pengujian](evidence/chip_highlights/regression.log).
+
 ## Security operasional yang tertanam di hardware
 
 Keunggulan desain terletak pada mekanisme pembatasan operasi dan kendali

@@ -207,6 +207,7 @@ def freeze():
                    ROOT / 'evidence/current_checks', ROOT / 'evidence/current_builds',
                    ROOT / 'evidence/current_acceptance', ROOT / 'evidence/current_programming',
                    ROOT / 'evidence/current_metrics',
+                   ROOT / 'evidence/chip_highlights',
                    ROOT / 'verification/src_policy/artifacts']:
         if folder.exists():
             tracked.update(p for p in folder.rglob('*') if p.is_file() and p.suffix in {'.json','.csv','.log','.hex','.gtkw','.gz','.rpt','.summary','.png'})

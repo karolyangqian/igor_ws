@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_utc": "2026-10-17T09:16:24.012886+00:00",
+  "generated_utc": "2026-10-17T09:26:42.290084+00:00",
   "scope": "FPGA simulation/build/handoff and user-supplied ASIC evidence; no physical FPGA/robot acceptance or new ASIC sign-off",
   "external_evidence": {
     "gatelevel_test_results": {
@@ -100,8 +100,8 @@
       "bytes": 27599
     },
     "Bennaya.md": {
-      "sha256": "e137ae8f6aa8b3e5873a431b10e76bb914b80a7f42dcc6bd9f6e6f9a18246969",
-      "bytes": 3600
+      "sha256": "c674570fc37202a7e78c3ae68f7cc3bdafc390c70f090ea565e4cee196bc119b",
+      "bytes": 4449
     },
     "bitstreams/igor_planner.sof": {
       "sha256": "84295ae937ab4a759efa1e4d21ebda09805559038bc4fef971894a8946d701d2",
@@ -130,6 +130,10 @@
     "BUKA_POLICY_QUARTUS.bat": {
       "sha256": "e03a087066845a8d430affd18366ef9055b0be231b93d2a9a1d35cc0e6c1fc3b",
       "bytes": 437
+    },
+    "CHIP_ADVANTAGES.md": {
+      "sha256": "19cfd08dcdbef993760d3f9437090556ac6b7861c313c10aedeb026175d96a7c",
+      "bytes": 6010
     },
     "ci/gds_user_reference.yml": {
       "sha256": "320acdd0aa91ebc6061ea75447e8520edfa4e56410ee3efa5830db0792b5948d",
@@ -2691,8 +2695,16 @@
       "sha256": "36235b2b66ba7f61eef49b61dd3cef6b074b59224aedfb62ccc3072b354090c2",
       "bytes": 12736
     },
+    "evidence/chip_highlights/regression.log": {
+      "sha256": "c59a36aab2980d37b4063f4de2c49926fe5221b81fe63477f5e3e0e1e7bb0bd2",
+      "bytes": 4933
+    },
+    "evidence/chip_highlights/results.json": {
+      "sha256": "64254c2eabe7377c55fc87d0261c262edd10f519477cf9ff4e56d2acc012d28f",
+      "bytes": 2766
+    },
     "evidence/current_acceptance/audit.json": {
-      "sha256": "76054e40d908d7f42d23c78d54da73d8fc168c10a8bf6a22bb5286ce31a7bfbe",
+      "sha256": "b3f0b575123290ae1e221d22775498416f0abcc9d4644e1eef24117915b479fd",
       "bytes": 3877
     },
     "evidence/current_board_wrapper/board.gtkw": {
@@ -3816,8 +3828,8 @@
       "bytes": 5080
     },
     "README.md": {
-      "sha256": "280ba4bc3bebd11aecfed31bdad84a0ab15a990a446d452614fbed53f5aadd4c",
-      "bytes": 14478
+      "sha256": "9eb329798e0a829527131f55402c7d8214a07edab1605cc75feff06e79cebab9",
+      "bytes": 14688
     },
     "reference_model/neural_reference.py": {
       "sha256": "88b45034827c71b00ca049b2284a1be64e5f34c070216edae3af7ebc3df1a347",
@@ -4252,8 +4264,8 @@
       "bytes": 2065
     },
     "scripts/freeze_release.py": {
-      "sha256": "bc7cb5fd03aa2b355a580acefd917540b8ed40fb021b7200d53369eab47726bd",
-      "bytes": 16029
+      "sha256": "9643dbcd356a6f55ea49cd2e6cc2b862f1cf91de2ebd911356c33591da2ad425",
+      "bytes": 16083
     },
     "scripts/generate_neural_logic_rom.py": {
       "sha256": "f9e5027dc46f499c28b0bf10fed09ee26615912ed3ddaee47ec24fd03156be7a",
@@ -4322,6 +4334,10 @@
     "scripts/validate_repository.py": {
       "sha256": "f9fe54d0eb0b5e43e084d9d4c3960310f9308993bdb531e060a34e356f671668",
       "bytes": 5794
+    },
+    "scripts/verify_chip_highlights.py": {
+      "sha256": "485012593969fae500b0b7e53dae4d7dfd0ccb9efa7f5e8d47927d6893be1583",
+      "bytes": 2524
     },
     "scripts/verify_neural_logic.py": {
       "sha256": "9601ea099dd7ddd6ce2bfe3875ff934cec3f84442d09878898b7b9e65cd0400a",

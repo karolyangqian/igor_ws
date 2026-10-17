@@ -13,6 +13,10 @@ I/O di hardware. [power.md](power.md) menampilkan estimasi daya ASIC
 `tt_um_igorchip` / `ihp-sg13cmos5l`: Typical **2,037372 mW**, lengkap dengan
 sumber angka dan bukti functional gate-level **PASS**.
 
+[Keunggulan tambahan chip](CHIP_ADVANTAGES.md) mencakup demo multi-protocol
+empat context dalam 508 byte, upload dengan readback, penanganan UART/I²C,
+dan bukti **42 tes lokal PASS** tanpa perubahan RTL.
+
 **Varian cepat untuk target core <0,16 ms sudah tervalidasi:** buka
 [Parallel8 QPF](experiments/parallel8/igor_src_policy.qpf), dengan
 [README dan bukti lengkap](experiments/parallel8/README.md).
