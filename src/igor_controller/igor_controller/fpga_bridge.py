@@ -8,11 +8,12 @@ PERURI Chip Hackathon 2026 - Project IGOR
 Features:
 1. Dual-Mode Communication:
    - Gigabit Ethernet UDP (Target: 192.168.1.50:8080 or 127.0.0.1 for Mock) as per pipeline_architecture.md.
+     Supports both Protocol V2 (SensorPacketV2 with CRC32) and V1 legacy framing.
    - Serial UART fallback (/dev/fpga @ 115200 / 921600 bps).
 2. Binary Q8.8 fixed-point quantization:
    - 74-D input observation vector -> Q8.8 int16.
    - 3-D output action vector <- Q8.8 int16.
-3. Fast timeout (30ms) & CRC-8 data integrity validation.
+3. Fast timeout (30ms) & CRC-32/CRC-8 data integrity validation.
 4. Built-in software mock emulation fallback for offline testing without hardware.
 """
 
@@ -29,6 +30,8 @@ except ImportError:
     serial = None
 
 logger = logging.getLogger("fpga_bridge")
+
+PROTOCOL_MAGIC = 0x49474F52  # "IGOR" in ASCII
 
 CRC8_TABLE = [
     0, 94, 188, 226, 97, 63, 221, 131, 194, 156, 126, 32, 163, 253, 31, 65,
@@ -54,6 +57,14 @@ def checksum_crc8(data: bytes) -> int:
     for b in data:
         check = CRC8_TABLE[check ^ b]
     return check & 0x00FF
+
+def compute_crc32(data: bytes) -> int:
+    crc = 0xFFFFFFFF
+    for b in data:
+        crc ^= b
+        for _ in range(8):
+            crc = (crc >> 1) ^ (0xEDB88320 if (crc & 1) else 0)
+    return (~crc) & 0xFFFFFFFF
 
 
 class FPGABridge:
@@ -82,6 +93,7 @@ class FPGABridge:
         self.udp_sock: Optional[socket.socket] = None
         self.udp_target: Optional[Tuple[str, int]] = None
         self.ser: Optional[serial.Serial] = None
+        self.frame_counter = 0
 
         self._connect()
 
@@ -91,7 +103,6 @@ class FPGABridge:
             return
 
         if self.is_udp:
-            # Parse UDP host and port
             addr_str = self.port.replace("udp://", "")
             parts = addr_str.split(":")
             host = parts[0] if parts[0] else "127.0.0.1"
@@ -123,15 +134,10 @@ class FPGABridge:
                 self.mock = True
                 self.ser = None
 
-    def infer(self, observation_74: np.ndarray) -> np.ndarray:
+    def infer(self, observation_74: np.ndarray, nominal_twist: Optional[Tuple[float, float, float]] = None) -> np.ndarray:
         """
         Sends 74-element observation vector to FPGA and returns 3-element action vector.
-        
-        Args:
-            observation_74: float32 array of shape (74,) with values roughly in [-1, 1]
-            
-        Returns:
-            np.ndarray of shape (3,) with values in [-1.0, 1.0]
+        Supports both Protocol V2 (SensorPacketV2 over Ethernet UDP) and UART framing.
         """
         if len(observation_74) != 74:
             raise ValueError(f"Expected 74 observation elements, got {len(observation_74)}")
@@ -148,51 +154,77 @@ class FPGABridge:
                 return np.array([-0.4, 0.0, 0.0], dtype=np.float32)
             return np.array([0.0, 0.0, 0.0], dtype=np.float32)
 
-        # Build packet: 2 header + 1 cmd + 1 len (148) + 148 payload + 1 crc = 153 bytes
-        payload = bytearray()
-        for val in q8_8_data:
-            payload.extend(struct.pack("<h", val))
+        if self.is_udp and self.udp_sock and self.udp_target:
+            # Protocol V2 SensorPacketV2
+            self.frame_counter += 1
+            ts_ns = int(time.time() * 1e9)
+            vx = nominal_twist[0] if nominal_twist else 0.0
+            vy = nominal_twist[1] if nominal_twist else 0.0
+            wz = nominal_twist[2] if nominal_twist else 0.0
 
-        header_cmd_len = bytearray([self.HEADER_B1, self.HEADER_B2, self.CMD_TX_OBS, len(payload)])
-        crc = checksum_crc8(bytes([self.CMD_TX_OBS, len(payload)]) + bytes(payload))
-        tx_packet = header_cmd_len + payload + bytes([crc])
+            obs_floats = [float(v) for v in observation_74]
 
-        try:
-            if self.is_udp and self.udp_sock and self.udp_target:
+            # struct SensorPacketV2:
+            # <IIQ3f3fI74f74hI (magic, frame_id, ts, lin[3], ang[3], len=74, floats[74], q8_8[74], crc32)
+            payload = struct.pack("<IIQ3f3fI74f74h",
+                                  PROTOCOL_MAGIC,
+                                  self.frame_counter,
+                                  ts_ns,
+                                  vx, vy, 0.0,
+                                  0.0, 0.0, wz,
+                                  74,
+                                  *obs_floats,
+                                  *q8_8_data)
+            crc = compute_crc32(payload)
+            tx_packet = payload + struct.pack("<I", crc)
+
+            try:
                 self.udp_sock.sendto(tx_packet, self.udp_target)
-                rx_buf, _ = self.udp_sock.recvfrom(64)
-            elif self.ser and self.ser.is_open:
+                rx_buf, _ = self.udp_sock.recvfrom(512)
+
+                # InferenceResponsePacketV2 struct:
+                # <IIQII3f3hII (magic, frame_id, ts, status, num_out=3, floats[3], q8_8[3], cycles, crc32) = 48 bytes
+                if len(rx_buf) >= 48:
+                    magic, f_id, ts_echo, status, n_out, a0, a1, a2, q0, q1, q2, cycles, rx_crc = struct.unpack("<IIQII3f3hII", rx_buf[:48])
+                    if magic == PROTOCOL_MAGIC and n_out == 3:
+                        expected_crc = compute_crc32(rx_buf[:44])
+                        if rx_crc == expected_crc:
+                            return np.clip(np.array([a0, a1, a2], dtype=np.float32), -1.0, 1.0)
+
+                # Fallback to UART format if response was 11 bytes
+                if len(rx_buf) >= 11 and rx_buf[0] == self.HEADER_B1 and rx_buf[1] == self.HEADER_B2:
+                    a0_raw, a1_raw, a2_raw = struct.unpack("<3h", rx_buf[4:10])
+                    return np.clip(np.array([float(a0_raw)/256.0, float(a1_raw)/256.0, float(a2_raw)/256.0], dtype=np.float32), -1.0, 1.0)
+
+            except Exception as e:
+                logger.debug(f"UDP FPGA communication error: {e}")
+                return np.array([0.0, 0.0, 0.0], dtype=np.float32)
+
+        elif self.ser and self.ser.is_open:
+            # Serial UART Frame: 2 header + 1 cmd + 1 len (148) + 148 payload + 1 crc = 153 bytes
+            payload = bytearray()
+            for val in q8_8_data:
+                payload.extend(struct.pack("<h", val))
+
+            header_cmd_len = bytearray([self.HEADER_B1, self.HEADER_B2, self.CMD_TX_OBS, len(payload)])
+            crc = checksum_crc8(bytes([self.CMD_TX_OBS, len(payload)]) + bytes(payload))
+            tx_packet = header_cmd_len + payload + bytes([crc])
+
+            try:
                 self.ser.reset_input_buffer()
                 self.ser.write(tx_packet)
                 rx_buf = self.ser.read(11)
-            else:
+
+                if len(rx_buf) == 11 and rx_buf[0] == self.HEADER_B1 and rx_buf[1] == self.HEADER_B2:
+                    expected_crc = checksum_crc8(rx_buf[2:10])
+                    if rx_buf[10] == expected_crc:
+                        a0_raw, a1_raw, a2_raw = struct.unpack("<3h", rx_buf[4:10])
+                        return np.clip(np.array([float(a0_raw)/256.0, float(a1_raw)/256.0, float(a2_raw)/256.0], dtype=np.float32), -1.0, 1.0)
+            except Exception as e:
+                logger.debug(f"Serial FPGA communication error: {e}")
                 return np.array([0.0, 0.0, 0.0], dtype=np.float32)
 
-            if len(rx_buf) < 11:
-                logger.warning(f"FPGA read timeout (expected 11 bytes, got {len(rx_buf)})")
-                return np.array([0.0, 0.0, 0.0], dtype=np.float32)
-
-            if rx_buf[0] != self.HEADER_B1 or rx_buf[1] != self.HEADER_B2 or rx_buf[2] != self.CMD_RX_ACT:
-                logger.warning(f"Invalid FPGA response header: {rx_buf[:3].hex()}")
-                return np.array([0.0, 0.0, 0.0], dtype=np.float32)
-
-            expected_crc = checksum_crc8(rx_buf[2:10])
-            if rx_buf[10] != expected_crc:
-                logger.warning(f"FPGA CRC mismatch: got {rx_buf[10]}, expected {expected_crc}")
-                return np.array([0.0, 0.0, 0.0], dtype=np.float32)
-
-            # Unpack 3x int16 Q8.8
-            a0_raw, a1_raw, a2_raw = struct.unpack("<3h", rx_buf[4:10])
-            actions = np.array([
-                float(a0_raw) / 256.0,
-                float(a1_raw) / 256.0,
-                float(a2_raw) / 256.0
-            ], dtype=np.float32)
-
-            return np.clip(actions, -1.0, 1.0)
-        except Exception as e:
-            logger.debug(f"FPGA communication error: {e}")
-            return np.array([0.0, 0.0, 0.0], dtype=np.float32)
+        return np.array([0.0, 0.0, 0.0], dtype=np.float32)
 
     def close(self) -> None:
         if self.udp_sock:

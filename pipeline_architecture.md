@@ -60,7 +60,7 @@ When executing this project via **Antigravity** (or any autonomous AI coding age
 ## 3. Directory Structure Blueprint
 
 ```text
-.
+src/igor_bridge
 ├── README.md                           # Master Architecture & Plan
 ├── protocol/                           # Shared Network Definitions
 │   ├── protocol_legacy.h               # Base struct definitions (Read-Only)
