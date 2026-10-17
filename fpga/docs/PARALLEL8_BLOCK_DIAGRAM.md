@@ -8,9 +8,9 @@ Dokumen ini mengikuti sumber yang benar-benar dipakai oleh [QSF Parallel8](../ex
 
 ![Diagram antarmodul Parallel8](assets/parallel8_system.svg)
 
-[Buka SVG untuk zoom](assets/parallel8_system.svg) · [PNG](assets/parallel8_system.png) · [sumber diagram DOT](assets/parallel8_system.dot).
+[Buka SVG untuk zoom](assets/parallel8_system.svg) · [PNG berikon](assets/parallel8_system.png) · [versi teknis rinci](assets/parallel8_system_technical.svg) · [DOT teknis](assets/parallel8_system.dot).
 
-Kotak biru menunjukkan modul/file komputasi atau serial, hijau menunjukkan bagian parser/hasil di dalam modul `igor_src_policy_uart`, dan jalur putus-putus menunjukkan kontrol/status. Parser dan pengambil hasil bukan file Verilog terpisah; keduanya digambar terpisah untuk menjelaskan tugas dalam satu FSM.
+Nomor **1–6** menunjukkan urutan proses: observasi → receiver → validasi/load → inferensi → capture/transmit → pemrosesan host. Ikon menggambarkan fungsi dan nama file di bawah judul menunjukkan implementasinya. Area biru muda membatasi FPGA, sedangkan host berada di luar area tersebut. Panel bawah merangkum reset, E-stop, watchdog dan status. Tahap capture/transmit menggabungkan bagian hasil pada `igor_src_policy_uart` dengan serializer `igor_uart_tx`; port terperinci tetap tersedia pada tabel dan versi teknis.
 
 1. **Host menyiapkan input:** 64 nilai LiDAR, 6 IMU, 3 perintah dan 1 heading menjadi **74 word signed 16-bit Q8.8**, lalu dikemas sebagai frame 153 byte.
 2. **Receiver memulihkan byte:** `igor_uart_rx.v` menyinkronkan pin RX dan menghasilkan `rx_data[7:0]`, `rx_valid`, atau `rx_error`.
@@ -115,7 +115,9 @@ Field 0–63 (LiDAR) harus berada pada kode **0…256**. Field 64–73 (IMU/peri
 
 ![Diagram datapath dan memori Parallel8](assets/parallel8_datapath.svg)
 
-[Buka SVG untuk zoom](assets/parallel8_datapath.svg) · [PNG](assets/parallel8_datapath.png) · [DOT](assets/parallel8_datapath.dot).
+[Buka SVG untuk zoom](assets/parallel8_datapath.svg) · [PNG berikon](assets/parallel8_datapath.png) · [versi teknis rinci](assets/parallel8_datapath_technical.svg) · [DOT teknis](assets/parallel8_datapath.dot).
+
+Ikon memori menunjukkan bank bobot; delapan ikon chip mewakili lane 0–7. Panah ungu membawa operand/aktivasi, hijau membawa bobot atau hasil hidden, biru membawa hasil komputasi, dan garis amber putus-putus menunjukkan kontrol FSM. Panel jadwal di bawah diagram menghubungkan alur tersebut dengan total 6.916 clock.
 
 Untuk kelompok neuron dengan base `neuron=g×8`, lane `i` mengerjakan neuron `g×8+i`. Semua lane menerima `operand` yang sama untuk indeks input `k`, sedangkan masing-masing lane membaca bobot berbeda dari banknya. Multiplier menghasilkan signed 32-bit; product di-sign-extend lalu dijumlahkan ke accumulator 40-bit. Urutan penjumlahan setiap neuron tetap mengikuti `k`.
 
@@ -258,11 +260,18 @@ Core mempunyai kode internal **1 indeks, 2 load saat busy, 3 start saat busy, 4 
 
 **Naskah penjelasan:** “Host mengirim 74 observasi robot. Receiver mengubah bit serial menjadi byte, lalu wrapper memeriksa transaksi dan memuat core. Di dalam chip, delapan bank bobot melayani delapan jalur perkalian dan akumulasi; dua hidden layer dan satu layer output selesai dalam 6.916 clock, atau 138,32 mikrodetik. Wrapper mengambil tiga residual, memeriksa validitasnya dan mengirim frame respons. Reset, E-stop, timeout dan fault dapat membatalkan jalur hasil. File Verilog, diagram, port dan bukti timing menunjukkan dengan jelas tugas setiap bagian.”
 
-Diagram adalah dokumentasi dari RTL tervalidasi; pembuatan dokumen ini tidak mengubah rangkaian, bobot atau bitstream. Sumber diagram disimpan dalam DOT dan dapat dirender ulang dengan Graphviz:
+Diagram adalah dokumentasi dari RTL tervalidasi; pembuatan dokumen ini tidak mengubah rangkaian, bobot atau bitstream. Tata letak ilustrasi dan ikon vektor digambar oleh [render_parallel8_diagrams.py](../scripts/render_parallel8_diagrams.py), lalu diekspor sebagai SVG dan PNG 2.080 piksel. Renderer PNG memakai [resvg-py 0.5.0](https://pypi.org/project/resvg_py/0.5.0/), dipasang hanya pada runtime workspace:
 
 ```powershell
-dot -Tsvg fpga/docs/assets/parallel8_system.dot -o fpga/docs/assets/parallel8_system.svg
-dot -Tpng fpga/docs/assets/parallel8_system.dot -o fpga/docs/assets/parallel8_system.png
-dot -Tsvg fpga/docs/assets/parallel8_datapath.dot -o fpga/docs/assets/parallel8_datapath.svg
-dot -Tpng fpga/docs/assets/parallel8_datapath.dot -o fpga/docs/assets/parallel8_datapath.png
+python -m pip install --target fpga/.runtime/diagram_renderer resvg-py==0.5.0
+python fpga/scripts/render_parallel8_diagrams.py
+```
+
+Diagram teknis rinci disimpan terpisah dan dapat dirender ulang dengan Graphviz:
+
+```powershell
+dot -Tsvg fpga/docs/assets/parallel8_system.dot -o fpga/docs/assets/parallel8_system_technical.svg
+dot -Tpng -Gdpi=100 fpga/docs/assets/parallel8_system.dot -o fpga/docs/assets/parallel8_system_technical.png
+dot -Tsvg fpga/docs/assets/parallel8_datapath.dot -o fpga/docs/assets/parallel8_datapath_technical.svg
+dot -Tpng -Gdpi=100 fpga/docs/assets/parallel8_datapath.dot -o fpga/docs/assets/parallel8_datapath_technical.png
 ```

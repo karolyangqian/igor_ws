@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_utc": "2026-10-17T12:49:49.695892+00:00",
+  "generated_utc": "2026-10-17T12:57:41.923876+00:00",
   "scope": "FPGA simulation/build/handoff and user-supplied ASIC evidence; no physical FPGA/robot acceptance or new ASIC sign-off",
   "external_evidence": {
     "gatelevel_test_results": {
@@ -164,24 +164,40 @@
       "bytes": 2800
     },
     "docs/assets/parallel8_datapath.png": {
+      "sha256": "97da8fde8620e9d4c3a49c1392589c148b0d36524844a351ec50e3acbde5ddaa",
+      "bytes": 258928
+    },
+    "docs/assets/parallel8_datapath.svg": {
+      "sha256": "789a06d04ff6173867ce73c0ad313ba193d5ec85d03fbd9d004416a804f23e94",
+      "bytes": 24210
+    },
+    "docs/assets/parallel8_datapath_technical.png": {
       "sha256": "a6e591d664910d3943102c467256112d4a6922f6731a06501a4c61b7c45e9d07",
       "bytes": 158009
     },
-    "docs/assets/parallel8_datapath.svg": {
-      "sha256": "0c787de41e6e81ea485251d7e99de26bf468a7ce3165b6444c0785056a013534",
-      "bytes": 18573
+    "docs/assets/parallel8_datapath_technical.svg": {
+      "sha256": "ce89eb27d484acc98039183163b8f3db04479cea32f164ddaf417f5eae428d3a",
+      "bytes": 18369
     },
     "docs/assets/parallel8_system.dot": {
       "sha256": "108e65d859f559e99e25bd62c9846bc65d40981442806416bb83da1e70772bad",
       "bytes": 3272
     },
     "docs/assets/parallel8_system.png": {
+      "sha256": "d314c3df8354d3278dd15841a7f26a66934c7f0a8d8397faae8f2829d79a56f5",
+      "bytes": 254390
+    },
+    "docs/assets/parallel8_system.svg": {
+      "sha256": "c7aac92c43d8388d606f73900fb6dd663861135249a161e260c0efd0d528a4aa",
+      "bytes": 19501
+    },
+    "docs/assets/parallel8_system_technical.png": {
       "sha256": "313abdeecfd4ac12a594261430ce6336bbe116d7110a520daf8b106b2b6e2f77",
       "bytes": 139560
     },
-    "docs/assets/parallel8_system.svg": {
-      "sha256": "602194a1bac4529b51a981a8bc380e0069f719cbaafbd9c2b3c4ed9ca434540c",
-      "bytes": 19033
+    "docs/assets/parallel8_system_technical.svg": {
+      "sha256": "014eeeedceeb8fec24436a99dc6311663cde28d2b17852c44d41c4cbbfb35288",
+      "bytes": 18832
     },
     "docs/BOARD_PROGRAMMING.md": {
       "sha256": "c439e6bf155e275c3208fbe8040b48e141c81ad8df867feeaa93e71e3ab02018",
@@ -240,8 +256,8 @@
       "bytes": 23873
     },
     "docs/PARALLEL8_BLOCK_DIAGRAM.md": {
-      "sha256": "807b88ccbd579835b9ac9c80c56c5f906e007582b45f6a3884c28367e20c7a4b",
-      "bytes": 21415
+      "sha256": "6b55b415f2b452ea77dabf4ef757a2c2549159f646fabf0c4512cea0860b72f3",
+      "bytes": 22604
     },
     "docs/PERFORMANCE.md": {
       "sha256": "36f51e40ae11d5559a99ab105566f96f0e1b947c5c98a170bd010ca2f9eb2ae1",
@@ -2744,7 +2760,7 @@
       "bytes": 1144
     },
     "evidence/current_acceptance/audit.json": {
-      "sha256": "82b21d545b93d4b17e160906ec3837bb77f5532c53da28f0589963d89fdce171",
+      "sha256": "086d0773888130befe5deaa4d1e2ae4cffb3eff1aed3b4d7d6e2b5f58ca2da19",
       "bytes": 3877
     },
     "evidence/current_board_wrapper/board.gtkw": {
@@ -3124,8 +3140,8 @@
       "bytes": 1502
     },
     "evidence/parallel8_architecture/rtl_map.json": {
-      "sha256": "0d074a0d41819e33249a9df0da3c10efbb4a3d3210d61cf83179b027f6413456",
-      "bytes": 2331
+      "sha256": "ba5da3a90d4dd9c5dcb23e35f9738374864faf42b749432e0b38a8b3a5a19d07",
+      "bytes": 3210
     },
     "evidence/visual_review/01_planner_estop_and_logger.gtkw": {
       "sha256": "263118b66c3729e4a1a619a3d1484719fc3d5e92e96d93891c57e5de6ec8fad3",
@@ -4334,6 +4350,10 @@
     "scripts/release_integrity.py": {
       "sha256": "7c0fc051e754e0d416e872a0008c31ab151770da82e39c4a5c2839d597f550ef",
       "bytes": 638
+    },
+    "scripts/render_parallel8_diagrams.py": {
+      "sha256": "fd10aab5984bfc5e1cac9503f54562b3de5c5b066432a7b58a3b2e443a21dacd",
+      "bytes": 13706
     },
     "scripts/replay_tinytapeout_routing.py": {
       "sha256": "9d6d915c8337d7aafed0ef693fd5462ab11603fff1c744031d2d36b886bb0739",
