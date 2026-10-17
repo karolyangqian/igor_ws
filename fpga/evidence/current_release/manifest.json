@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_utc": "2026-10-17T10:22:57.247587+00:00",
+  "generated_utc": "2026-10-17T11:23:56.679503+00:00",
   "scope": "FPGA simulation/build/handoff and user-supplied ASIC evidence; no physical FPGA/robot acceptance or new ASIC sign-off",
   "external_evidence": {
     "gatelevel_test_results": {
@@ -100,8 +100,8 @@
       "bytes": 27599
     },
     "Bennaya.md": {
-      "sha256": "c674570fc37202a7e78c3ae68f7cc3bdafc390c70f090ea565e4cee196bc119b",
-      "bytes": 4449
+      "sha256": "1716676a14b83a2901241fcd6d042c08555025db8cca7cc45358f79adbaf26d4",
+      "bytes": 31837
     },
     "bitstreams/igor_planner.sof": {
       "sha256": "84295ae937ab4a759efa1e4d21ebda09805559038bc4fef971894a8946d701d2",
@@ -2695,6 +2695,10 @@
       "sha256": "36235b2b66ba7f61eef49b61dd3cef6b074b59224aedfb62ccc3072b354090c2",
       "bytes": 12736
     },
+    "evidence/bennaya_answers/traceability.json": {
+      "sha256": "75e63ad03533b2b281514944d2c7813715db93361de9117cc7fd58e9bea123a8",
+      "bytes": 30255
+    },
     "evidence/chip_highlights/regression.log": {
       "sha256": "c59a36aab2980d37b4063f4de2c49926fe5221b81fe63477f5e3e0e1e7bb0bd2",
       "bytes": 4933
@@ -2708,7 +2712,7 @@
       "bytes": 1144
     },
     "evidence/current_acceptance/audit.json": {
-      "sha256": "c951281cbe87b2295c17c106ae70ac05af6720922407ca0f1dfbc365f6c49289",
+      "sha256": "0ed6cf3a39a59ea50d9400c2d343a23b3b458a3c6a476255bc356666418440fa",
       "bytes": 3877
     },
     "evidence/current_board_wrapper/board.gtkw": {
@@ -4268,8 +4272,8 @@
       "bytes": 2065
     },
     "scripts/freeze_release.py": {
-      "sha256": "9643dbcd356a6f55ea49cd2e6cc2b862f1cf91de2ebd911356c33591da2ad425",
-      "bytes": 16083
+      "sha256": "57e9fddadff230674417f4f9e04259421acb273d0b0df92410c01dbc3075b21d",
+      "bytes": 16137
     },
     "scripts/generate_neural_logic_rom.py": {
       "sha256": "f9e5027dc46f499c28b0bf10fed09ee26615912ed3ddaee47ec24fd03156be7a",
