@@ -206,7 +206,7 @@ class IgorControllerNode(Node):
             if not math.isfinite(angle_min) or not math.isfinite(increment) or increment == 0:
                 return
             # This model requires a full revolution, including both frontal sides.
-            if abs(abs(increment) * len(ranges) - 2.0 * math.pi) > 1.5 * abs(increment):
+            if abs(abs(increment) * len(ranges) - 2.0 * math.pi) > max(3.0 * abs(increment), math.radians(5.0)):
                 return
             # +inf is the ROS no-return convention. NaN, -inf, zero/negative
             # and too-near samples are unknown/unsafe rather than empty space.
@@ -224,11 +224,17 @@ class IgorControllerNode(Node):
         """A failed residual inference must zero the complete motor command."""
         motor_tx = self.mcu.send_motor_speeds(0.0, 0.0, 0.0, 0.0)
         self.pub_safe_twist.publish(Twist())
+        bat_v = self.mcu.get_battery_voltage() if hasattr(self.mcu, 'get_battery_voltage') else None
+        imu_pkts = getattr(self.mcu, 'total_imu_packets', -1)
+        crc_err = getattr(self.mcu, 'crc_errors', -1)
         diag = String()
         diag.data = json.dumps({"algo": self.algorithm, "fpga": self.use_fpga,
                                 "safe": [0.0, 0.0, 0.0], "rps": [0.0]*4,
                                 "safety_permit": False, "fault": reason,
                                 "motor_tx_confirmed": motor_tx is True,
+                                "battery_v": round(bat_v, 2) if bat_v is not None else None,
+                                "imu_pkts": imu_pkts,
+                                "crc_err": crc_err,
                                 "timestamp": time.time()})
         self.pub_diag.publish(diag)
 
@@ -280,7 +286,13 @@ class IgorControllerNode(Node):
         if not np.all(np.isfinite([ax, ay, az, gx, gy, gz])):
             self._stop_for_fault("OBSERVATION_NONFINITE")
             return
-        if not self.use_mock_serial and (not math.isfinite(imu_t) or imu_t <= 0 or not 0.0 <= sensed - imu_t < 0.5):
+        if not self.use_mock_serial and (not math.isfinite(imu_t) or imu_t <= 0 or not 0.0 <= sensed - imu_t < 0.6):
+            if hasattr(self, 'get_logger'):
+                age = sensed - imu_t if (math.isfinite(imu_t) and imu_t > 0) else -1.0
+                self.get_logger().warn(
+                    f"IMU stream missing/stale! age={age:.3f}s (threshold=0.6s)",
+                    throttle_duration_sec=2.0
+                )
             self._stop_for_fault("IMU_MISSING_OR_STALE")
             return
         self.heading_engine.update_imu(gz, current_time=now)
@@ -448,6 +460,7 @@ class IgorControllerNode(Node):
             self._diag_cnt = 0
 
         if self._diag_cnt % 10 == 0:
+            bat_v = self.mcu.get_battery_voltage() if hasattr(self.mcu, 'get_battery_voltage') else None
             diag_data = {
                 "algo": self.algorithm,
                 "fpga": self.use_fpga,
@@ -455,8 +468,17 @@ class IgorControllerNode(Node):
                 "cmd": [round(float(c), 3) for c in v_cmd],
                 "safe": [round(float(s), 3) for s in v_safe],
                 "rps": [round(float(r), 2) for r in [rps1, rps2, rps3, rps4]],
+                "battery_v": round(bat_v, 2) if bat_v is not None else None,
+                "battery_ok": (bat_v >= 9.5) if (bat_v is not None and not self.use_mock_serial) else True,
                 "heading": self.heading_engine.get_diagnostics()
             }
+            if not self.use_mock_serial and bat_v is not None and 0.0 < bat_v < 9.5:
+                if self._diag_cnt % 50 == 0:
+                    self.get_logger().warn(
+                        f"BATTERY VOLTAGE CRITICALLY LOW: {bat_v:.2f}V! "
+                        "Motor H-bridges require ~12V. Ensure robot battery switch is turned ON.",
+                        throttle_duration_sec=5.0
+                    )
             diag_msg = String()
             diag_msg.data = json.dumps(diag_data)
             self.pub_diag.publish(diag_msg)

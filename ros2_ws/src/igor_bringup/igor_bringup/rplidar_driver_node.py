@@ -107,7 +107,7 @@ class RPLidarDriverNode(Node):
         self.declare_parameter('serial_baudrate', 115200)
         self.declare_parameter('frame_id', 'laser')
         self.declare_parameter('mock', False)
-        self.declare_parameter('min_scan_bins', 180)
+        self.declare_parameter('min_scan_bins', 1)
         self.declare_parameter('max_scan_age_sec', 0.25)
 
         self.port = str(self.get_parameter('serial_port').value)
@@ -142,7 +142,7 @@ class RPLidarDriverNode(Node):
 
         # Publish timer at 10 Hz
         self.timer = self.create_timer(0.1, self._publish_scan)
-        self.get_logger().info(f"RPLidarDriverNode initialized (Port: {self.port}, Baud: {self.baudrate}, Mock: {self.mock})")
+        self.get_logger().info(f"RPLidarDriverNode initialized (Port: {self.port}, Baud: {self.baudrate}, Mock: {self.mock}, MinScanBins: {self.min_scan_bins})")
 
     def _connect(self):
         if self.mock:
@@ -157,9 +157,26 @@ class RPLidarDriverNode(Node):
                 baudrate=self.baudrate,
                 timeout=1.0
             )
+            # Ensure motor control pin (DTR) is cleared to enable motor rotation
+            if hasattr(self.ser, 'dtr'):
+                try:
+                    self.ser.dtr = False
+                except Exception:
+                    pass
+            if hasattr(self.ser, 'rts'):
+                try:
+                    self.ser.rts = False
+                except Exception:
+                    pass
+
             # Send stop and reset
             self.ser.write(self.CMD_STOP)
             time.sleep(0.05)
+            if hasattr(self.ser, 'reset_input_buffer'):
+                try:
+                    self.ser.reset_input_buffer()
+                except Exception:
+                    pass
             self.ser.write(self.CMD_SCAN)
             time.sleep(0.05)
 
@@ -272,6 +289,8 @@ class RPLidarDriverNode(Node):
         if self.ser and self.ser.is_open:
             try:
                 self.ser.write(self.CMD_STOP)
+                if hasattr(self.ser, 'dtr'):
+                    self.ser.dtr = True
                 self.ser.close()
             except Exception:
                 pass

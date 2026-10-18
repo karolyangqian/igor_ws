@@ -15,7 +15,7 @@ import os
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, LogInfo
 from launch.conditions import IfCondition
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
@@ -85,19 +85,38 @@ def generate_launch_description():
     use_mock_serial = LaunchConfiguration('use_mock_serial')
     control_rate_hz = LaunchConfiguration('control_rate_hz')
 
-    # RPLiDAR Driver Node
+    # Official Slamtec RPLiDAR ROS 2 Driver Node (Boost Mode @ 8 kHz for physical hardware)
     rplidar_node = Node(
-        package='igor_bringup',
-        executable='rplidar_driver',
-        name='rplidar_driver_node',
+        package='rplidar_ros',
+        executable='rplidar_node',
+        name='rplidar_node',
         output='screen',
         parameters=[{
             'serial_port': lidar_port,
             'serial_baudrate': 115200,
             'frame_id': 'laser',
-            'mock': use_mock_serial
+            'inverted': False,
+            'angle_compensate': True,
+            'scan_mode': 'Boost'
         }],
-        condition=IfCondition(launch_lidar)
+        condition=IfCondition(
+            PythonExpression(["'", launch_lidar, "' == 'true' and '", use_mock_serial, "' == 'false'"])
+        )
+    )
+
+    # Simulated RPLiDAR Node (when explicit simulation requested via use_mock_serial:=true)
+    rplidar_mock_node = Node(
+        package='igor_bringup',
+        executable='rplidar_driver',
+        name='rplidar_driver_node',
+        output='screen',
+        parameters=[{
+            'frame_id': 'laser',
+            'mock': True
+        }],
+        condition=IfCondition(
+            PythonExpression(["'", launch_lidar, "' == 'true' and '", use_mock_serial, "' == 'true'"])
+        )
     )
 
     # Igor Controller Node
@@ -131,5 +150,6 @@ def generate_launch_description():
         LogInfo(msg="   LAUNCHING PROJECT IGOR AUTONOMOUS JETAUTO NAVIGATION STACK   "),
         LogInfo(msg="================================================================"),
         rplidar_node,
+        rplidar_mock_node,
         controller_node
     ])
