@@ -1,6 +1,6 @@
 Flow report for igor
-Sat Oct 17 08:34:22 2026
-Quartus Prime Version 25.1std.0 Build 1129 10/21/2025 SC Standard Edition
+Sun Oct 18 12:00:25 2026
+Quartus Prime Version 20.1.0 Build 711 06/05/2020 SJ Lite Edition
 
 
 ---------------------
@@ -21,46 +21,46 @@ Quartus Prime Version 25.1std.0 Build 1129 10/21/2025 SC Standard Edition
 ----------------
 ; Legal Notice ;
 ----------------
-Copyright (C) 2025  Altera Corporation. All rights reserved.
-Your use of Altera Corporation's design tools, logic functions 
+Copyright (C) 2020  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
 and other software and tools, and any partner logic 
 functions, and any output files from any of the foregoing 
 (including device programming or simulation files), and any 
 associated documentation or information are expressly subject 
-to the terms and conditions of the Altera Program License 
-Subscription Agreement, the Altera Quartus Prime License Agreement,
-the Altera IP License Agreement, or other applicable license
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
 agreement, including, without limitation, that your use is for
 the sole purpose of programming logic devices manufactured by
-Altera and sold by Altera or its authorized distributors.  Please
-refer to the Altera Software License Subscription Agreements 
-on the Quartus Prime software download page.
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
 
 
 
-+---------------------------------------------------------------------------------------+
-; Flow Summary                                                                          ;
-+---------------------------------+-----------------------------------------------------+
-; Flow Status                     ; Successful - Sat Oct 17 08:34:22 2026               ;
-; Quartus Prime Version           ; 25.1std.0 Build 1129 10/21/2025 SC Standard Edition ;
-; Revision Name                   ; igor                                                ;
-; Top-level Entity Name           ; igor_uart_top                                       ;
-; Family                          ; Cyclone V                                           ;
-; Device                          ; 5CSEBA6U23I7                                        ;
-; Timing Models                   ; Final                                               ;
-; Logic utilization (in ALMs)     ; 5,048 / 41,910 ( 12 % )                             ;
-; Total registers                 ; 1650                                                ;
-; Total pins                      ; 17 / 314 ( 5 % )                                    ;
-; Total virtual pins              ; 0                                                   ;
-; Total block memory bits         ; 1,051,008 / 5,662,720 ( 19 % )                      ;
-; Total DSP Blocks                ; 10 / 112 ( 9 % )                                    ;
-; Total HSSI RX PCSs              ; 0                                                   ;
-; Total HSSI PMA RX Deserializers ; 0                                                   ;
-; Total HSSI TX PCSs              ; 0                                                   ;
-; Total HSSI PMA TX Serializers   ; 0                                                   ;
-; Total PLLs                      ; 0 / 6 ( 0 % )                                       ;
-; Total DLLs                      ; 0 / 4 ( 0 % )                                       ;
-+---------------------------------+-----------------------------------------------------+
++-------------------------------------------------------------------------------+
+; Flow Summary                                                                  ;
++---------------------------------+---------------------------------------------+
+; Flow Status                     ; Successful - Sun Oct 18 11:59:58 2026       ;
+; Quartus Prime Version           ; 20.1.0 Build 711 06/05/2020 SJ Lite Edition ;
+; Revision Name                   ; igor                                        ;
+; Top-level Entity Name           ; igor_uart_top                               ;
+; Family                          ; Cyclone V                                   ;
+; Device                          ; 5CSEBA6U23I7                                ;
+; Timing Models                   ; Final                                       ;
+; Logic utilization (in ALMs)     ; 5,062 / 41,910 ( 12 % )                     ;
+; Total registers                 ; 1630                                        ;
+; Total pins                      ; 17 / 314 ( 5 % )                            ;
+; Total virtual pins              ; 0                                           ;
+; Total block memory bits         ; 1,051,008 / 5,662,720 ( 19 % )              ;
+; Total DSP Blocks                ; 10 / 112 ( 9 % )                            ;
+; Total HSSI RX PCSs              ; 0                                           ;
+; Total HSSI PMA RX Deserializers ; 0                                           ;
+; Total HSSI TX PCSs              ; 0                                           ;
+; Total HSSI PMA TX Serializers   ; 0                                           ;
+; Total PLLs                      ; 0 / 6 ( 0 % )                               ;
+; Total DLLs                      ; 0 / 4 ( 0 % )                               ;
++---------------------------------+---------------------------------------------+
 
 
 +-----------------------------------------+
@@ -68,22 +68,25 @@ on the Quartus Prime software download page.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 10/16/2026 17:55:55 ;
+; Start date & time ; 10/18/2026 11:56:18 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; igor                ;
 +-------------------+---------------------+
 
 
-+-----------------------------------------------------------------------------------------------------+
-; Flow Non-Default Global Settings                                                                    ;
-+--------------------------+-------------------------------+---------------+-------------+------------+
-; Assignment Name          ; Value                         ; Default Value ; Entity Name ; Section Id ;
-+--------------------------+-------------------------------+---------------+-------------+------------+
-; COMPILER_SIGNATURE_ID    ; 1098648279763.179214815536280 ; --            ; --          ; --         ;
-; NUM_PARALLEL_PROCESSORS  ; 4                             ; --            ; --          ; --         ;
-; PROJECT_OUTPUT_DIRECTORY ; output_files                  ; --            ; --          ; --         ;
-; TOP_LEVEL_ENTITY         ; igor_uart_top                 ; igor          ; --          ; --         ;
-+--------------------------+-------------------------------+---------------+-------------+------------+
++---------------------------------------------------------------------------------------------------------------------------+
+; Flow Non-Default Global Settings                                                                                          ;
++-------------------------------------+----------------------------------------+---------------+---------------+------------+
+; Assignment Name                     ; Value                                  ; Default Value ; Entity Name   ; Section Id ;
++-------------------------------------+----------------------------------------+---------------+---------------+------------+
+; COMPILER_SIGNATURE_ID               ; 92826776578452.179229937839215         ; --            ; --            ; --         ;
+; NUM_PARALLEL_PROCESSORS             ; 4                                      ; --            ; --            ; --         ;
+; PARTITION_COLOR                     ; -- (Not supported for targeted family) ; --            ; igor_uart_top ; Top        ;
+; PARTITION_FITTER_PRESERVATION_LEVEL ; -- (Not supported for targeted family) ; --            ; igor_uart_top ; Top        ;
+; PARTITION_NETLIST_TYPE              ; -- (Not supported for targeted family) ; --            ; igor_uart_top ; Top        ;
+; PROJECT_OUTPUT_DIRECTORY            ; output_files                           ; --            ; --            ; --         ;
+; TOP_LEVEL_ENTITY                    ; igor_uart_top                          ; igor          ; --            ; --         ;
++-------------------------------------+----------------------------------------+---------------+---------------+------------+
 
 
 +--------------------------------------------------------------------------------------------------------------------------+
@@ -91,26 +94,24 @@ on the Quartus Prime software download page.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:47     ; 1.0                     ; 4962 MB             ; 00:01:10                           ;
-; Fitter               ; 00:03:31     ; 1.2                     ; 6716 MB             ; 00:07:20                           ;
-; Assembler            ; 00:00:15     ; 1.0                     ; 5289 MB             ; 00:00:14                           ;
-; Timing Analyzer      ; 00:00:27     ; 2.4                     ; 5520 MB             ; 00:00:55                           ;
-; Power Analyzer       ; 00:00:22     ; 1.6                     ; 5586 MB             ; 00:00:34                           ;
-; Total                ; 00:05:22     ; --                      ; --                  ; 00:10:13                           ;
+; Analysis & Synthesis ; 00:00:35     ; 1.0                     ; 525 MB              ; 00:01:09                           ;
+; Fitter               ; 00:02:42     ; 1.3                     ; 1981 MB             ; 00:06:25                           ;
+; Assembler            ; 00:00:13     ; 1.0                     ; 579 MB              ; 00:00:13                           ;
+; Timing Analyzer      ; 00:00:26     ; 2.4                     ; 1031 MB             ; 00:01:00                           ;
+; Total                ; 00:03:56     ; --                      ; --                  ; 00:08:47                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
-+------------------------------------------------------------------------------------+
-; Flow OS Summary                                                                    ;
-+----------------------+------------------+------------+------------+----------------+
-; Module Name          ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
-+----------------------+------------------+------------+------------+----------------+
-; Analysis & Synthesis ; DESKTOP-3S5LN80  ; Windows 10 ; 10.0       ; x86_64         ;
-; Fitter               ; DESKTOP-3S5LN80  ; Windows 10 ; 10.0       ; x86_64         ;
-; Assembler            ; DESKTOP-3S5LN80  ; Windows 10 ; 10.0       ; x86_64         ;
-; Timing Analyzer      ; DESKTOP-3S5LN80  ; Windows 10 ; 10.0       ; x86_64         ;
-; Power Analyzer       ; DESKTOP-3S5LN80  ; Windows 10 ; 10.0       ; x86_64         ;
-+----------------------+------------------+------------+------------+----------------+
++--------------------------------------------------------------------------------------------------------+
+; Flow OS Summary                                                                                        ;
++----------------------+----------------------------------+----------------+------------+----------------+
+; Module Name          ; Machine Hostname                 ; OS Name        ; OS Version ; Processor type ;
++----------------------+----------------------------------+----------------+------------+----------------+
+; Analysis & Synthesis ; hadynata-IdeaPad-Gaming-3-15IAH7 ; Ubuntu 22.04.5 ; 22         ; x86_64         ;
+; Fitter               ; hadynata-IdeaPad-Gaming-3-15IAH7 ; Ubuntu 22.04.5 ; 22         ; x86_64         ;
+; Assembler            ; hadynata-IdeaPad-Gaming-3-15IAH7 ; Ubuntu 22.04.5 ; 22         ; x86_64         ;
+; Timing Analyzer      ; hadynata-IdeaPad-Gaming-3-15IAH7 ; Ubuntu 22.04.5 ; 22         ; x86_64         ;
++----------------------+----------------------------------+----------------+------------+----------------+
 
 
 ------------
@@ -120,7 +121,6 @@ quartus_map --read_settings_files=on --write_settings_files=off igor -c igor
 quartus_fit --read_settings_files=off --write_settings_files=off igor -c igor
 quartus_asm --read_settings_files=off --write_settings_files=off igor -c igor
 quartus_sta igor -c igor
-quartus_pow igor --read_settings_files=on --write_settings_files=off --estimate_power=on --use_vectorless_estimation=on --no_input_file
 
 
 

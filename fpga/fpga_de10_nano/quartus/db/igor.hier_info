@@ -8,15 +8,15 @@ SW[1] => ~NO_FANOUT~
 SW[2] => sw_meta[2].DATAIN
 SW[3] => sw_meta[3].DATAIN
 UART_RX => UART_RX.IN1
-UART_TX << igor_uart_protocol:serial.port3
-LED[0] << igor_top:core.port15
-LED[1] << rst_n.DB_MAX_OUTPUT_PORT_TYPE
-LED[2] << igor_top:core.port19
-LED[3] << igor_top:core.port20
-LED[4] << igor_top:core.port18
-LED[5] << igor_top:core.port18
-LED[6] << igor_top:core.port18
-LED[7] << igor_top:core.port18
+UART_TX <= igor_uart_protocol:serial.port3
+LED[0] <= igor_top:core.port15
+LED[1] <= rst_n.DB_MAX_OUTPUT_PORT_TYPE
+LED[2] <= igor_top:core.port19
+LED[3] <= igor_top:core.port20
+LED[4] <= igor_top:core.port18
+LED[5] <= igor_top:core.port18
+LED[6] <= igor_top:core.port18
+LED[7] <= igor_top:core.port18
 
 
 |igor_uart_top|igor_uart_protocol:serial
