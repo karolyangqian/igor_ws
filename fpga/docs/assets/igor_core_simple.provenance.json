@@ -1,17 +1,96 @@
 {
-  "kind": "editable functional RTL diagram; no new RTL/build or hardware test",
-  "checks": [
-    "native mxGraph XML parsed",
-    "object IDs unique and edge references resolved",
-    "10 functional edges",
-    "PNG visually reviewed",
-    "local documentation links resolved"
+  "kind": "editable RTL bit-flow diagram; no RTL or hardware change",
+  "edges": [
+    {
+      "id": "input-data",
+      "source": "input",
+      "target": "storage",
+      "label": "s16 data\nu7 index\n1-bit load"
+    },
+    {
+      "id": "operand",
+      "source": "storage",
+      "target": "multiply",
+      "label": "s16 operand\nbroadcast ke 8 lane"
+    },
+    {
+      "id": "weights",
+      "source": "memory",
+      "target": "multiply",
+      "label": "8 × s16 weights\nDipakai state MAC"
+    },
+    {
+      "id": "bias",
+      "source": "memory",
+      "target": "accumulator",
+      "label": "8 × s16 bias\nsign-extend 16→40; <<8\nInisialisasi accumulator"
+    },
+    {
+      "id": "products",
+      "source": "multiply",
+      "target": "accumulator",
+      "label": "8 × s32 products\nsign-extend 32→40"
+    },
+    {
+      "id": "sum",
+      "source": "accumulator",
+      "target": "activation",
+      "label": "8 × s40\naccumulator[39:0]"
+    },
+    {
+      "id": "acc-feedback",
+      "source": "accumulator",
+      "target": "accumulator",
+      "label": "8 × s40\nfeedback"
+    },
+    {
+      "id": "final-actions",
+      "source": "activation",
+      "target": "actions",
+      "label": "Layer akhir:\n3 × s16 → actions[0:2]\nHanya lane 0–2"
+    },
+    {
+      "id": "result",
+      "source": "actions",
+      "target": "output",
+      "label": "s16 output_value\n1 nilai per index"
+    },
+    {
+      "id": "hidden-feedback",
+      "source": "activation",
+      "target": "storage",
+      "label": "Layer 0/1: 8 × s16 hidden activation ditulis per grup\nDibaca kembali sebagai satu s16 operand"
+    },
+    {
+      "id": "select-index",
+      "source": "select",
+      "target": "actions",
+      "label": "u2 index"
+    },
+    {
+      "id": "control-in",
+      "source": "control-input",
+      "target": "control",
+      "label": "clk / rst_n / start / abort:\n1-bit masing-masing"
+    },
+    {
+      "id": "control-out",
+      "source": "control",
+      "target": "status",
+      "label": "busy / done / fault / saturated: 1-bit masing-masing\nerror_code: u4; latency_cycles: u32"
+    },
+    {
+      "id": "output-valid",
+      "source": "control",
+      "target": "actions",
+      "label": "done / fault / abort:\n1-bit masing-masing"
+    }
   ],
   "files": {
-    "docs/assets/igor_core_simple.drawio": "68fd9a6bf1974288322bad3771872ffcedb30efeeac79f36ad895af3b4515b77",
-    "docs/assets/igor_core_simple.svg": "f86a3d2dd593e3b659e3b33446e4bdeefde61558ede02cd5ae102b929d6cccc3",
-    "docs/assets/igor_core_simple.png": "3aa044ac766cbab8eb32dee081bb98f50311cd4dae372e346e7c60f0af4ad0a9",
-    "scripts/render_igor_core_drawio.py": "d8f55c69956af65d085aab9cd30c2326bd92c5e13f8dae76e6650346e62e6187",
+    "docs/assets/igor_core_simple.drawio": "b41d61967dfd3498a2fadaf3d9ebd9de1e3f268b2ad7757f16ebfa8032026856",
+    "docs/assets/igor_core_simple.svg": "678b56e59d42d3c3b5246b7460c0a3603f6bf9bd5a45f4a6be8668b178536e5b",
+    "docs/assets/igor_core_simple.png": "cddbe75fd82d31bc42711172af933b2cfba6908093269123ead59a619f72ad97",
+    "scripts/render_igor_core_drawio.py": "8c1f459847412a2f3b0742233135340ed8005aa9e9487f3fb4312868dfbfa782",
     "experiments/parallel8/igor_src_policy_core.v": "0aff96cf9638582ab0bc6eabaf1462baa25a41196e1e73abc1aa4786cddc5d34",
     "experiments/parallel8/artifacts/acceptance.json": "f025b1af91a04e1bd30f8eb5f75eeb98195149d0c7054d9cc0900196ba1479a2"
   }

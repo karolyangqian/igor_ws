@@ -1,93 +1,174 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1450" viewBox="0 0 2400 1450">
 <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 Z" fill="#334155"/></marker></defs>
-<rect width="1600" height="1000" fill="white"/>
-<text x="800.0" y="57.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="34" fill="#0f172a" font-weight="700">IGOR CORE</text>
-<text x="800.0" y="104.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="20" fill="#475569" font-weight="400">Neural inference · 74 → 128 → 64 → 3 · Parallel8</text>
-<rect x="240" y="265" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="305" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="345" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="385" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="425" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="465" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="505" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="545" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="585" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="625" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="665" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="705" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="745" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="785" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="240" y="825" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="265" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="305" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="345" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="385" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="425" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="465" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="505" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="545" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="585" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="625" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="665" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="705" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="745" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="785" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="1340" y="825" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
-<rect x="260" y="150" width="1080" height="710" rx="28" fill="#f8fafc" stroke="#0f172a" stroke-width="4"/>
-<rect x="295" y="175" width="1010" height="65" rx="16" fill="#0f172a" stroke="#0f172a" stroke-width="2"/>
-<text x="800.0" y="207.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="25" fill="#ffffff" font-weight="700">IGOR  |  FPGA NEURAL CORE</text>
-<rect x="520" y="290" width="560" height="100" rx="16" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
-<text x="800.0" y="313.6" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="20" fill="#0f172a" font-weight="700">MEMORY</text>
-<text x="800.0" y="340.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="20" fill="#0f172a" font-weight="700">weights + bias</text>
-<text x="800.0" y="366.40000000000003" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="20" fill="#0f172a" font-weight="700">8 bank ROM · M10K · 64 KiB</text>
-<rect x="15" y="470" width="200" height="110" rx="16" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
-<text x="115.0" y="499.92" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">INPUT</text>
-<text x="115.0" y="525.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">74 observasi</text>
-<text x="115.0" y="550.08" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">16-bit fixed-point</text>
-<rect x="325" y="470" width="210" height="110" rx="16" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
-<text x="430.0" y="501.24" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">DATA STORAGE</text>
-<text x="430.0" y="525.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">Input + hidden</text>
-<text x="430.0" y="548.76" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">activation</text>
-<rect x="590" y="470" width="180" height="110" rx="16" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
-<text x="680.0" y="513.12" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">8× MULTIPLIER</text>
-<text x="680.0" y="536.88" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">input × weights</text>
-<rect x="825" y="470" width="180" height="110" rx="16" fill="#cffafe" stroke="#0891b2" stroke-width="2"/>
-<text x="915.0" y="503.88" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="700">8× ACCUMULATOR</text>
-<text x="915.0" y="525.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="700">bias + Σ products</text>
-<text x="915.0" y="546.12" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="700">40-bit signed</text>
-<rect x="1060" y="470" width="210" height="110" rx="16" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
-<text x="1165.0" y="499.92" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">ACTIVATION</text>
-<text x="1165.0" y="525.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">ReLU / clamp</text>
-<text x="1165.0" y="550.08" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">16-bit</text>
-<rect x="1395" y="470" width="190" height="110" rx="16" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
-<text x="1490.0" y="501.24" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">OUTPUT</text>
-<text x="1490.0" y="525.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">3 residual AI</text>
-<text x="1490.0" y="548.76" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">16-bit fixed-point</text>
-<rect x="600" y="745" width="400" height="80" rx="16" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
-<text x="800.0" y="773.78" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="700">CONTROL / FSM</text>
-<text x="800.0" y="796.22" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="700">Mengatur memory, MAC, dan activation</text>
-<rect x="15" y="745" width="200" height="80" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
-<text x="115.0" y="763.88" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">CONTROL INPUT</text>
-<text x="115.0" y="785.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">clock · reset</text>
-<text x="115.0" y="806.12" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">start · abort</text>
-<rect x="1395" y="745" width="190" height="80" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
-<text x="1490.0" y="763.88" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">STATUS</text>
-<text x="1490.0" y="785.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">busy · done · fault</text>
-<text x="1490.0" y="806.12" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">error_code</text>
-<path d="M215,525 L325,525" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
-<path d="M535,525 L590,525" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
-<path d="M680,390 L680,470" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
-<path d="M915,390 L915,470" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
-<path d="M770,525 L825,525" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
-<path d="M1005,525 L1060,525" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
-<path d="M1270,525 L1395,525" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
-<path d="M1165,580 L1165,650 L430,650 L430,580" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
-<path d="M215,785 L600,785" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
-<path d="M1000,785 L1395,785" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
-<text x="745.0" y="425.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#6d28d9" font-weight="700">weights</text>
-<text x="965.0" y="425.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#6d28d9" font-weight="700">bias</text>
-<text x="810.0" y="676.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#475569" font-weight="400">Hidden activation → input untuk layer berikutnya</text>
-<text x="797.5" y="604.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="15" fill="#475569" font-weight="400">MAC = multiplier + accumulator</text>
-<text x="800.0" y="917.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="23" fill="#0f172a" font-weight="700">6.916 siklus  ·  50 MHz  ·  138,32 µs  (&lt;160 µs)</text>
-<text x="800.0" y="963.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="15" fill="#475569" font-weight="400">Diagram fungsi core RTL · Pins ilustratif · Interface UART berada di wrapper</text>
+<rect width="2400" height="1450" fill="white"/>
+<text x="1200.0" y="57.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="36" fill="#0f172a" font-weight="700">IGOR CORE — BIT FLOW</text>
+<text x="1200.0" y="109.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="20" fill="#475569" font-weight="400">74 → 128 → 64 → 3  ·  sN = signed N-bit  ·  uN = unsigned N-bit  ·  8 × N-bit = delapan sinyal/lane</text>
+<rect x="290" y="285" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="325" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="365" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="405" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="445" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="485" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="525" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="565" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="605" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="645" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="685" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="725" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="765" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="805" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="845" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="885" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="925" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="965" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="1005" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="1045" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="1085" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="1125" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="1165" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="1205" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="290" y="1245" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="285" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="325" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="365" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="405" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="445" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="485" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="525" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="565" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="605" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="645" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="685" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="725" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="765" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="805" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="845" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="885" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="925" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="965" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="1005" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="1045" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="1085" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="1125" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="1165" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="1205" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="2080" y="1245" width="20" height="12" rx="2" fill="#94a3b8" stroke="#64748b" stroke-width="1"/>
+<rect x="310" y="150" width="1770" height="1140" rx="28" fill="#f8fafc" stroke="#0f172a" stroke-width="4"/>
+<rect x="345" y="175" width="1700" height="75" rx="16" fill="#0f172a" stroke="#0f172a" stroke-width="2"/>
+<text x="1195.0" y="212.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="28" fill="#ffffff" font-weight="700">IGOR  |  FPGA NEURAL CORE  |  WIDTHS FROM RTL</text>
+<rect x="780" y="300" width="710" height="150" rx="16" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+<text x="1135.0" y="344.64" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="23" fill="#0f172a" font-weight="700">MEMORY: weights + bias</text>
+<text x="1135.0" y="375.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="23" fill="#0f172a" font-weight="700">8 bank × 4.096 × 16-bit ROM</text>
+<text x="1135.0" y="405.36" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="23" fill="#0f172a" font-weight="700">M10K · 64 KiB · address[11:0] bersama</text>
+<rect x="20" y="590" width="220" height="150" rx="16" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+<text x="130.0" y="627.38" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">INPUT</text>
+<text x="130.0" y="652.46" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">74 nilai berurutan</text>
+<text x="130.0" y="677.54" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">input_value[15:0]</text>
+<text x="130.0" y="702.62" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">skala 1/256</text>
+<rect x="370" y="590" width="230" height="150" rx="16" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+<text x="485.0" y="625.4" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="20" fill="#0f172a" font-weight="700">DATA STORAGE</text>
+<text x="485.0" y="651.8" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="20" fill="#0f172a" font-weight="700">74 × s16 input</text>
+<text x="485.0" y="678.1999999999999" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="20" fill="#0f172a" font-weight="700">128 × s16 hidden1</text>
+<text x="485.0" y="704.6" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="20" fill="#0f172a" font-weight="700">64 × s16 hidden2</text>
+<rect x="790" y="590" width="230" height="150" rx="16" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+<text x="905.0" y="639.92" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">8× MULTIPLIER</text>
+<text x="905.0" y="665.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">s16 input × s16 weights</text>
+<text x="905.0" y="690.0799999999999" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">= s32 product</text>
+<rect x="1240" y="590" width="250" height="150" rx="16" fill="#cffafe" stroke="#0891b2" stroke-width="2"/>
+<text x="1365.0" y="629.36" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">8× ACCUMULATOR</text>
+<text x="1365.0" y="653.12" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">s40 + sign-extended product</text>
+<text x="1365.0" y="676.88" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">= s40 mac_sum</text>
+<text x="1365.0" y="700.64" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">Register s40 / lane</text>
+<rect x="1700" y="590" width="300" height="150" rx="16" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+<text x="1850.0" y="629.36" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">8× ACTIVATION</text>
+<text x="1850.0" y="653.12" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">s40 → s32: [39:8]</text>
+<text x="1850.0" y="676.88" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">= floor(accumulator / 256)</text>
+<text x="1850.0" y="700.64" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#0f172a" font-weight="700">ReLU / clamp: s32 → s16</text>
+<rect x="1700" y="890" width="300" height="130" rx="16" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+<text x="1850.0" y="917.38" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">ACTIONS + OUTPUT MUX</text>
+<text x="1850.0" y="942.46" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">3 × s16 actions[0:2]</text>
+<text x="1850.0" y="967.54" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">Pilih index 0, 1, atau 2</text>
+<text x="1850.0" y="992.62" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="700">Output invalid → 16&#x27;sd0</text>
+<rect x="2180" y="895" width="200" height="120" rx="16" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+<text x="2280.0" y="921.34" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="700">OUTPUT</text>
+<text x="2280.0" y="943.7800000000001" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="700">output_value[15:0]</text>
+<text x="2280.0" y="966.22" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="700">1 nilai / pembacaan</text>
+<text x="2280.0" y="988.6600000000001" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="700">skala 1/256</text>
+<rect x="2180" y="790" width="200" height="65" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<text x="2280.0" y="811.28" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="400">SELECT</text>
+<text x="2280.0" y="833.72" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="400">output_index[1:0]</text>
+<rect x="800" y="1110" width="690" height="105" rx="16" fill="#e2e8f0" stroke="#64748b" stroke-width="2"/>
+<text x="1145.0" y="1148.64" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="21" fill="#0f172a" font-weight="700">CONTROL / FSM</text>
+<text x="1145.0" y="1176.3600000000001" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="21" fill="#0f172a" font-weight="700">Urutan baca memory, MAC, activation, dan validasi state</text>
+<rect x="20" y="1100" width="220" height="120" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<text x="130.0" y="1134.92" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="400">CONTROL INPUT</text>
+<text x="130.0" y="1160.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="400">clk · rst_n</text>
+<text x="130.0" y="1185.0800000000002" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="19" fill="#0f172a" font-weight="400">start · abort</text>
+<rect x="2180" y="1105" width="200" height="115" rx="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<text x="2280.0" y="1128.84" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="400">STATUS</text>
+<text x="2280.0" y="1151.28" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="400">busy · done · fault</text>
+<text x="2280.0" y="1173.72" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="400">saturated</text>
+<text x="2280.0" y="1196.1599999999999" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#0f172a" font-weight="400">error_code · latency</text>
+<path d="M240,665 L370,665" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="255.8" y="586.28" width="98.4" height="67.44" rx="5" fill="white"/>
+<text x="305" y="601.52" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="400">s16 data</text>
+<text x="305" y="620.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="400">u7 index</text>
+<text x="305" y="638.48" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="400">1-bit load</text>
+<path d="M600,665 L790,665" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="599.88" y="597.88" width="190.24" height="54.24" rx="5" fill="white"/>
+<text x="695" y="614.44" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">s16 operand</text>
+<text x="695" y="635.5600000000001" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">broadcast ke 8 lane</text>
+<path d="M905,450 L905,590" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="948.84" y="492.88" width="172.32000000000002" height="54.24" rx="5" fill="white"/>
+<text x="1035" y="509.44" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">8 × s16 weights</text>
+<text x="1035" y="530.56" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">Dipakai state MAC</text>
+<path d="M1365,450 L1365,590" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="1432.48" y="482.32" width="235.04000000000002" height="75.36" rx="5" fill="white"/>
+<text x="1550" y="498.88" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">8 × s16 bias</text>
+<text x="1550" y="520.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">sign-extend 16→40; &lt;&lt;8</text>
+<text x="1550" y="541.12" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">Inisialisasi accumulator</text>
+<path d="M1020,665 L1240,665" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="1043.84" y="597.88" width="172.32000000000002" height="54.24" rx="5" fill="white"/>
+<text x="1130" y="614.44" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">8 × s32 products</text>
+<text x="1130" y="635.5600000000001" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">sign-extend 32→40</text>
+<path d="M1490,665 L1700,665" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="1508.84" y="597.88" width="172.32000000000002" height="54.24" rx="5" fill="white"/>
+<text x="1595" y="614.44" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">8 × s40</text>
+<text x="1595" y="635.5600000000001" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">accumulator[39:0]</text>
+<path d="M1365,740 L1365,790 L1190,790 L1190,710 L1240,710" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="1236.4" y="764.2" width="87.2" height="51.6" rx="5" fill="white"/>
+<text x="1280" y="780.1" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="15" fill="#0f172a" font-weight="400">8 × s40</text>
+<text x="1280" y="799.9" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="15" fill="#0f172a" font-weight="400">feedback</text>
+<path d="M1850,740 L1850,890" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="1831.44" y="772.32" width="217.12" height="75.36" rx="5" fill="white"/>
+<text x="1940" y="788.88" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">Layer akhir:</text>
+<text x="1940" y="810.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">3 × s16 → actions[0:2]</text>
+<text x="1940" y="831.12" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">Hanya lane 0–2</text>
+<path d="M2000,955 L2180,955" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="2013.36" y="890.52" width="153.28" height="48.96" rx="5" fill="white"/>
+<text x="2090" y="905.76" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="400">s16 output_value</text>
+<text x="2090" y="924.24" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="400">1 nilai per index</text>
+<path d="M1790,740 L1790,830 L485,830 L485,740" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)"/>
+<rect x="822.56" y="847.88" width="494.88000000000005" height="54.24" rx="5" fill="white"/>
+<text x="1070" y="864.44" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">Layer 0/1: 8 × s16 hidden activation ditulis per grup</text>
+<text x="1070" y="885.5600000000001" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">Dibaca kembali sebagai satu s16 operand</text>
+<path d="M2180,822.5 L2120,822.5 L2120,860 L1940,860 L1940,890" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<rect x="2066.4" y="839.1" width="87.2" height="31.8" rx="5" fill="white"/>
+<text x="2110" y="855.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="15" fill="#0f172a" font-weight="400">u2 index</text>
+<path d="M240,1160 L800,1160" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<rect x="384.56" y="1082.88" width="270.88" height="54.24" rx="5" fill="white"/>
+<text x="520" y="1099.44" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">clk / rst_n / start / abort:</text>
+<text x="520" y="1120.56" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="16" fill="#0f172a" font-weight="400">1-bit masing-masing</text>
+<path d="M1490,1162.5 L2180,1162.5" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<rect x="1606.6" y="1084.2" width="456.80000000000007" height="51.6" rx="5" fill="white"/>
+<text x="1835" y="1100.1" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="15" fill="#0f172a" font-weight="400">busy / done / fault / saturated: 1-bit masing-masing</text>
+<text x="1835" y="1119.8999999999999" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="15" fill="#0f172a" font-weight="400">error_code: u4; latency_cycles: u32</text>
+<path d="M1420,1110 L1420,1055 L1660,1055 L1660,980 L1700,980" fill="none" stroke="#334155" stroke-width="2.5" marker-end="url(#arrow)" stroke-dasharray="7 5"/>
+<rect x="1416.8" y="1024.2" width="196.4" height="51.6" rx="5" fill="white"/>
+<text x="1515" y="1040.1" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="15" fill="#0f172a" font-weight="400">done / fault / abort:</text>
+<text x="1515" y="1059.8999999999999" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="15" fill="#0f172a" font-weight="400">1-bit masing-masing</text>
+<text x="875.0" y="960.62" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#475569" font-weight="400">Input, weights, bias: kode / 256  →  product, accumulator: kode / 65.536</text>
+<text x="875.0" y="984.38" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="18" fill="#475569" font-weight="400">Activation: floor(accumulator / 256), lalu clamp sebelum hasil s16</text>
+<text x="1200.0" y="1332.5" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="25" fill="#0f172a" font-weight="700">6.916 siklus  ·  50 MHz  ·  138,32 µs  (&lt;160 µs)</text>
+<text x="1200.0" y="1388.0" text-anchor="middle" dominant-baseline="middle" font-family="Arial, sans-serif" font-size="17" fill="#475569" font-weight="400">Lebar aktual RTL 16/32/40-bit · Bundel kontrol = sinyal terpisah · Pins ilustratif · UART berada di wrapper</text>
 </svg>
