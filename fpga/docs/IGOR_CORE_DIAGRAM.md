@@ -15,6 +15,16 @@ Control/FSM mengatur urutan operasi dan menyediakan status.
 
 ## Lebar bit pada setiap panah
 
+Label panah memakai **nama sinyal RTL dan rentang bit**, misalnya
+`operand[15:0]`, `product[lane][31:0]`, `accumulator[lane][39:0]`, dan
+`output_value[15:0]`. `lane` menunjukkan indeks 0 sampai 7 pada array RTL;
+pada jalur actions hanya lane 0 sampai 2 yang digunakan. `acc[39:0]` adalah
+register lokal setiap lane; `accumulator[lane][39:0]` adalah alias keluarannya.
+Bias memakai sinyal `weight[lane][15:0]` pada state `BIAS_TAKE`, sehingga
+diagram tidak memperkenalkan sinyal RTL `bias` yang sebenarnya tidak ada.
+Sinyal skalar seperti `clk`, `done`, dan `fault` ditulis dengan keterangan
+**1-bit**, sesuai deklarasinya tanpa rentang bus.
+
 Label **sN** berarti signed N-bit; **uN** berarti unsigned N-bit.
 `8 × s16` berarti delapan sinyal 16-bit pada delapan lane, bukan satu port
 packed bernama 128-bit. Bundel kontrol pada panah putus-putus adalah kumpulan
@@ -22,20 +32,20 @@ sinyal terpisah dengan lebar masing-masing.
 
 | Panah | Lebar aktual dan perubahan data |
 |---|---|
-| Input -> data storage | `input_value`: s16; `input_index`: u7; `load_input`: 1-bit. Sebanyak 74 nilai dimuat berurutan, bukan bus input 74 × 16-bit paralel. |
-| Data storage -> multiplier | Satu `operand`: s16, dibroadcast ke delapan lane. |
-| Memory -> multiplier | Delapan `weight[lane]`: masing-masing s16; ROM dibaca sinkron dan data dipakai pada state MAC. |
+| Input -> data storage | `input_value[15:0]`: s16; `input_index[6:0]`: u7; `load_input`: 1-bit. Sebanyak 74 nilai dimuat berurutan, bukan bus input 74 × 16-bit paralel. |
+| Data storage -> multiplier | Satu `operand[15:0]`: s16, dibroadcast ke delapan lane. |
+| Memory -> multiplier | Delapan `weight[lane][15:0]`: masing-masing s16; ROM dibaca sinkron dan data dipakai pada state MAC. |
 | Memory -> accumulator | Delapan bias: masing-masing s16. Nilai di-sign-extend dan digeser kiri delapan bit dalam representasi s40 saat `BIAS_TAKE`. |
-| Multiplier -> accumulator | Delapan product: masing-masing s32 dari perkalian s16 × s16, lalu di-sign-extend ke s40 sebelum penjumlahan. |
-| Feedback accumulator | Delapan nilai accumulator s40 disimpan dan dipakai kembali untuk MAC berikutnya. Penjumlahan menghasilkan `mac_sum` s40. |
-| Accumulator -> activation | Delapan accumulator: masing-masing s40. Di dalam activation, `[39:8]` menjadi s32 `scaled`; ReLU/clamp menghasilkan s16. |
+| Multiplier -> accumulator | `product[lane][31:0]`: s32 dari perkalian s16 × s16, lalu di-sign-extend ke s40 sebelum penjumlahan. |
+| Feedback accumulator | Register `acc[39:0]` per lane disimpan dan dipakai kembali untuk MAC berikutnya. Penjumlahan menghasilkan `mac_sum[lane][39:0]`. |
+| Accumulator -> activation | `accumulator[lane][39:0]`: s40. Di dalam activation, `[39:8]` menjadi `scaled[31:0]`; ReLU/clamp menghasilkan `activated[lane][15:0]`. |
 | Activation -> data storage | Pada layer 0/1, delapan hidden activation s16 ditulis per grup, satu per bank/lane. Pembacaan berikutnya memilih satu s16 sebagai operand. |
 | Activation -> actions | Pada layer akhir, hanya lane 0–2 disalin ke `actions[0:2]`, masing-masing s16. |
-| Select -> output mux | `output_index`: u2 memilih salah satu dari tiga actions. |
-| Actions/mux -> output | `output_value`: satu s16 untuk index yang dipilih. Tiga register total 48 bit penyimpanan, tetapi port output tetap 16 bit. |
+| Select -> output mux | `output_index[1:0]`: u2 memilih salah satu dari tiga actions. |
+| Actions/mux -> output | `output_value[15:0]`: satu s16 untuk index yang dipilih. Tiga register total 48 bit penyimpanan, tetapi port output tetap 16 bit. |
 | Control input -> control | `clk`, `rst_n`, `start`, `abort`: masing-masing 1-bit. |
 | Control/validity -> output gating | `done`, `fault`, `abort`: masing-masing 1-bit; output nol jika tidak valid. `abort` berasal dari input core, tidak dihasilkan FSM. |
-| Control -> status | `busy`, `done`, `fault`, `saturated`: masing-masing 1-bit; `error_code`: u4; `latency_cycles`: u32. |
+| Control -> status | `busy`, `done`, `fault`, `saturated`: masing-masing 1-bit; `error_code[3:0]`: u4; `latency_cycles[31:0]`: u32. |
 
 ## Pergeseran dan sign-extension yang benar
 
