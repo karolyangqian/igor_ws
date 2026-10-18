@@ -149,3 +149,17 @@ Jika sudah mengetahui IP HPS pada subnet lain, berikan kedua alamat yang
 sesuai dengan --hps-ip dan --jetson-ip. Jangan menganggap alamat ARP dari
 Wi-Fi sebagai alamat DE10 pada kabel. Tanpa alamat HPS yang dapat dijangkau
 atau console yang bekerja, script tidak dapat memasang konfigurasi pada HPS.
+
+## Perbaikan otomatis driver USB console
+
+Versi terbaru membaca VID/PID dari sysfs USB. Jika FT232R 0403:6001 terlihat
+tetapi belum ada ttyUSB, script meminta sudo untuk `modprobe ftdi_sio`, menunggu
+udev dan memeriksa port lagi. Tidak melepas driver lain atau membuat device node.
+Jika hanya USB-Blaster/JTAG yang terlihat, script menjelaskan bahwa connector
+tersebut bukan console. Jika FT232R tidak terlihat pada bus USB, memuat driver
+secara acak tidak akan menyelesaikan enumerasi USB.
+
+Konektor console DE10 harus masuk ke USB HOST **Jetson** agar terlihat pada
+/dev Jetson. Jika console terhubung ke PC, buka console dari PC; Jetson tidak
+akan melihat perangkat USB milik PC melalui kabel Ethernet. Port UART GPIO
+Jetson seperti ttyTHS1 bukan pengganti USB-UART console tersebut.

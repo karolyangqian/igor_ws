@@ -84,6 +84,48 @@ def choose_console(requested=None):
             f'lalu pilih --console /dev/ttyUSBx. Terdeteksi: {inventory}')
     return candidates[0]
 
+def usb_inventory(root=Path('/sys/bus/usb/devices')):
+    devices=[]
+    for entry in root.glob('*'):
+        try:
+            vid=int((entry/'idVendor').read_text().strip(),16)
+            pid=int((entry/'idProduct').read_text().strip(),16)
+        except (OSError,ValueError):continue
+        if vid==0x1d6b:continue # Linux root hubs are not a DE10 console.
+        try:product=(entry/'product').read_text().strip()
+        except OSError:product=''
+        devices.append({'vid':vid,'pid':pid,'product':product})
+    return devices
+
+def ensure_console(requested=None):
+    try:return choose_console(requested)
+    except ConnectionError as initial:
+        devices=usb_inventory()
+        ftdi=[d for d in devices if (d['vid'],d['pid'])==(0x0403,0x6001)]
+        inventory=', '.join(f"{d['vid']:04x}:{d['pid']:04x} {d['product']}" for d in devices[:8]) or '(tidak ada perangkat USB eksternal)'
+        print(f'Inventaris USB Jetson: {inventory}',flush=True)
+        if not ftdi:
+            blaster=any(d['vid']==0x09fb for d in devices)
+            detail=' USB-Blaster terlihat, tetapi itu hanya JTAG.' if blaster else ''
+            raise ConnectionError('Chip USB console FT232R (0403:6001) belum terlihat oleh Jetson.'+detail+
+                ' Hubungkan konektor USB-UART console DE10 langsung ke port USB HOST Jetson dengan kabel DATA. '
+                'Kabel yang hanya masuk ke PC tidak membuat ttyUSB di Jetson. '+str(initial)) from initial
+        if len(ftdi)!=1:raise ConnectionError('Beberapa FT232R terlihat; pilih --console setelah port ttyUSB muncul. '+str(initial)) from initial
+        if not shutil.which('modprobe'):raise ConnectionError('FT232R terdeteksi tetapi modprobe tidak tersedia untuk memuat driver ftdi_sio') from initial
+        print('FT232R terdeteksi. Memuat driver console ftdi_sio...',flush=True)
+        prefix=[] if os.geteuid()==0 else ['sudo']
+        try:run(prefix+['modprobe','ftdi_sio'])
+        except subprocess.CalledProcessError as exc:
+            raise ConnectionError('Driver ftdi_sio gagal dimuat. Periksa dukungan modul pada kernel Jetson; tidak membuat ttyUSB palsu.') from exc
+        if shutil.which('udevadm'):
+            try:subprocess.run(['udevadm','settle','--timeout=5'],timeout=6,check=False)
+            except subprocess.TimeoutExpired:pass
+        deadline=time.monotonic()+3
+        while time.monotonic()<deadline:
+            try:return choose_console()
+            except ConnectionError:time.sleep(.2)
+        raise ConnectionError('FT232R terlihat dan driver sudah diminta, tetapi ttyUSB belum muncul. Periksa error USB/binding pada sudo dmesg; tidak memilih ttyTHS/ttyS bawaan Jetson.')
+
 def is_de10(identity):
     lower=identity.lower()
     return bool(re.search(r'(?m)^armv7l\s*$',identity)) and any(
@@ -227,7 +269,7 @@ def main():
                 elif peers:
                     raise ConnectionError(f'Beberapa kandidat SSH kabel: {peers}. Pilih --hps-ip dan --jetson-ip yang sesuai; tidak memilih perangkat secara acak.')
         if args.bootstrap_console or not reachable:
-            try:device=choose_console(args.console)
+            try:device=ensure_console(args.console)
             except ConnectionError as exc:
                 if carrier(interface):
                     raise ConnectionError(f'Ethernet SUDAH link (carrier=1), tetapi SSH HPS belum terjangkau dan IP HPS belum dapat diverifikasi. '

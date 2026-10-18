@@ -68,6 +68,31 @@ class ConnectTests(unittest.TestCase):
         with patch('serial.tools.list_ports.comports',return_value=[ftdi,ftdi]):
             with self.assertRaises(connect.ConnectionError):connect.choose_console()
 
+    def test_usb_absent_does_not_load_random_drivers(self):
+        with patch.object(connect,'choose_console',side_effect=connect.ConnectionError('tidak ada tty')), \
+             patch.object(connect,'usb_inventory',return_value=[{'vid':0x09fb,'pid':0x6010,'product':'USB-Blaster'}]), \
+             patch.object(connect,'run') as runner,patch('builtins.print'):
+            with self.assertRaisesRegex(connect.ConnectionError,'hanya JTAG'):connect.ensure_console()
+            runner.assert_not_called()
+
+    def test_enumerated_ftdi_gets_driver_then_port_is_rechecked(self):
+        with patch.object(connect,'choose_console',side_effect=[connect.ConnectionError('no tty'),'/dev/ttyUSB0']), \
+             patch.object(connect,'usb_inventory',return_value=[{'vid':0x0403,'pid':0x6001,'product':'FT232R'}]), \
+             patch.object(connect.os,'geteuid',return_value=1000,create=True), \
+             patch.object(connect.shutil,'which',side_effect=lambda name:'/sbin/modprobe' if name=='modprobe' else None), \
+             patch.object(connect,'run') as runner,patch('builtins.print'):
+            self.assertEqual(connect.ensure_console(),'/dev/ttyUSB0')
+            runner.assert_called_once_with(['sudo','modprobe','ftdi_sio'])
+
+    def test_usb_inventory_from_sysfs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            for name,vid,pid in [('usb1','1d6b','0002'),('1-1','0403','6001')]:
+                folder=root/name;folder.mkdir()
+                (folder/'idVendor').write_text(vid);(folder/'idProduct').write_text(pid)
+                (folder/'product').write_text('test')
+            self.assertEqual(connect.usb_inventory(root),[{'vid':0x0403,'pid':0x6001,'product':'test'}])
+
     def console(self,chunks):
         console=connect.Console.__new__(connect.Console);console.user='fpga';console.serial=SerialFixture(chunks)
         return console

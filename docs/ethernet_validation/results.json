@@ -1,11 +1,11 @@
 {
   "scope": "Localhost UDP + simulated UART; native C wire/HAL tests; no physical board acceptance",
-  "utc": "2026-10-18T09:11:24.084099+00:00",
+  "utc": "2026-10-18T09:17:00.494384+00:00",
   "hardware_verified": false,
   "suites": {
     "connection": {
       "passed": true,
-      "tests": 15,
+      "tests": 18,
       "log": "connection.log"
     },
     "ethernet": {
@@ -29,8 +29,8 @@
     "production_rejected_mock": true
   },
   "source_sha256": {
-    "docs/connect_de10.md": "5a2bbd3e510eb590ae1d312ac2a8b3dcf08a83ada3f6a4d77ab7dc6631766bca",
-    "eth_direction.md": "42b88d653f90db81fba7e49a4b3b09bc2577ad87a4cd81ff0441f530bcfc7517",
+    "docs/connect_de10.md": "9e1de60d74a483dba8dbdbdd8afd0899d615ce88b1a5eeccfe541162a8446178",
+    "eth_direction.md": "343f3f377626daee66bd67304a361442dc866eff07ff877cfe6ca8dfbf752f7b",
     "fpga/software_integration/src/igor_controller/igor_controller/__init__.py": "193ebb463856d04f55eb163e152f46f7981f1efcc6c563f845c4e4f723e733d5",
     "fpga/software_integration/src/igor_controller/igor_controller/controller_node.py": "2ebe5e4e3ccefe93ae3a7242e42644d2b02bb1d3277bd6127b4b9875f77b758b",
     "fpga/software_integration/src/igor_controller/igor_controller/ethernet_protocol.py": "95b188d057e6b9cc97cdb5cb7a1b6c73ced290acc8086d418f2b9c1b3a541a7f",
@@ -60,10 +60,10 @@
     "src/igor_pipeline/scripts/uart_test.py": "9a052c0b394eb441ce782529a57238d1b66617fd9eaab49e36073aad0daa5636",
     "src/igor_pipeline/scripts/uart_validate_hardware_q88.py": "bafd6593ee7365bdf7eb81f2b7a6dea6aa98ca6d3ad65e9da6f00b71ee59fa04",
     "src/igor_pipeline/scripts/uart_validate_q88.py": "bbb78b8c1e1e854f9df1b5cf9c9f6e15718ba02f6dc2857529e55c3118d0e3a9",
-    "test/test_connect_de10.py": "9683087f4823342ce4d7cc910067fccfb8d9b2d952a8338ba225cbe17c69eeee",
+    "test/test_connect_de10.py": "15898de88c35e1ba3935f46903c533712ce43b2ac7d17d8de1c7b72c0d36f1d3",
     "test/test_ethernet.py": "4fe1d744dc7e4037e8aa49af3ae8a26d59c267dc702d82abbc68a3f67dc996db",
-    "tools/connect_de10.py": "58c95a98439edee0aa3a143bb547953a8ce9f3c0f4568ecda8c26ba765a79ed0",
-    "tools/de10_connect.py": "9f66381e2bb5031764fbc150404d8eeba10aa7811870d5283bada040a29b4254",
+    "tools/connect_de10.py": "ca46777fad658fa42e20b2d40f86c4a4bcacb48d8955b7d10ab7bc1174a75ab1",
+    "tools/de10_connect.py": "7b00c88ca31463d51c2ca8bee5e61a6fc26c68ed3a287f5865fc72d8e618bc4d",
     "tools/package_de10_connect.py": "e6f5614946148f5ea37f98b27adb49aa4f6f8f594c6bd9a428513ce823b9bdbf",
     "tools/verify_ethernet.py": "42b948446f181aaada81ce7ed88bfb85182eb1a0e11252c818d0abd721d0c89f"
   }
