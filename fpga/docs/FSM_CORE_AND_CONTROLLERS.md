@@ -1,5 +1,8 @@
 # FSM core IGOR dan controller pendukung
 
+Untuk presentasi singkat, gunakan [versi 3 FSM sederhana](FSM_3_SIMPLE.md)
+dengan lingkaran terbagi nama state/aksi seperti contoh pengguna.
+
 **[Buka seluruh 19 halaman draw.io](assets/igor_fsm_all.drawio)** menggunakan
 diagrams.net: **File -> Open From -> Device**, kemudian pilih tab halaman di
 bawah kanvas. State, panah, kondisi dan catatan berupa objek native yang dapat

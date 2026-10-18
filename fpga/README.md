@@ -1,5 +1,8 @@
 # IGOR FPGA — mulai di sini
 
+**Versi sederhana sesuai contoh:** [3 FSM lingkaran](docs/FSM_3_SIMPLE.md),
+dengan [file draw.io tiga halaman](docs/assets/igor_fsm_3_simple.drawio).
+
 [FSM core dan semua controller](docs/FSM_CORE_AND_CONTROLLERS.md) tersedia dalam
 [draw.io 19 halaman](docs/assets/igor_fsm_all.drawio), dengan kondisi transisi,
 aksi register, reset, fault/default dan sumber RTL.
