@@ -539,7 +539,7 @@
     "S15": {
       "path": "CHIP_ADVANTAGES.md",
       "title": "Arsitektur, parameter, bisnis dan fabrikasi",
-      "sha256": "b43818fb767b07784278ae256b78acd98b766a9a5c81961b07dd5274651fe43c"
+      "sha256": "2a1f0ccea291331d341a3371c5c2a6f3ec73cf604036352ea0a3d8886af561c9"
     },
     "S16": {
       "path": "verification/neural_cocotb_results.json",

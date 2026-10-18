@@ -2,7 +2,7 @@
 
 **Kami menciptakan IGOR: rancangan chip kendali cerdas yang membawa inferensi AI berlatensi mikrodetik, proteksi keluaran di hardware, dan antarmuka industri terprogram ke dalam satu visi produk.**
 
-**138,32 ?s per inferensi core ? 8 jalur komputasi paralel ? 18.051 parameter neural ? memori bobot on-chip ? proteksi operasi yang dapat ditelusuri.**
+**138,32 µs per inferensi core; 8 jalur komputasi paralel; 18.051 parameter neural; memori bobot on-chip; proteksi operasi yang dapat ditelusuri.**
 
 IGOR dikembangkan untuk robot bergerak yang membaca lingkungan, menghitung koreksi gerak, dan menjaga agar keluaran aktuator mengikuti aturan operasi. Nilai produknya terletak pada tiga kemampuan yang saling melengkapi: **menghitung cepat, mengendalikan keluaran dengan disiplin, dan berkomunikasi dengan periferal secara fleksibel**.
 
@@ -28,22 +28,22 @@ Dalam visi integrasi ini, akselerator menghasilkan residual AI, host mengolahnya
 
 ## 2. Inti IGOR: akselerator AI yang dirancang langsung di RTL
 
-**Jantung komputasi IGOR berada di folder `fpga/`: core PPO Parallel8 dengan delapan jalur multiply?accumulate, memori bobot lokal, dan state machine yang mengatur setiap langkah inferensi.** Jalur datanya menerima **74 observasi**, mengolah dua hidden layer **128 dan 64 neuron**, lalu menghasilkan **tiga residual kendali**. Ini adalah mesin inferensi neural berbasis Verilog yang mengerjakan matematika kebijakan IGOR pada hardware khusus.
+**Jantung komputasi IGOR berada di folder `fpga/`: core PPO Parallel8 dengan delapan jalur multiply-accumulate, memori bobot lokal, dan state machine yang mengatur setiap langkah inferensi.** Jalur datanya menerima **74 observasi**, mengolah dua hidden layer **128 dan 64 neuron**, lalu menghasilkan **tiga residual kendali**. Ini adalah mesin inferensi neural berbasis Verilog yang mengerjakan matematika kebijakan IGOR pada hardware khusus.
 
 | Parameter core AI FPGA | Spesifikasi / hasil | Makna desain |
 |---|---:|---|
-| Topologi neural | **74 ? 128 ? 64 ? 3** | Input sensor/perintah menuju tiga residual |
+| Topologi neural | **74 -> 128 -> 64 -> 3** | Input sensor/perintah menuju tiga residual |
 | Clock operasi yang divalidasi | **50 MHz** | Periode clock **20 ns** |
 | Siklus inferensi | **6.916 clock** | Jadwal komputasi dari start hingga done |
-| Latensi inferensi core | **138,32 ?s / 0,13832 ms** | Memenuhi target core di bawah 0,16 ms |
+| Latensi inferensi core | **138,32 µs / 0,13832 ms** | Memenuhi target core di bawah 0,16 ms |
 | Parallelisme | **8 lane MAC** | Satu operand dibagikan ke delapan bobot/neuron |
 | Format input dan bobot | **signed 16-bit Q8.8** | Resolusi numerik **1/256 = 0,00390625** |
-| Hasil perkalian | **signed 32-bit** | Perkalian operand 16 ? 16 bit |
-| Akumulator | **8 ? signed 40-bit** | Penjumlahan dot product dengan ruang numerik ekstra |
+| Hasil perkalian | **signed 32-bit** | Perkalian operand 16 x 16 bit |
+| Akumulator | **8 x signed 40-bit** | Penjumlahan dot product dengan ruang numerik ekstra |
 | Aktivasi hidden layer | **ReLU dengan saturasi** | Aktivasi terdefinisi pada rentang fixed-point |
-| Pembatas output | **?256 sampai +256 kode Q8.8** | Residual dalam rentang **?1 sampai +1** |
+| Pembatas output | **-256 sampai +256 kode Q8.8** | Residual dalam rentang **-1 sampai +1** |
 | Parameter neural berguna | **18.051 word 16-bit** | **17.856 bobot + 195 bias** |
-| Memori bobot fisik FPGA | **8 bank ? 4.096 ? 16 bit** | Total alokasi **524.288 bit / 64 KiB** |
+| Memori bobot fisik FPGA | **8 bank x 4.096 x 16 bit** | Total alokasi **524.288 bit / 64 KiB** |
 | Register hasil/state | **6.277 register fitted** | State, datapath dan kontrol pada hasil implementasi |
 | Logika fitted | **3.303 ALM / 41.910** | Pemakaian sekitar **7,88% ALM** DE10-Nano |
 | Blok memori fitted | **64 M10K / 553** | Penyimpanan bobot pada embedded block memory |
@@ -55,19 +55,19 @@ Sumber primer: [Verilog core Parallel8](experiments/parallel8/igor_src_policy_co
 
 ### Clock-cycle design: setiap fase komputasi mempunyai tugas
 
-State machine core mengatur **alamat ? baca memori sinkron ? MAC ? aktivasi**. Delapan bank bobot menyediakan data untuk delapan neuron dalam satu kelompok. Tahap `WEIGHT_WAIT` menyelaraskan pembacaan memori terdaftar sebelum hasil dipakai.
+State machine core mengatur **alamat -> baca memori sinkron -> MAC -> aktivasi**. Delapan bank bobot menyediakan data untuk delapan neuron dalam satu kelompok. Tahap `WEIGHT_WAIT` menyelaraskan pembacaan memori terdaftar sebelum hasil dipakai.
 
 | Fase RTL | Siklus per kelompok neuron | Tugas |
 |---|---:|---|
-| `BIAS_ADDRESS ? BIAS_WAIT ? BIAS_TAKE` | **3** | Mengambil bias dan mengisi akumulator |
-| `WEIGHT_ADDRESS ? WEIGHT_WAIT ? MAC` | **3 ? jumlah input layer** | Membaca bobot dan menambahkan hasil perkalian |
+| `BIAS_ADDRESS -> BIAS_WAIT -> BIAS_TAKE` | **3** | Mengambil bias dan mengisi akumulator |
+| `WEIGHT_ADDRESS -> WEIGHT_WAIT -> MAC` | **3 x jumlah input layer** | Membaca bobot dan menambahkan hasil perkalian |
 | `ACTIVATE` | **1** | ReLU/saturasi atau pembatas output, lalu menyimpan hasil |
 
-| Layer | Input ? neuron | Kelompok delapan lane | Perhitungan siklus | Total |
+| Layer | Input x neuron | Kelompok delapan lane | Perhitungan siklus | Total |
 |---|---:|---:|---|---:|
-| Hidden 1 | 74 ? 128 | 16 | 16 ? (3 + 3?74 + 1) | **3.616** |
-| Hidden 2 | 128 ? 64 | 8 | 8 ? (3 + 3?128 + 1) | **3.104** |
-| Output | 64 ? 3 | 1 | 1 ? (3 + 3?64 + 1) | **196** |
+| Hidden 1 | 74 x 128 | 16 | 16 x (3 + 3x74 + 1) | **3.616** |
+| Hidden 2 | 128 x 64 | 8 | 8 x (3 + 3x128 + 1) | **3.104** |
+| Output | 64 x 3 | 1 | 1 x (3 + 3x64 + 1) | **196** |
 | **Satu inferensi** | | **25 kelompok** | 3.616 + 3.104 + 196 | **6.916** |
 
 Pada layer output, tiga lane menghasilkan tiga keluaran berguna. Anggaran siklus tersebut berasal dari urutan state Verilog dan cocok dengan hasil simulasi penerimaan. `latency_cycles` menyediakan counter **32-bit**, sedangkan `busy`, `done`, `fault`, `error_code` dan `saturated` membuat hasil komputasi dapat dipantau.
@@ -77,9 +77,9 @@ Pada layer output, tiga lane menghasilkan tiga keluaran berguna. Anggaran siklus
 | Metrik turunan core | Perhitungan | Nilai |
 |---|---|---:|
 | Laju ekuivalen dari latensi core | 50.000.000 / 6.916 | **7.229,61 inferensi/detik** |
-| MAC berguna per inferensi | 74?128 + 128?64 + 64?3 | **17.856 MAC** |
-| Laju MAC berguna ekuivalen | 17.856 / 138,32 ?s | **129,09 MMAC/s** |
-| Selisih terhadap anggaran 0,16 ms | 160 ? 138,32 | **21,68 ?s** |
+| MAC berguna per inferensi | 74x128 + 128x64 + 64x3 | **17.856 MAC** |
+| Laju MAC berguna ekuivalen | 17.856 / 138,32 µs | **129,09 MMAC/s** |
+| Selisih terhadap anggaran 0,16 ms | 160 - 138,32 | **21,68 µs** |
 
 **7.229,61 inferensi/detik adalah kebalikan latensi core**, dengan asumsi pengulangan tanpa overhead. Ini merupakan batas laju ekuivalen komputasi, bukan hasil pengukuran sustained throughput antarmuka. Akuisisi 74 input, reload/start, pengiriman UART dan pemrosesan host dihitung dalam anggaran sistem tersendiri. **129,09 MMAC/s** adalah jumlah MAC neural berguna dibagi waktu inferensi, dengan satu perkalian-penjumlahan dihitung sebagai satu MAC; tidak mencakup bias, aktivasi atau lane padding sebagai operasi berguna.
 
@@ -89,18 +89,18 @@ Pada layer output, tiga lane menghasilkan tiga keluaran berguna. Anggaran siklus
 
 | Organisasi memori | Kapasitas / bentuk | Fungsi |
 |---|---|---|
-| Bank bobot Parallel8 pada FPGA | **8 ? 4.096 word ? 16-bit = 64 KiB alokasi** | Delapan pembacaan bank paralel dengan keluaran terdaftar |
-| Isi model yang berguna | **18.051 ? 2 byte = 36.102 byte** | Bobot dan bias; sisa alokasi bank mencakup padding |
-| Penyimpanan observasi | **74 ? 16-bit** | Snapshot input untuk satu inferensi |
-| Penyimpanan aktivasi hidden | **128 ? 16-bit + 64 ? 16-bit** | Hasil antar-layer lokal pada array RTL |
-| Penyimpanan residual | **3 ? 16-bit** | Hasil akhir yang dipilih melalui indeks output |
-| SRAM program protocol engine ASIC | **256 ? 16-bit = 4.096 bit / 512 byte** | Instruksi dan literal empat context |
+| Bank bobot Parallel8 pada FPGA | **8 x 4.096 word x 16-bit = 64 KiB alokasi** | Delapan pembacaan bank paralel dengan keluaran terdaftar |
+| Isi model yang berguna | **18.051 x 2 byte = 36.102 byte** | Bobot dan bias; sisa alokasi bank mencakup padding |
+| Penyimpanan observasi | **74 x 16-bit** | Snapshot input untuk satu inferensi |
+| Penyimpanan aktivasi hidden | **128 x 16-bit + 64 x 16-bit** | Hasil antar-layer lokal pada array RTL |
+| Penyimpanan residual | **3 x 16-bit** | Hasil akhir yang dipilih melalui indeks output |
+| SRAM program protocol engine ASIC | **256 x 16-bit = 4.096 bit / 512 byte** | Instruksi dan literal empat context |
 
 Array observasi/aktivasi adalah organisasi logis RTL; tabel tidak mengklaim semuanya dipetakan ke SRAM. Bobot FPGA diinisialisasi dari `bank0.mem` sampai `bank7.mem` dan dipakai sebagai **ROM bobot** pada blok M10K. Nama M10K adalah resource FPGA; SRAM macro IHP adalah implementasi memori pada blok ASIC yang terkait.
 
 **SRAM ASIC menggunakan macro `RM_IHPSG13_1P_256x16_c2_bm_bist`**, dengan satu port baca/tulis fisik, alamat **8-bit**, data **16-bit**, serta mask tulis byte tinggi/rendah. Pembaruan satu byte mempertahankan pasangan byte dalam word. Pembacaan instruksi dipersiapkan pada sisi clock turun untuk grant eksekusi pada sisi clock naik. Pin BIST tersedia pada macro dan diikat nonaktif dalam wrapper ini.
 
-Host dapat mengunggah dan membaca kembali isi SRAM. Uji mencakup seluruh **256 word**, alamat akhir **255**, pelestarian byte dan warm reset pada model SRAM yang tetap mendapat suplai. Demo UART RX/TX, I?C dan SPI memuat **508 byte** program. Untuk perencanaan cadence ASIC, scheduler memberikan giliran **satu context per eligible clock**, berulang tiap **empat eligible clock** per context; jumlah instruksi selesai bergantung pada opcode, literal dan wait. Angka tersebut adalah aturan RTL, bukan klaim frekuensi silicon ASIC.
+Host dapat mengunggah dan membaca kembali isi SRAM. Uji mencakup seluruh **256 word**, alamat akhir **255**, pelestarian byte dan warm reset pada model SRAM yang tetap mendapat suplai. Demo UART RX/TX, I2C dan SPI memuat **508 byte** program. Untuk perencanaan cadence ASIC, scheduler memberikan giliran **satu context per eligible clock**, berulang tiap **empat eligible clock** per context; jumlah instruksi selesai bergantung pada opcode, literal dan wait. Angka tersebut adalah aturan RTL, bukan klaim frekuensi silicon ASIC.
 
 Sumber: [banked core FPGA](experiments/parallel8/igor_src_policy_core.v), [pemetaan bank](experiments/parallel8/prepare.py), [wrapper SRAM ASIC](../src/program_memory.v), dan [tes SRAM](../test/test_sram.py). Rujukan tes SRAM yang spesifik juga tersedia dalam [log regression](evidence/chip_highlights/regression.log).
 
@@ -118,6 +118,48 @@ Sumber: [banked core FPGA](experiments/parallel8/igor_src_policy_core.v), [pemet
 Antarmuka neural default memakai **UART 921.600 baud, 8N1**, dengan frame observasi **153 byte** dan respons **11 byte**. Core menyediakan pemeriksaan kelengkapan **74 input**, penolakan indeks tidak valid, load/start saat sibuk, load dan start bersamaan, serta pembatalan melalui `abort`. Wrapper menyediakan status frame diterima/ditolak dan latensi terakhir. `safety_permit` neural menyatakan validitas/freshness residual pada jalurnya; izin motor dengan pemeriksaan peta merupakan fungsi gate planner. Hubungan keduanya pada diagram merupakan tujuan integrasi sistem.
 
 Bukti pengujian Parallel8 mencatat **54.399 assertion core**, **268 assertion UART**, dan **18 checkpoint board**, seluruhnya PASS pada receipt. Bukti ini menyertai file Verilog, laporan compile, timing, pin planning, waveform dan bitstream dalam paket `fpga/`.
+
+## 2C. Eksplorasi ASIC IHP: periode picosecond, inferensi mikrodetik
+
+**Arsitektur Parallel8 memberi dasar yang terukur untuk eksplorasi ASIC: jumlah pekerjaan tetap 6.916 siklus, sedangkan periode clock ditentukan oleh hasil implementasi fisiknya.** Pada **asumsi 100 MHz**, periodenya **10.000 ps** dan proyeksi latensi core **69.160.000 ps = 69,16 µs**. Pada **asumsi 200 MHz**, periodenya **5.000 ps** dan proyeksi menjadi **34.580.000 ps = 34,58 µs**.
+
+**Status angka: proyeksi arsitektural dengan clock asumsi, bukan hasil synthesis/STA atau pengukuran silicon neural ASIC IHP.** Nilai 75–200 MHz di bawah dipilih sebagai sweep eksplorasi; sumber PDK tidak menyatakan bahwa core IGOR pasti mencapai frekuensi tersebut. Jumlah siklus diasumsikan tetap setelah pemetaan memori dan datapath.
+
+### Tabel kecepatan: setiap besaran mempunyai satuan dan lingkup
+
+| Clock asumsi ASIC | Periode clock | Proyeksi latensi core, ps | Setara latensi core | Kapasitas ekuivalen core | MAC berguna ekuivalen |
+|---:|---:|---:|---:|---:|---:|
+| **75 MHz** | **13.333,33 ps** | **92.213.333,33 ps** | **92,2133 µs** | **10.844,42 inferensi/s** | **193,64 MMAC/s** |
+| **100 MHz** | **10.000 ps** | **69.160.000 ps** | **69,16 µs** | **14.459,22 inferensi/s** | **258,18 MMAC/s** |
+| **150 MHz** | **6.666,67 ps** | **46.106.666,67 ps** | **46,1067 µs** | **21.688,84 inferensi/s** | **387,28 MMAC/s** |
+| **200 MHz** | **5.000 ps** | **34.580.000 ps** | **34,58 µs** | **28.918,45 inferensi/s** | **516,37 MMAC/s** |
+
+Semua baris adalah **skenario bersyarat**, bukan speed grade PDK. Perhitungan menggunakan nilai periode penuh sebelum pembulatan. Kapasitas adalah kebalikan latensi tanpa jeda/reload; belum termasuk UART, host, akuisisi sensor atau aktuator. Satu MAC adalah satu perkalian-penjumlahan berguna; **17.856 MAC** per inferensi mengikuti topologi neural.
+
+```text
+Tclock_ps   = 1.000.000.000.000 / f_Hz
+Tinfer_ps   = 6.916 × Tclock_ps
+Tinfer_us   = Tinfer_ps / 1.000.000
+kapasitas   = f_Hz / 6.916
+MMAC/s      = 17.856 × kapasitas / 1.000.000
+```
+
+**Picosecond digunakan untuk menuliskan periode dan detail timing, bukan mengubah skala fisik pekerjaan AI.** Contohnya, 5.000 ps sama dengan 5 ns, sedangkan 34.580.000 ps sama dengan 34,58 µs. Untuk target core **kurang dari 0,16 ms**, jadwal 6.916 siklus memerlukan **f > 43,225 MHz**, atau **Tclock < 23.134,75998 ps**. Angka tersebut adalah anggaran matematis, bukan hasil Fmax.
+
+### Apa yang benar-benar berasal dari IHP?
+
+- **Identitas proses pada artefak ASIC:** `ihp-sg13cmos5l`, top `tt_um_igorchip`, dari [ringkasan impor](evidence/asic_import/gds_diagnostics_1/summary.json). Artefak itu milik **protocol engine**, bukan hasil pemetaan neural Parallel8. Constraint clock yang tercatat adalah **20 ns = 20.000 ps**, yaitu target 50 MHz; nilai constraint tidak membuktikan Fmax tercapai.
+- **Model timing untuk implementasi:** library standard cell dan SRAM menyediakan model timing/corner yang dipakai untuk mengevaluasi jalur aktual. [Dokumentasi SRAM resmi IHP](https://ihp-open-pdk-docs.readthedocs.io/en/latest/contents/reference_libraries/sram.html) menjelaskan view Liberty serta informasi timing macro. Saat port neural, M10K harus diganti organisasi memori ASIC yang sesuai; latency memori dan kebutuhan pipeline dapat mengubah jumlah siklus.
+- **Sumber PDK:** [repository SG13CMOS5L](https://github.com/IHP-GmbH/ihp-sg13cmos5l) menjelaskan pemindahan konten ke [IHP-Open-PDK](https://github.com/IHP-GmbH/IHP-Open-PDK). Revisi PDK/library untuk eksperimen harus dikunci sesuai flow/shuttle; dokumen estimasi ini tidak mengganti konfigurasi build yang ada.
+- **Makna “paling cepat”:** [IHP Process Integration](https://www.ihp-microelectronics.com/research/technologies-for-smart-systems/research-groups/process-integration) membahas performa RF transistor **SiGe HBT** dengan metrik fT/fMAX. Metrik transistor itu berbeda dari clock digital CMOS sebuah neural accelerator. Ia tidak dipakai untuk menetapkan clock IGOR atau mengklaim prosesnya paling cepat untuk semua RTL.
+
+Pada FPGA, **50 MHz adalah clock proyek yang telah divalidasi**, bukan pernyataan frekuensi maksimum seluruh perangkat. Pada ASIC, clock yang dapat dipublikasikan sebagai hasil implementasi berasal dari **synthesis → placement/routing → ekstraksi parasitik → static timing analysis pada corner yang dipilih**. Jalur multiplier, accumulator 40-bit, mux, setup/hold dan akses memori semuanya diperhitungkan. Jika retiming/pipeline mengubah jadwal menjadi N siklus, proyeksi dihitung ulang sebagai **N/f** dan diperiksa terhadap model integer yang sama.
+
+**Nilai desain untuk presentasi:** “IGOR memiliki jadwal neural eksplisit yang dapat dipetakan ke skenario clock ASIC. Pada skenario 100 MHz dengan jadwal tetap, core diproyeksikan menyelesaikan inferensi dalam **69,16 µs**, dengan periode **10.000 ps**. Skenario 200 MHz memproyeksikan **34,58 µs**. Frekuensi final dikunci dari hasil timing implementasi IHP.”
+
+Daya Typical **2,037372 mW** pada bagian lain tetap milik protocol engine ASIC pada kondisi laporannya. Angka itu tidak dipindahkan menjadi daya neural ASIC pada 100/200 MHz. Peningkatan clock serta pemetaan memori/datapath memerlukan evaluasi power dengan aktivitas dan kondisi implementasi yang sesuai.
+
+Sumber perhitungan dan reproduksi: [CSV skenario](evidence/asic_clock_scenarios/clock_scenarios.csv), [asumsi, rumus dan SHA sumber](evidence/asic_clock_scenarios/scenarios.json), [script generator](scripts/estimate_asic_clock_scenarios.py), dan [receipt 6.916 siklus](experiments/parallel8/artifacts/acceptance.json). Sumber resmi diperiksa **18 Oktober 2026**. Untuk membuat ulang data: `python fpga/scripts/estimate_asic_clock_scenarios.py`.
 
 ## 3. Security operasional: keputusan harus melewati aturan hardware
 

@@ -1,0 +1,91 @@
+{
+  "generated_utc": "2026-10-18T03:07:28.359408+00:00",
+  "status": "ARCHITECTURAL_SCENARIOS_ONLY_NO_ASIC_TIMING_RUN",
+  "scope": "Neural Parallel8 latency projection for possible IHP port; not the imported protocol-engine ASIC timing result",
+  "pdk_context": "ihp-sg13cmos5l",
+  "assumed_frequency_origin": "Analyst-selected clock sweep; not a PDK speed grade or extracted Fmax",
+  "assumptions": [
+    "Same 6916-cycle neural schedule and arithmetic after ASIC port",
+    "Memory mapping/read latency preserves the schedule; no extra pipeline or wait cycles",
+    "Each frequency must close timing on the actual mapped/routed neural design and corners",
+    "No load, UART, host or actuator overhead is included",
+    "Latency reciprocal is a no-overhead capacity calculation, not measured sustained throughput",
+    "Protocol ASIC 2.037372 mW and die area are not estimates for the neural ASIC at these clocks"
+  ],
+  "validated_fpga_reference": {
+    "clock_hz": 50000000,
+    "cycles": 6916,
+    "latency_ps": 138320000,
+    "latency_us": "138.32",
+    "meaning": "Existing simulated core schedule and fitted FPGA timing, not a board maximum frequency"
+  },
+  "imported_protocol_asic_context": {
+    "top": "tt_um_igorchip",
+    "clock_constraint_ns": 20,
+    "clock_constraint_ps": 20000,
+    "classification": "Clock constraint only; not proof of achieved Fmax"
+  },
+  "target_below_160us": {
+    "strict_period_upper_bound_ps": "23134.75997686524002313475997686524002313",
+    "strict_frequency_lower_bound_hz": "4.3225E+7"
+  },
+  "source_sha256": {
+    "experiments/parallel8/artifacts/acceptance.json": "f025b1af91a04e1bd30f8eb5f75eeb98195149d0c7054d9cc0900196ba1479a2",
+    "evidence/asic_import/gds_diagnostics_1/summary.json": "36235b2b66ba7f61eef49b61dd3cef6b074b59224aedfb62ccc3072b354090c2",
+    "experiments/parallel8/igor_src_policy_core.v": "0aff96cf9638582ab0bc6eabaf1462baa25a41196e1e73abc1aa4786cddc5d34"
+  },
+  "formulas": {
+    "period_ps": "1e12 / frequency_hz",
+    "latency_ps": "cycles * period_ps",
+    "inference_capacity_per_s": "frequency_hz / cycles",
+    "useful_mmac_per_s": "17856 * frequency_hz / cycles / 1e6"
+  },
+  "official_sources_checked_2026_10_18": [
+    "https://github.com/IHP-GmbH/ihp-sg13cmos5l",
+    "https://github.com/IHP-GmbH/IHP-Open-PDK",
+    "https://www.ihp-microelectronics.com/research/technologies-for-smart-systems/research-groups/process-integration",
+    "https://ihp-open-pdk-docs.readthedocs.io/en/latest/contents/reference_libraries/sram.html"
+  ],
+  "scenarios": [
+    {
+      "classification": "ASSUMED_CLOCK_NOT_ASIC_STA",
+      "assumed_clock_mhz": 75,
+      "period_ps": "13333.33333333333333333333333333333333333",
+      "cycles_assumed_unchanged": 6916,
+      "latency_ps": "92213333.33333333333333333333333333333331",
+      "latency_us": "92.21333333333333333333333333333333333331",
+      "latency_reciprocal_inferences_per_s": "10844.41873915558126084441873915558126084",
+      "useful_mmac_per_s": "193.6379410063620589936379410063620589936"
+    },
+    {
+      "classification": "ASSUMED_CLOCK_NOT_ASIC_STA",
+      "assumed_clock_mhz": 100,
+      "period_ps": "10000",
+      "cycles_assumed_unchanged": 6916,
+      "latency_ps": "69160000",
+      "latency_us": "69.16",
+      "latency_reciprocal_inferences_per_s": "14459.22498554077501445922498554077501446",
+      "useful_mmac_per_s": "258.1839213418160786581839213418160786582"
+    },
+    {
+      "classification": "ASSUMED_CLOCK_NOT_ASIC_STA",
+      "assumed_clock_mhz": 150,
+      "period_ps": "6666.666666666666666666666666666666666667",
+      "cycles_assumed_unchanged": 6916,
+      "latency_ps": "46106666.66666666666666666666666666666667",
+      "latency_us": "46.10666666666666666666666666666666666667",
+      "latency_reciprocal_inferences_per_s": "21688.83747831116252168883747831116252169",
+      "useful_mmac_per_s": "387.2758820127241179872758820127241179873"
+    },
+    {
+      "classification": "ASSUMED_CLOCK_NOT_ASIC_STA",
+      "assumed_clock_mhz": 200,
+      "period_ps": "5000",
+      "cycles_assumed_unchanged": 6916,
+      "latency_ps": "34580000",
+      "latency_us": "34.58",
+      "latency_reciprocal_inferences_per_s": "28918.44997108155002891844997108155002892",
+      "useful_mmac_per_s": "516.3678426836321573163678426836321573164"
+    }
+  ]
+}
