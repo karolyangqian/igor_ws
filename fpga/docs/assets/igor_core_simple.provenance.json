@@ -1,0 +1,18 @@
+{
+  "kind": "editable functional RTL diagram; no new RTL/build or hardware test",
+  "checks": [
+    "native mxGraph XML parsed",
+    "object IDs unique and edge references resolved",
+    "10 functional edges",
+    "PNG visually reviewed",
+    "local documentation links resolved"
+  ],
+  "files": {
+    "docs/assets/igor_core_simple.drawio": "68fd9a6bf1974288322bad3771872ffcedb30efeeac79f36ad895af3b4515b77",
+    "docs/assets/igor_core_simple.svg": "f86a3d2dd593e3b659e3b33446e4bdeefde61558ede02cd5ae102b929d6cccc3",
+    "docs/assets/igor_core_simple.png": "3aa044ac766cbab8eb32dee081bb98f50311cd4dae372e346e7c60f0af4ad0a9",
+    "scripts/render_igor_core_drawio.py": "d8f55c69956af65d085aab9cd30c2326bd92c5e13f8dae76e6650346e62e6187",
+    "experiments/parallel8/igor_src_policy_core.v": "0aff96cf9638582ab0bc6eabaf1462baa25a41196e1e73abc1aa4786cddc5d34",
+    "experiments/parallel8/artifacts/acceptance.json": "f025b1af91a04e1bd30f8eb5f75eeb98195149d0c7054d9cc0900196ba1479a2"
+  }
+}

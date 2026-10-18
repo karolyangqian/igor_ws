@@ -12,6 +12,10 @@ Teknik optimasi **weights, bias, dan accumulator** dijelaskan dalam
 [docs/techniques.md](docs/techniques.md), termasuk kandidat penghematan resource
 dan syarat validasinya.
 
+[Block diagram core berbentuk chip](docs/IGOR_CORE_DIAGRAM.md) tersedia dalam
+[draw.io](docs/assets/igor_core_simple.drawio), [PNG](docs/assets/igor_core_simple.png)
+dan [SVG](docs/assets/igor_core_simple.svg).
+
 Seluruh implementasi dan keluaran baru berada di folder **`igor_ws/fpga`**.
 `../src` digunakan sebagai referensi software; `../peruri-iseedesign` digunakan
 sebagai referensi rancangan dan checklist. Proyek Quartus, RTL, bobot, pin

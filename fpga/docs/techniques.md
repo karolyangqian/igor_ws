@@ -4,6 +4,9 @@ Dokumen ini menjelaskan teknik yang sudah digunakan oleh core Parallel8 dan
 kandidat penghematan berikutnya. Istilah yang digunakan adalah **weights**,
 **bias**, dan **accumulator**. Kandidat belum mengubah RTL atau image pada board.
 
+Lihat [block diagram core sederhana](IGOR_CORE_DIAGRAM.md) untuk alur memory,
+input, weights, bias, accumulator, activation dan output; file draw.io dapat diedit.
+
 ## Cara perhitungan satu neuron
 
 - **Weights** menentukan kontribusi setiap input terhadap neuron.
