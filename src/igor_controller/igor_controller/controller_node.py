@@ -42,7 +42,7 @@ from igor_navigation import create_controller
 
 from igor_controller.mcu_driver import STM32Driver
 from igor_controller.heading_estimator import HeadingEstimator
-from igor_controller.fpga_bridge import FPGABridge
+from igor_controller.fpga_bridge import FPGABridge, FPGACommunicationError
 
 
 class HardwareWatchdog:
@@ -80,6 +80,8 @@ class IgorControllerNode(Node):
         self.declare_parameter('use_fpga', False)
         self.declare_parameter('mcu_port', '/dev/ttyACM0')
         self.declare_parameter('fpga_port', '/dev/fpga')
+        self.declare_parameter('fpga_baudrate', 9600)
+        self.declare_parameter('fpga_timeout', 0.3)
         self.declare_parameter('control_rate_hz', 50.0)
         self.declare_parameter('use_mock_serial', False)
 
@@ -100,6 +102,8 @@ class IgorControllerNode(Node):
         self.use_fpga = bool(self.get_parameter('use_fpga').value)
         self.mcu_port = str(self.get_parameter('mcu_port').value)
         self.fpga_port = str(self.get_parameter('fpga_port').value)
+        self.fpga_baudrate = int(self.get_parameter('fpga_baudrate').value)
+        self.fpga_timeout = float(self.get_parameter('fpga_timeout').value)
         self.control_rate_hz = float(self.get_parameter('control_rate_hz').value)
         self.use_mock_serial = bool(self.get_parameter('use_mock_serial').value)
 
@@ -174,7 +178,8 @@ class IgorControllerNode(Node):
         if self.use_fpga:
             self.fpga = FPGABridge(
                 port=self.fpga_port,
-                baudrate=115200,
+                baudrate=self.fpga_baudrate,
+                timeout=self.fpga_timeout,
                 mock=self.use_mock_serial
             )
             if self.algorithm in ['cl_drl_cbf', 'cl_drl_dwa']:
@@ -409,7 +414,17 @@ class IgorControllerNode(Node):
             # 5. Normal AI Inference Path (FPGA or CPU)
             if self.use_fpga:
                 # Query FPGA inference
-                raw_action = self.fpga.infer(obs)
+                try:
+                    raw_action = self.fpga.infer(obs)
+                except FPGACommunicationError as exc:
+                    self.mcu.send_motor_speeds(0.0, 0.0, 0.0, 0.0)
+                    self.pub_safe_twist.publish(Twist())
+                    self.pub_safety_alert.publish(Bool(data=True))
+                    self.pub_diag.publish(String(data=json.dumps({
+                        'fault': f'FPGA_TRANSPORT: {exc}', 'safety_permit': False,
+                        'safe': [0.0, 0.0, 0.0]})))
+                    self.get_logger().error(f'FPGA transport failed; motors stopped: {exc}')
+                    return
                 delta_vx = raw_action[0] * 0.60 if raw_action[0] < 0.0 else raw_action[0] * 0.15
                 delta_vy = raw_action[1] * 0.45
                 delta_wz = raw_action[2] * 0.80

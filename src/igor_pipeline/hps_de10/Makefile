@@ -1,19 +1,14 @@
-CC ?= gcc
-CFLAGS ?= -O2 -Wall -Wextra -pthread -I../protocol
+CC ?= cc
+CFLAGS ?= -O2 -std=c11 -Wall -Wextra -Werror
+CPPFLAGS += -I../protocol
 TARGET = de10_server_daemon
-
-SRCS = de10_server_daemon.c de10_shared_mem_ext.c
-OBJS = $(SRCS:.c=.o)
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(TARGET): de10_server_daemon.c ../protocol/protocol_v2.h
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ de10_server_daemon.c
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(TARGET) de10_server_daemon.o de10_shared_mem_ext.o
 
 .PHONY: all clean

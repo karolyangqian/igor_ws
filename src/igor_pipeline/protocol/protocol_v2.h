@@ -22,6 +22,8 @@ extern "C" {
 #define STATUS_ERR_DIM           0x00000003
 #define STATUS_PL_TIMEOUT        0x00000004
 #define STATUS_SAFETY_INTERVENE  0x00000005
+#define STATUS_TEST_ONLY         0x00000006 /* Never a hardware success */
+#define STATUS_BACKEND_FAULT     0x00000007
 
 #pragma pack(push, 1)
 
@@ -58,6 +60,19 @@ typedef struct {
 } InferenceResponsePacketV2;
 
 #pragma pack(pop)
+
+/* Wire format: little-endian, no alignment padding (response is 50, not 48/52). */
+#if defined(__cplusplus)
+static_assert(sizeof(SensorPacketV2) == 492, "SensorPacketV2 wire size");
+static_assert(sizeof(InferenceResponsePacketV2) == 50, "Response wire size");
+static_assert(offsetof(InferenceResponsePacketV2, execution_cycles) == 42, "cycles offset");
+static_assert(offsetof(InferenceResponsePacketV2, crc32) == 46, "CRC offset");
+#else
+_Static_assert(sizeof(SensorPacketV2) == 492, "SensorPacketV2 wire size");
+_Static_assert(sizeof(InferenceResponsePacketV2) == 50, "Response wire size");
+_Static_assert(offsetof(InferenceResponsePacketV2, execution_cycles) == 42, "cycles offset");
+_Static_assert(offsetof(InferenceResponsePacketV2, crc32) == 46, "CRC offset");
+#endif
 
 // Standard CRC-32 (IEEE 802.3 polynomial: 0xEDB88320)
 static inline uint32_t crc32_bitwise(const uint8_t *data, size_t length) {

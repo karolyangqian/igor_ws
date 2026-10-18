@@ -55,6 +55,7 @@ class IgorControllerNode(Node):
         self.declare_parameter('mcu_port', '/dev/ttyACM0')
         self.declare_parameter('fpga_port', '/dev/fpga')
         self.declare_parameter('fpga_baudrate', 921600)
+        self.declare_parameter('fpga_timeout', 0.3)
         self.declare_parameter('control_rate_hz', 50.0)
         self.declare_parameter('use_mock_serial', False)
 
@@ -63,6 +64,7 @@ class IgorControllerNode(Node):
         self.mcu_port = str(self.get_parameter('mcu_port').value)
         self.fpga_port = str(self.get_parameter('fpga_port').value)
         self.fpga_baudrate = int(self.get_parameter('fpga_baudrate').value)
+        self.fpga_timeout = float(self.get_parameter('fpga_timeout').value)
         self.control_rate_hz = float(self.get_parameter('control_rate_hz').value)
         self.use_mock_serial = bool(self.get_parameter('use_mock_serial').value)
 
@@ -140,6 +142,7 @@ class IgorControllerNode(Node):
                 self.fpga = FPGABridge(
                     port=self.fpga_port,
                     baudrate=self.fpga_baudrate,
+                    timeout=self.fpga_timeout,
                     mock=self.use_mock_serial
                 )
                 if self.algorithm == 'cl_drl_cbf':

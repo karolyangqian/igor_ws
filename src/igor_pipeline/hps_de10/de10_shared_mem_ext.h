@@ -15,7 +15,8 @@ extern "C" {
 #define SHARED_RAM_BASE  0x20000000 // Upper 512MB region
 #define SHARED_RAM_SPAN  0x01000000 // 16MB buffer space
 
-// Register mapping for ai_accel_wrapper
+// Historical mock ABI only. No matching register slave exists in Parallel8.
+// Production gateway uses local UART; hal_init(..., 0) refuses hardware access.
 #define REG_CONTROL      0
 #define REG_IN_PTR       1
 #define REG_OUT_PTR      2
@@ -50,9 +51,9 @@ typedef struct {
 } SoC_HAL_Context;
 
 /**
- * Initialize SoC FPGA memory and register mappings.
+ * Initialize legacy heap-only test buffers. Not a physical DDR/MMIO backend.
  * @param ctx Pointer to SoC_HAL_Context
- * @param is_mock If 1, allocate virtual heap memory without touching /dev/mem
+ * @param is_mock Must be 1. Zero returns -10 without touching /dev/mem.
  * @return 0 on success, negative error code on failure
  */
 int hal_init(SoC_HAL_Context *ctx, int is_mock);
