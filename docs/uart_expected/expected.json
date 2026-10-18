@@ -1,7 +1,8 @@
 {
   "scope": "Expected reference result, not a physical Jetson measurement",
-  "baud": 921600,
+  "baud": 9600,
   "format": "8N1",
+  "numeric_format": "Q8.8",
   "observation": [
     0.8,
     0.8,

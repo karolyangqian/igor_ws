@@ -6,7 +6,7 @@ Setelah kuantisasi, 64 nilai pertama adalah 205 (Q8.8), sisanya 0.
 
 | Hasil | Expected |
 |---|---|
-| UART | 921600, 8N1, flow control off |
+| UART | 9600, 8N1, flow control off |
 | Request | 153 byte: `5a a5 01 94` + `cd 00` sebanyak 64 + `00 00` sebanyak 10 + CRC8 |
 | Output Q8.8 | -46, 60, 34 |
 | Residual | -0.1796875, 0.234375, 0.1328125 |
