@@ -404,7 +404,7 @@ python fpga/verification/run_host_regression.py
 ```
 
 Latest verification: **16 Ethernet tests + 14 UART tests + 29 host/controller
-tests + 13 connection automation tests = 72 passing tests**. A separate real-process localhost CLI smoke test
+tests + 15 connection automation tests = 74 passing tests**. A separate real-process localhost CLI smoke test
 also passes network-only mode and confirms production rejection of mock.
 Results and source hashes are recorded in `docs/ethernet_validation/results.json`;
 the same directory contains logs. Run `python tools/verify_ethernet.py` to

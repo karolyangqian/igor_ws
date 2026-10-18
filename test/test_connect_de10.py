@@ -35,6 +35,29 @@ class ConnectTests(unittest.TestCase):
         self.assertFalse(connect.is_de10('armv7l\n5.15\nraspberrypi'))
         self.assertTrue(connect.is_de10('armv7l\n5.15-socfpga\nterasic,de10-nano'))
 
+    def test_neighbor_discovery_uses_only_wired_subnet_and_valid_entries(self):
+        neighbors=[{'dst':'192.168.50.2','lladdr':'aa','state':['STALE']},
+                   {'dst':'172.16.17.203','lladdr':'bb','state':['REACHABLE']},
+                   {'dst':'192.168.50.3','lladdr':'cc','state':['FAILED']},
+                   {'dst':'192.168.50.4','state':['INCOMPLETE']},
+                   {'dst':'fe80::1','lladdr':'dd','state':['REACHABLE']},
+                   {'dst':'192.168.50.1','lladdr':'ee','state':['REACHABLE']}]
+        result=SimpleNamespace(returncode=0,stdout=json.dumps(neighbors))
+        with patch.object(connect.subprocess,'run',return_value=result) as runner, \
+             patch.object(connect,'ssh_ready',return_value=True) as probe:
+            self.assertEqual(connect.discover_peer('enP8p1s0','192.168.50.1'),['192.168.50.2'])
+            self.assertEqual(runner.call_args.args[0],['ip','-j','neigh','show','dev','enP8p1s0'])
+            probe.assert_called_once_with('192.168.50.2','192.168.50.1')
+
+    def test_ssh_probe_binds_jetson_wired_address(self):
+        link=Mock();context=Mock();context.__enter__=Mock(return_value=link);context.__exit__=Mock(return_value=False)
+        with patch.object(connect.socket,'socket',return_value=context):
+            self.assertTrue(connect.ssh_ready('192.168.50.2','192.168.50.1'))
+            link.bind.assert_called_once_with(('192.168.50.1',0))
+            link.connect.assert_called_once_with(('192.168.50.2',22))
+            link.connect.side_effect=OSError('unreachable')
+            self.assertFalse(connect.ssh_ready('192.168.50.2','192.168.50.1'))
+
     def test_console_autodetection_does_not_probe_robot_ports(self):
         ftdi=SimpleNamespace(device='/dev/ttyUSB0',vid=0x0403,pid=0x6001,description='FT232R')
         stm=SimpleNamespace(device='/dev/ttyACM0',vid=0x0483,pid=0x5740,description='STM32')

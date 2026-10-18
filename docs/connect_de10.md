@@ -39,7 +39,11 @@ Nama /dev/ttyUSB0 di contoh harus diganti sesuai perangkat console DE10 pada Jet
 
 1. Inventaris interface dan carrier Jetson; konfigurasi IP sementara tanpa
    menghapus IP/default route lain. Verifikasi mesin lokal Jetson sebelum mutasi.
-2. Bila HPS belum dapat diakses melalui Ethernet/SSH, pilih FT232R console
+2. Jika carrier aktif tetapi SSH alamat default belum terjangkau, periksa
+   neighbor IPv4 yang sudah dikenal pada interface kabel dan subnet /24 yang
+   sama. Hanya satu kandidat SSH yang dipilih; identitasnya tetap diperiksa
+   setelah login. Tidak memindai Wi-Fi/subnet penuh atau menebak IP di subnet
+   lain. Jika belum terjangkau, pilih FT232R console
    yang unik, atau gunakan --console. Console selalu 115200 baud.
 3. Login HPS melalui prompt biasa. Identitas ARMv7/SoCFPGA diverifikasi sebelum
    mengubah IP; kernel Tegra/aarch64 Jetson tidak diterima sebagai DE10.
@@ -123,3 +127,25 @@ pemasangan asset ulang dengan checksum yang sama. Regenerasi file mandiri
 dengan `python tools/package_de10_connect.py` bila asset sumber berubah.
 Ini pengujian software; bootstrap/login dan link fisik pada kedua board tetap
 harus dicoba oleh operator. Tidak ada klaim perangkat fisik sudah terhubung.
+
+## Jika carrier=1 tetapi console tidak terdeteksi
+
+Link Ethernet sudah terbentuk; itu belum membuktikan IP HPS, boot Linux atau
+SSH siap. Script terbaru melaporkan tahap tersebut secara terpisah. Periksa:
+
+```bash
+ip neigh show dev enP8p1s0
+lsusb
+sudo dmesg -w
+```
+
+Saat dmesg berjalan, colokkan port USB-UART console DE10 ke Jetson memakai
+kabel data dan lihat apakah driver membuat ttyUSB/ttyACM. Jangan menggunakan
+port USB-Blaster sebagai console. Jika tidak ada serial device sama sekali,
+--console /dev/ttyUSB0 tidak akan membuat perangkat itu muncul. Periksa
+konektor, kabel data dan pesan USB/driver terlebih dahulu.
+
+Jika sudah mengetahui IP HPS pada subnet lain, berikan kedua alamat yang
+sesuai dengan --hps-ip dan --jetson-ip. Jangan menganggap alamat ARP dari
+Wi-Fi sebagai alamat DE10 pada kabel. Tanpa alamat HPS yang dapat dijangkau
+atau console yang bekerja, script tidak dapat memasang konfigurasi pada HPS.

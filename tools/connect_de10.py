@@ -13,6 +13,7 @@ from pathlib import Path
 import re
 import shlex
 import shutil
+import socket
 import subprocess
 import sys
 import tarfile
@@ -43,6 +44,32 @@ def choose_interface(links,requested=None):
 def carrier(interface):
     try:return (Path('/sys/class/net')/interface/'carrier').read_text().strip()=='1'
     except OSError:return False
+
+def ssh_ready(host,source_ip,timeout=1):
+    try:
+        with socket.socket(socket.AF_INET,socket.SOCK_STREAM) as link:
+            link.settimeout(timeout)
+            link.bind((source_ip,0))
+            link.connect((host,22))
+        return True
+    except OSError:return False
+
+def discover_peer(interface,source_ip):
+    """Only inspect existing IPv4 neighbors on this wired /24, never Wi-Fi or a subnet sweep."""
+    result=subprocess.run(['ip','-j','neigh','show','dev',interface],capture_output=True,text=True)
+    if result.returncode:return []
+    try:neighbors=json.loads(result.stdout)
+    except ValueError:return []
+    network=ipaddress.IPv4Network(source_ip+'/24',strict=False)
+    candidates=[]
+    for item in neighbors:
+        try:address=ipaddress.IPv4Address(item.get('dst',''))
+        except ValueError:continue
+        states=item.get('state',[])
+        if isinstance(states,str):states=[states]
+        if address not in network or str(address)==source_ip or not item.get('lladdr') or any(s in ('FAILED','INCOMPLETE') for s in states):continue
+        if str(address) not in candidates:candidates.append(str(address))
+    return [address for address in candidates[:8] if ssh_ready(address,source_ip)]
 
 def choose_console(requested=None):
     if requested:return requested
@@ -190,12 +217,24 @@ def main():
         # commands to the GPIO inference UART or an unidentified Jetson shell.
         reachable=False
         if carrier(interface):
-            import socket
-            try:
-                with socket.create_connection((args.hps_ip,22),timeout=2):reachable=True
-            except OSError:pass
+            reachable=ssh_ready(args.hps_ip,args.jetson_ip,2)
+            if not reachable and not args.bootstrap_console:
+                print(f'Link Ethernet aktif, tetapi SSH {args.hps_ip}:22 belum dapat diakses. Memeriksa neighbor kabel, bukan Wi-Fi...',flush=True)
+                peers=discover_peer(interface,args.jetson_ip)
+                if len(peers)==1:
+                    args.hps_ip=peers[0];reachable=True
+                    print(f'Kandidat SSH kabel: {args.hps_ip}; identitas HPS akan diverifikasi setelah login.',flush=True)
+                elif peers:
+                    raise ConnectionError(f'Beberapa kandidat SSH kabel: {peers}. Pilih --hps-ip dan --jetson-ip yang sesuai; tidak memilih perangkat secara acak.')
         if args.bootstrap_console or not reachable:
-            device=choose_console(args.console)
+            try:device=choose_console(args.console)
+            except ConnectionError as exc:
+                if carrier(interface):
+                    raise ConnectionError(f'Ethernet SUDAH link (carrier=1), tetapi SSH HPS belum terjangkau dan IP HPS belum dapat diverifikasi. '
+                        f'Penyebab dapat berupa IP berbeda, SSH belum aktif, atau Linux belum boot. {exc}. '
+                        'Hubungkan port USB-UART CONSOLE DE10 ke Jetson (bukan USB-Blaster), lalu periksa lsusb dan sudo dmesg -w saat mencolok kabel. '
+                        'Carrier=1 tidak berarti Linux/SSH sudah siap.') from exc
+                raise
             print(f'Console yang dipilih: {device}',flush=True)
             console=Console(device,args.user)
             try:console.login();configure_hps(console,args)
@@ -208,7 +247,7 @@ def main():
         target=f'{args.user}@{args.hps_ip}'
         with tempfile.TemporaryDirectory(prefix='igor-ssh-') as tmp:
             control=str(Path(tmp)/'control')
-            base=['ssh','-S',control,'-o','ConnectTimeout=5','-o','ConnectionAttempts=1','-o','StrictHostKeyChecking=ask']
+            base=['ssh','-b',args.jetson_ip,'-S',control,'-o','ConnectTimeout=5','-o','ConnectionAttempts=1','-o','StrictHostKeyChecking=ask']
             gateway=None
             logfile=ROOT/('igor_connect_'+time.strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:6]+'.log')
             stream=None
