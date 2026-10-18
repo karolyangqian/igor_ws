@@ -1,0 +1,54 @@
+EXPECTED OUTPUT EXAMPLE -- RTT and script hash depend on the actual run.
+IGOR source-policy UART | /dev/ttyTHS1 | 921600 baud | TX=153B RX=11B CRC8 Maxim
+[Frame    0] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame    1] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame    2] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame    3] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame    4] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame    5] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame    6] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame    7] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame    8] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame    9] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   10] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   11] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   12] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   13] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   14] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   15] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   16] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   17] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   18] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   19] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   20] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   21] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   22] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   23] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   24] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   25] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   26] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   27] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   28] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   29] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   30] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   31] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   32] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   33] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   34] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   35] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   36] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   37] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   38] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   39] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   40] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   41] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   42] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   43] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   44] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   45] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   46] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   47] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   48] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+[Frame   49] Residuals: [-0.1796875, 0.234375, 0.1328125] | RTT: <measured> us
+Frames sent: 50 | received: 50 | dropped: 0
+Mean RTT: <measured> us (includes UART transfer)
