@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Test the DE10-Nano source-policy/Parallel8 fabric UART (921600, 8N1).
+"""Test DE10-Nano source-policy UART (9600 or 921600, matching FPGA image).
 
 Request: 5a a5 01 94 + 74 little-endian Q8.8 words + CRC8 Maxim.
 Response: 5a a5 02 06 + 3 little-endian Q8.8 words + CRC8 Maxim.
@@ -131,13 +131,13 @@ if __name__ == '__main__':
         body = bytes.fromhex('02 06') + struct.pack('<3h', -256, 0, 256)
         response = bytes.fromhex('5a a5') + body + bytes([crc8_maxim(body)])
         assert parse_response_packet(response)['ai_results'] == [-1, 0, 1]
-        print('PASS: source-policy-v1 | baud=921600 | TX=153B RX=11B | CRC8 Maxim')
+        print(f'PASS: source-policy-v1 | baud={args.baud} | TX=153B RX=11B | CRC8 Maxim')
         print(f'Script: {Path(__file__).resolve()}')
         raise SystemExit(0)
     if args.iter <= 0 or args.baud <= 0 or not math.isfinite(args.timeout) or args.timeout <= 0:
         parser.error('--iter, --baud and --timeout must be positive')
-    if args.baud != 921600:
-        parser.error('The supplied source-policy/Parallel8 image requires --baud 921600')
+    if args.baud not in (9600, 921600):
+        parser.error('Use --baud 9600 for the 9600 image or --baud 921600 for the original image')
     try:
         ok = run_uart_test(args.port, args.baud, args.iter, args.timeout)
     except (serial.SerialException, OSError) as exc:
