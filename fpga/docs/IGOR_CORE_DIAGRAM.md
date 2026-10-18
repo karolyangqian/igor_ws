@@ -5,6 +5,10 @@ melalui **File -> Open From -> Device**, atau di aplikasi draw.io desktop.
 Semua kotak, teks dan panah merupakan objek native yang dapat diedit.
 Tersedia juga [PNG](assets/igor_core_simple.png) dan [SVG](assets/igor_core_simple.svg).
 
+Diagram state seluruh core/controller tersedia dalam
+[FSM_CORE_AND_CONTROLLERS.md](FSM_CORE_AND_CONTROLLERS.md) dan
+[file draw.io 19 halaman](assets/igor_fsm_all.drawio).
+
 ![Block diagram sederhana core IGOR](assets/igor_core_simple.png)
 
 Alurnya: **74 input -> data storage -> delapan multiplier -> delapan

@@ -1,5 +1,9 @@
 # IGOR FPGA — mulai di sini
 
+[FSM core dan semua controller](docs/FSM_CORE_AND_CONTROLLERS.md) tersedia dalam
+[draw.io 19 halaman](docs/assets/igor_fsm_all.drawio), dengan kondisi transisi,
+aksi register, reset, fault/default dan sumber RTL.
+
 **Untuk langsung memprogram core Parallel8:** buka
 [bitstreams/README.md](bitstreams/README.md), lalu jalankan
 [PROGRAM_PARALLEL8.bat](bitstreams/PROGRAM_PARALLEL8.bat).
