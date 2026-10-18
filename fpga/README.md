@@ -1,5 +1,17 @@
 # IGOR FPGA — mulai di sini
 
+**Untuk langsung memprogram core Parallel8:** buka
+[bitstreams/README.md](bitstreams/README.md), lalu jalankan
+[PROGRAM_PARALLEL8.bat](bitstreams/PROGRAM_PARALLEL8.bat).
+[Project Programmer CDF](bitstreams/igor_src_policy_parallel8.cdf) sudah memilih
+SOF dan chain board aktual. **Programming fisik berhasil pada 18 Oktober 2026**;
+lihat [log Quartus](evidence/current_programming/20261018T0558125221956Z/programming.log).
+Tidak perlu kompilasi untuk memuat ulang SOF tersebut.
+
+Teknik optimasi **weights, bias, dan accumulator** dijelaskan dalam
+[docs/techniques.md](docs/techniques.md), termasuk kandidat penghematan resource
+dan syarat validasinya.
+
 Seluruh implementasi dan keluaran baru berada di folder **`igor_ws/fpga`**.
 `../src` digunakan sebagai referensi software; `../peruri-iseedesign` digunakan
 sebagai referensi rancangan dan checklist. Proyek Quartus, RTL, bobot, pin

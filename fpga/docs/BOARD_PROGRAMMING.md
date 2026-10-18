@@ -7,6 +7,22 @@ karena QSF dan ROM memakai path relatif.
 
 ## Pilih project dan protokol yang sama
 
+Untuk core cepat **6.916 siklus / 138,32 us**, gunakan paket
+[programming Parallel8](../bitstreams/README.md) dan
+[PROGRAM_PARALLEL8.bat](../bitstreams/PROGRAM_PARALLEL8.bat).
+Launcher memilih `igor_src_policy_parallel8.sof`, memeriksa checksum/build,
+dan mendeteksi posisi FPGA secara otomatis tanpa mengasumsikan urutan HPS.
+Perintah ekuivalen: `powershell -NoProfile -File fpga/scripts/program_fpga.ps1 -Project source_policy_parallel8 -AutoSelect -Program`.
+CDF siap dibuka ada di `fpga/bitstreams/igor_src_policy_parallel8.cdf`;
+CDF chain aktual disimpan sebagai `detected_board.cdf` setelah identifikasi.
+
+**Update 18 Oktober 2026, 12:58 WIB: programming Parallel8 berhasil.**
+Chain `DE-SoC [USB-1]`: `SOCVHPS` @1 bypass dan `5CSEBA6` @2 dikonfigurasi.
+Quartus melaporkan `Configuration succeeded -- 1 device(s) configured`,
+0 error / 0 warning. Bukti: [log programming](../evidence/current_programming/20261018T0558125221956Z/programming.log)
+dan [receipt](../evidence/current_programming/20261018T0558125221956Z/inspection.json).
+Ini bukti konfigurasi FPGA, belum pengujian fungsi UART atau robot fisik.
+
 | Tujuan | Project | SOF di bawah `fpga/` | UART |
 |---|---|---|---|
 | PPO mengikuti software 74→128→64→3 | [igor_src_policy.qpf](../fpga_de10_nano/src_policy/igor_src_policy.qpf) | `fpga_de10_nano/src_policy/output_files/igor_src_policy.sof` | 921600 8N1, observasi 74 nilai, CRC8 Maxim |
@@ -22,11 +38,12 @@ Arsitektur, batas klaim dan seluruh pin dijelaskan di
 
 ## Inspeksi JTAG
 
-Pemeriksaan lokal 16 Oktober 2026 mendeteksi **Quartus Prime Standard
+Riwayat pemeriksaan lokal 16 Oktober 2026 mendeteksi **Quartus Prime Standard
 25.1std.0 Build 1129** dan mengembalikan **No JTAG hardware available** untuk
-kedua project. Log aktual ada pada
+kedua project. Log historis ada pada
 [current_programming](../evidence/current_programming/). Belum ada programming,
-readback atau pengujian robot fisik baru yang dibuktikan sesi ini.
+readback atau pengujian robot fisik yang dibuktikan pada pemeriksaan tanggal itu.
+Status terbaru adalah programming Parallel8 berhasil sebagaimana receipt di atas.
 
 Nyalakan board, sambungkan USB berlabel **USB-Blaster/JTAG**, lalu jalankan:
 
