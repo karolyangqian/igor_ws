@@ -26,6 +26,25 @@ A network-only test is available without an adapter, but never reports FPGA
 success. Physical Ethernet and inference acceptance must be performed on the
 boards using the steps below; they were not available from this workstation.
 
+## One-command connection from Jetson
+
+For a standalone download, copy `tools/de10_connect.py` onto Jetson and run
+`python3 de10_connect.py`. It includes its required gateway/client assets.
+With the updated repository and prepared HPS Linux/SSH, you can also run:
+
+```bash
+python3 tools/connect_de10.py
+```
+
+The script configures temporary IPs, uses the DE10 USB console if HPS is not
+reachable, authenticates normally, deploys the gateway over SSH and runs a
+network-only UDP test. Keep its terminal open; Ctrl+C ends its gateway session.
+It verifies HPS ARMv7/SoCFPGA identity before remote configuration. Use
+`--user ACTUAL_HPS_ACCOUNT --console /dev/ttyUSBx` when defaults do not match.
+`--hardware --baud 9600 --fpga-serial HPS_LOCAL_ADAPTER` enables real inference.
+The script cannot replace a missing Linux SD image or repair NO-CARRIER wiring.
+See [full automation instructions](docs/connect_de10.md).
+
 ## 1. Initial audit and fixes
 
 | Problem found | Consequence | Implemented fix |
@@ -385,7 +404,7 @@ python fpga/verification/run_host_regression.py
 ```
 
 Latest verification: **16 Ethernet tests + 14 UART tests + 29 host/controller
-tests = 59 passing tests**. A separate real-process localhost CLI smoke test
+tests + 13 connection automation tests = 72 passing tests**. A separate real-process localhost CLI smoke test
 also passes network-only mode and confirms production rejection of mock.
 Results and source hashes are recorded in `docs/ethernet_validation/results.json`;
 the same directory contains logs. Run `python tools/verify_ethernet.py` to

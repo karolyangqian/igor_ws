@@ -6,7 +6,7 @@ import zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
 FILES=[
- 'eth_direction.md',
+ 'eth_direction.md','docs/connect_de10.md','tools/connect_de10.py','tools/de10_connect.py','tools/package_de10_connect.py','test/test_connect_de10.py',
  'src/igor_controller/igor_controller/ethernet_protocol.py',
  'src/igor_controller/igor_controller/fpga_bridge.py',
  'src/igor_controller/igor_controller/controller_node.py',

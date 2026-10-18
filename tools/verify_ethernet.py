@@ -1,4 +1,4 @@
-﻿"""Record software interoperability/regression evidence; no physical board claims."""
+"""Record software interoperability/regression evidence; no physical board claims."""
 from datetime import datetime,timezone
 import hashlib
 import json
@@ -17,6 +17,7 @@ def main():
     results={'scope':'Localhost UDP + simulated UART; native C wire/HAL tests; no physical board acceptance',
              'utc':datetime.now(timezone.utc).isoformat(),'hardware_verified':False,'suites':{}}
     suites={
+      'connection':['-m','unittest','discover','-s','test','-p','test_connect_de10.py'],
       'ethernet':['-m','unittest','discover','-s','test','-p','test_ethernet.py'],
       'uart':['-m','unittest','discover','-s','test','-p','test_uart*.py'],
       'host':['fpga/verification/run_host_regression.py']}
@@ -53,7 +54,7 @@ def main():
             server.terminate()
             try:server.wait(timeout=5)
             except subprocess.TimeoutExpired:server.kill();server.wait(timeout=5)
-    files=[ROOT/'eth_direction.md',ROOT/'test/test_ethernet.py',Path(__file__).resolve()]
+    files=[ROOT/'eth_direction.md',ROOT/'docs/connect_de10.md',ROOT/'test/test_ethernet.py',ROOT/'test/test_connect_de10.py',ROOT/'tools/connect_de10.py',ROOT/'tools/de10_connect.py',ROOT/'tools/package_de10_connect.py',Path(__file__).resolve()]
     for folder in ['src/igor_controller/igor_controller','src/igor_pipeline/hps_de10',
                    'src/igor_pipeline/protocol','src/igor_pipeline/scripts',
                    'fpga/software_integration/src/igor_controller/igor_controller']:

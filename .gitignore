@@ -7,3 +7,6 @@ __pycache__/
 install/
 log/
 .vscode/*
+/tools/.igor_de10_connect/
+
+/igor_connect_*.log
