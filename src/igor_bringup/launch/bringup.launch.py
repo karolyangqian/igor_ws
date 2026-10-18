@@ -42,8 +42,8 @@ def generate_launch_description():
 
     fpga_port_arg = DeclareLaunchArgument(
         'fpga_port',
-        default_value='/dev/fpga',
-        description='UART port for DE10-Nano FPGA accelerator'
+        default_value='udp://192.168.1.50:8080',
+        description='Gigabit Ethernet UDP or UART port for DE10-Nano FPGA accelerator (e.g. udp://192.168.1.50:8080 or udp://127.0.0.1:8080)'
     )
 
     lidar_port_arg = DeclareLaunchArgument(
