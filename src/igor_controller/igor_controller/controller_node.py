@@ -15,7 +15,7 @@ Execution Pipeline:
 7. Enforces STRICT FPGA GUARD & Ethernet/Serial FPGA Bridge:
    - Evaluates 0.1s predictive forward collision boundary (15 cm radius).
    - If barrier violated: Activates Jetson Safety Gate -> blocks FPGA inference input,
-     commands emergency stop and reverse backoff (0.15 m/s for 0.1s), then resumes target tracking.
+     commands zero wheel speeds during a 0.1s stop interval, then resumes target tracking.
 8. Dynamic speed bounds: Runtime parameter updates without keypress halts.
 9. Computes 4-wheel Mecanum RPS with JetAuto physical right-side sign inversion.
 10. Transmits motor speeds to STM32 @ 1 Mbps and publishes /igor/cmd_vel_safe & /igor/heading.
@@ -53,17 +53,17 @@ class HardwareWatchdog:
     def __init__(self, timeout_sec: float = 0.5, enabled: bool = False):
         self.timeout_sec = timeout_sec
         self.enabled = enabled
-        self.last_heartbeat = time.time()
+        self.last_heartbeat = time.monotonic()
         self.tripped = False
 
     def kick(self) -> None:
-        self.last_heartbeat = time.time()
+        self.last_heartbeat = time.monotonic()
         self.tripped = False
 
     def is_expired(self) -> bool:
         if not self.enabled:
             return False
-        if time.time() - self.last_heartbeat > self.timeout_sec:
+        if time.monotonic() - self.last_heartbeat > self.timeout_sec:
             self.tripped = True
             return True
         return False
@@ -80,7 +80,7 @@ class IgorControllerNode(Node):
         self.declare_parameter('use_fpga', False)
         self.declare_parameter('mcu_port', '/dev/ttyACM0')
         self.declare_parameter('fpga_port', '/dev/fpga')
-        self.declare_parameter('fpga_baudrate', 9600)
+        self.declare_parameter('fpga_baudrate', 921600)
         self.declare_parameter('fpga_timeout', 0.3)
         self.declare_parameter('control_rate_hz', 50.0)
         self.declare_parameter('use_mock_serial', False)
@@ -191,7 +191,7 @@ class IgorControllerNode(Node):
         self.cmd_linear_x = 0.0
         self.cmd_linear_y = 0.0
         self.cmd_angular_z = 0.0
-        self.last_cmd_time = time.time()
+        self.last_cmd_time = time.monotonic()
 
         # =====================================================================
         # Jetson Orin Nano Safety Gate State Machine
@@ -254,9 +254,31 @@ class IgorControllerNode(Node):
         return SetParametersResult(successful=True)
 
     def _scan_callback(self, msg: LaserScan) -> None:
-        """Stores latest 360 deg range array with monotonic receive timestamp."""
-        self.latest_ranges = np.array(msg.ranges, dtype=np.float32)
-        self.last_scan_time = time.time()
+        self.latest_ranges = None
+        self.last_scan_time = 0.0
+        ranges = np.asarray(msg.ranges, dtype=np.float32)
+        increment = float(msg.angle_increment)
+        stamp = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
+        age = self.get_clock().now().nanoseconds / 1e9 - stamp
+        if (len(ranges) < 64 or not math.isfinite(msg.angle_min)
+                or not math.isfinite(increment) or increment == 0
+                or abs(abs(increment)*len(ranges)-2*math.pi) > max(.04, 1.5*abs(increment))
+                or not -.1 <= age < .5 or np.any(np.isnan(ranges))
+                or np.any(np.isneginf(ranges)) or np.any(ranges <= .05)):
+            return
+        self.latest_ranges = ranges
+        self.scan_angle_min = float(msg.angle_min)
+        self.scan_angle_end = float(msg.angle_min) + len(ranges)*increment
+        self.last_scan_time = time.monotonic()
+
+    def _stop_for_fault(self, reason):
+        sent = self.mcu.send_motor_speeds(0., 0., 0., 0.)
+        self.pub_safe_twist.publish(Twist())
+        self.pub_safety_alert.publish(Bool(data=True))
+        self.pub_diag.publish(String(data=json.dumps({
+            'fault': reason, 'safety_permit': False, 'fpga': self.use_fpga,
+            'mock': self.use_mock_serial, 'safe': [0.,0.,0.], 'rps': [0.]*4,
+            'motor_tx_confirmed': sent is True})))
 
     def _cmd_vel_callback(self, msg: Twist) -> None:
         """Stores commanded velocities and applies dynamic speed scaling."""
@@ -268,7 +290,7 @@ class IgorControllerNode(Node):
         self.cmd_linear_x = float(np.clip(msg.linear.x * scale, -0.15, max_vx))
         self.cmd_linear_y = float(np.clip(msg.linear.y * scale, -max_vy, max_vy))
         self.cmd_angular_z = float(np.clip(msg.angular.z * scale, -max_wz, max_wz))
-        self.last_cmd_time = time.time()
+        self.last_cmd_time = time.monotonic()
         self.watchdog.kick()
 
     def check_forward_collision_risk(
@@ -312,8 +334,21 @@ class IgorControllerNode(Node):
 
     def _control_loop(self) -> None:
         """Main 50 Hz control execution loop."""
-        now = time.time()
+        now = time.monotonic()
         dt = 1.0 / self.control_rate_hz
+
+        # Missing/stale data cannot be replaced by a clear-space observation.
+        if not 0 <= now-self.last_cmd_time < .5:
+            self._stop_for_fault('COMMAND_STALE')
+            return
+        if not self.use_mock_serial and (self.latest_ranges is None or
+                not 0 <= now-self.last_scan_time <= self.freshness_timeout_sec):
+            self._stop_for_fault('SCAN_MISSING_OR_STALE')
+            return
+        command = np.array([self.cmd_linear_x,self.cmd_linear_y,self.cmd_angular_z])
+        if not np.all(np.isfinite(command)):
+            self._stop_for_fault('COMMAND_INVALID')
+            return
 
         # Watchdog timeout check
         if self.watchdog.is_expired():
@@ -347,7 +382,7 @@ class IgorControllerNode(Node):
 
         if lidar_fresh:
             beams_m = self.lidar_subsampler.subsample_from_laserscan(
-                self.latest_ranges, angle_min=0.0, angle_max=2.0 * np.pi
+                self.latest_ranges, angle_min=self.scan_angle_min, angle_max=self.scan_angle_end
             )
             beams_norm = np.clip(beams_m / 3.50, 0.0, 1.0).astype(np.float32)
             d_min = float(np.min(beams_m))
@@ -359,6 +394,12 @@ class IgorControllerNode(Node):
 
         # 2. Process IMU Telemetry & Heading
         (ax, ay, az), (gx, gy, gz), imu_t = self.mcu.get_latest_imu()
+        if not np.all(np.isfinite([ax,ay,az,gx,gy,gz])):
+            self._stop_for_fault('IMU_INVALID')
+            return
+        if not self.use_mock_serial and (imu_t <= 0 or not 0 <= time.monotonic()-imu_t <= self.freshness_timeout_sec):
+            self._stop_for_fault('IMU_MISSING_OR_STALE')
+            return
         imu_age = now - imu_t if imu_t > 0 else 0.0
         if imu_age > self.freshness_timeout_sec and imu_t > 0:
             self.stale_sensor_drops += 1
@@ -392,6 +433,7 @@ class IgorControllerNode(Node):
         obs[71] = float(self.cmd_linear_y) / 0.50
         obs[72] = float(self.cmd_angular_z) / 2.0
         obs[73] = norm_delta_theta
+        obs[64:70] = np.clip(obs[64:70], -1., 1.)
 
         v_cmd = np.array([self.cmd_linear_x, self.cmd_linear_y, self.cmd_angular_z], dtype=np.float32)
 
@@ -399,15 +441,15 @@ class IgorControllerNode(Node):
         # 4. SAFETY GATE RECOVERY FSM
         # =====================================================================
         if self.safety_gate_active:
-            # We are in active emergency backoff: reverse for 0.1s with velocity 0.15 m/s
+            # Hold zero wheel speeds while the stop interval is active
             if (now - self.safety_reverse_start_time) < self.reverse_duration:
-                # Disallow FPGA input; execute reverse backoff
-                v_safe = np.array([-self.reverse_speed, 0.0, 0.0], dtype=np.float32)
+                # Disallow FPGA input; hold STOP
+                v_safe = np.zeros(3, dtype=np.float32)
                 self.pub_safety_alert.publish(Bool(data=True))
             else:
                 # Recovery duration elapsed: deactivate safety gate and resume normal inference
                 self.safety_gate_active = False
-                self.get_logger().info("Safety Gate: Recovery backoff complete. Resuming inference toward former target.")
+                self.get_logger().info("Safety Gate: Stop interval complete. Resuming inference toward former target.")
                 v_safe = np.zeros(3, dtype=np.float32)
                 self.pub_safety_alert.publish(Bool(data=False))
         else:
@@ -441,7 +483,8 @@ class IgorControllerNode(Node):
                         cand_vy=float(v_blended[1]),
                         cand_omega=float(v_blended[2]),
                         robot_pose=(0.0, 0.0, 0.0),
-                        obstacles=None,
+                        obstacles=[{"x":float(r*np.cos(a)), "y":float(r*np.sin(a)), "radius":0.}
+                                   for r,a in zip(beams_m,np.linspace(-np.pi/2,np.pi/2,64)) if r<3.50],
                         allowed_max_vx=allowed_max_vx
                     )
                     cand_safe = np.array([safe_vx, safe_vy, safe_wz], dtype=np.float32)
@@ -459,15 +502,15 @@ class IgorControllerNode(Node):
                 )
 
                 if collision_risk:
-                    # Trigger Safety Gate: block FPGA input, stop, start 0.1s reverse backoff
+                    # Trigger Safety Gate: block FPGA input and hold STOP
                     self.safety_gate_active = True
                     self.safety_reverse_start_time = now
                     self.safety_events_count += 1
                     self.get_logger().warn(
                         f"Safety Gate Tripped! Obstacle in 0.1s path (< {self.safety_radius*100:.0f}cm). "
-                        f"Stalling FPGA and reversing at {self.reverse_speed} m/s for {self.reverse_duration}s."
+                        f"Stopping all wheels for {self.reverse_duration}s."
                     )
-                    v_safe = np.array([-self.reverse_speed, 0.0, 0.0], dtype=np.float32)
+                    v_safe = np.zeros(3, dtype=np.float32)
                     self.pub_safety_alert.publish(Bool(data=True))
                 else:
                     v_safe = cand_safe
@@ -494,7 +537,7 @@ class IgorControllerNode(Node):
                     self.safety_gate_active = True
                     self.safety_reverse_start_time = now
                     self.safety_events_count += 1
-                    v_safe = np.array([-self.reverse_speed, 0.0, 0.0], dtype=np.float32)
+                    v_safe = np.zeros(3, dtype=np.float32)
                     self.pub_safety_alert.publish(Bool(data=True))
                 else:
                     v_safe = cand_safe
@@ -503,6 +546,20 @@ class IgorControllerNode(Node):
         # 6. Inverse Kinematics for JetAuto Mecanum Chassis
         # Note: Right motors (FR M3, RR M4) have mechanical sign inversion
         # =====================================================================
+        completed = time.monotonic()
+        if not np.all(np.isfinite(v_safe)):
+            self._stop_for_fault('CONTROLLER_OUTPUT_INVALID')
+            return
+        if not 0 <= completed-self.last_cmd_time < .5:
+            self._stop_for_fault('COMMAND_STALE_AFTER_COMPUTE')
+            return
+        if not self.use_mock_serial and (not 0 <= completed-self.last_scan_time <= self.freshness_timeout_sec
+                or not 0 <= completed-imu_t <= self.freshness_timeout_sec):
+            self._stop_for_fault('SENSOR_STALE_AFTER_COMPUTE')
+            return
+        if not np.any(command) or d_min <= .22 or self.safety_gate_active:
+            v_safe = np.zeros(3, dtype=np.float32)
+        v_safe = np.clip(v_safe, [-.15,-.50,-2.], [.60,.50,2.])
         linear_x, linear_y, angular_z = float(v_safe[0]), float(v_safe[1]), float(v_safe[2])
         vp = angular_z * (self.kinematics.wheelbase + self.kinematics.track_width) / 2.0
         circ = math.pi * self.kinematics.wheel_diameter
@@ -518,7 +575,9 @@ class IgorControllerNode(Node):
         rps4 = np.clip(v4 / circ, -self.kinematics.max_rps, self.kinematics.max_rps)
 
         # Transmit motor speed packet to STM32
-        self.mcu.send_motor_speeds(rps1, rps2, rps3, rps4)
+        if not self.mcu.send_motor_speeds(rps1, rps2, rps3, rps4):
+            self._stop_for_fault('MCU_TRANSPORT')
+            return
 
         # Publish Safe Twist
         twist_out = Twist()
@@ -536,6 +595,7 @@ class IgorControllerNode(Node):
         if self._diag_cnt % 10 == 0:
             diag_data = {
                 "algo": self.algorithm,
+                "safety_permit": True, "mock": self.use_mock_serial,
                 "fpga": self.use_fpga,
                 "d_min": round(d_min, 3),
                 "cmd": [round(float(c), 3) for c in v_cmd],
@@ -567,6 +627,7 @@ class IgorControllerNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
+    node = None
     try:
         node = IgorControllerNode()
         rclpy.spin(node)
@@ -575,6 +636,8 @@ def main(args=None):
     except KeyboardInterrupt:
         pass
     finally:
+        if node is not None:
+            node.destroy_node()
         if rclpy.ok():
             rclpy.shutdown()
 

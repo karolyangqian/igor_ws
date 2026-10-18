@@ -13,8 +13,8 @@ Usage:
 
 import os
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, LogInfo
-from launch.conditions import IfCondition
+from launch.actions import DeclareLaunchArgument, LogInfo, GroupAction
+from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
@@ -42,8 +42,25 @@ def generate_launch_description():
 
     fpga_port_arg = DeclareLaunchArgument(
         'fpga_port',
-        default_value='udp://192.168.1.50:8080',
-        description='Gigabit Ethernet UDP or UART port for DE10-Nano FPGA accelerator (e.g. udp://192.168.1.50:8080 or udp://127.0.0.1:8080)'
+        default_value='udp://192.168.50.2:8080',
+        description='Ethernet UDP or UART endpoint for DE10-Nano (default matches eth_direction.md)'
+    )
+
+    fpga_baudrate_arg = DeclareLaunchArgument(
+        'fpga_baudrate',
+        default_value='921600',
+        description='Direct UART baud rate; must match the programmed FPGA image'
+    )
+
+    fpga_timeout_arg = DeclareLaunchArgument(
+        'fpga_timeout',
+        default_value='0.3',
+        description='FPGA transaction deadline in seconds; freshness guards still apply'
+    )
+
+    freshness_arg = DeclareLaunchArgument(
+        'sensor_freshness_timeout_ms', default_value='25.0',
+        description='Maximum sensor age; supervised timed test uses 150 ms for measured 74 ms scans'
     )
 
     lidar_port_arg = DeclareLaunchArgument(
@@ -81,6 +98,8 @@ def generate_launch_description():
     use_fpga = LaunchConfiguration('use_fpga')
     mcu_port = LaunchConfiguration('mcu_port')
     fpga_port = LaunchConfiguration('fpga_port')
+    fpga_baudrate = LaunchConfiguration('fpga_baudrate')
+    fpga_timeout = LaunchConfiguration('fpga_timeout')
     lidar_port = LaunchConfiguration('lidar_port')
     launch_lidar = LaunchConfiguration('launch_lidar')
     launch_planner = LaunchConfiguration('launch_planner')
@@ -88,7 +107,22 @@ def generate_launch_description():
     control_rate_hz = LaunchConfiguration('control_rate_hz')
 
     # RPLiDAR Driver Node
-    rplidar_node = Node(
+    # Physical scans use the installed SLAMTEC driver verified on this robot.
+    # The custom synthetic publisher is selected only in explicit mock mode.
+    physical_lidar_node = Node(
+        package='rplidar_ros',
+        executable='rplidar_node',
+        name='rplidar_node',
+        output='screen',
+        parameters=[{
+            'serial_port': lidar_port,
+            'serial_baudrate': 115200,
+            'frame_id': 'laser',
+            'angle_compensate': True,
+        }],
+        condition=UnlessCondition(use_mock_serial)
+    )
+    mock_lidar_node = Node(
         package='igor_bringup',
         executable='rplidar_driver',
         name='rplidar_driver_node',
@@ -97,8 +131,12 @@ def generate_launch_description():
             'serial_port': lidar_port,
             'serial_baudrate': 115200,
             'frame_id': 'laser',
-            'mock': use_mock_serial
+            'mock': True
         }],
+        condition=IfCondition(use_mock_serial)
+    )
+    rplidar_node = GroupAction(
+        actions=[physical_lidar_node, mock_lidar_node],
         condition=IfCondition(launch_lidar)
     )
 
@@ -113,6 +151,9 @@ def generate_launch_description():
             'use_fpga': use_fpga,
             'mcu_port': mcu_port,
             'fpga_port': fpga_port,
+            'fpga_baudrate': fpga_baudrate,
+            'fpga_timeout': fpga_timeout,
+            'sensor_freshness_timeout_ms': LaunchConfiguration('sensor_freshness_timeout_ms'),
             'control_rate_hz': control_rate_hz,
             'use_mock_serial': use_mock_serial
         }]
@@ -140,6 +181,9 @@ def generate_launch_description():
         use_fpga_arg,
         mcu_port_arg,
         fpga_port_arg,
+        fpga_baudrate_arg,
+        fpga_timeout_arg,
+        freshness_arg,
         lidar_port_arg,
         launch_lidar_arg,
         launch_planner_arg,

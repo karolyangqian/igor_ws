@@ -1,3 +1,12 @@
+> **Current Ethernet setup:** follow [eth_direction.md](eth_direction.md) and
+> [connection instructions](docs/connect_de10.md). The supported endpoint is
+> `udp://192.168.50.2:8080`, with Jetson `192.168.50.1/24` on its actual wired
+> interface (`enP8p1s0` on this Jetson). Older examples below using
+> `192.168.1.50`, daemon `--hw`/`--mock`, or an HPS DDR/DMA bridge are obsolete.
+> The deployed path requires HPS Linux plus an HPS-local USB-to-3.3 V UART
+> adapter to the FPGA. Programming a SOF alone does not start Ethernet.
+> See [Jetson diagnostic results](docs/jetson_de10_diagnosis.md).
+
 # Project IGOR: Jetson Orin Nano <-> DE10-Nano FPGA Acceleration Pipeline Documentation (`pipeline_docs.md`)
 
 This document provides complete technical documentation for the implementation of the **Gigabit Ethernet & Serial AI Acceleration Pipeline** described in [`pipeline_plan.md`](file:///home/hadynata/vs-code-data/Python/igor_ws/pipeline_plan.md), [`pipeline_architecture.md`](file:///home/hadynata/vs-code-data/Python/igor_ws/pipeline_architecture.md), and [`global_planner_architecture.md`](file:///home/hadynata/vs-code-data/Python/igor_ws/global_planner_architecture.md).

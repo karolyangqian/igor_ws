@@ -1,3 +1,17 @@
+> **Verified direct FPGA link:** Jetson `/dev/ttyTHS1` at **921600 baud**
+> passed **98/98 physical inference checks** (mean 4.59 ms, max 5.92 ms).
+> See [tested UART run instructions](docs/direct_uart_runbook.md).
+> Keep KEY1 released and reset with KEY0 to clear the E-stop latch.
+
+> **Current Ethernet setup:** follow [eth_direction.md](eth_direction.md) and
+> [connection instructions](docs/connect_de10.md). The supported endpoint is
+> `udp://192.168.50.2:8080`, with Jetson `192.168.50.1/24` on its actual wired
+> interface (`enP8p1s0` on this Jetson). Older examples below using
+> `192.168.1.50`, daemon `--hw`/`--mock`, or an HPS DDR/DMA bridge are obsolete.
+> The deployed path requires HPS Linux plus an HPS-local USB-to-3.3 V UART
+> adapter to the FPGA. Programming a SOF alone does not start Ethernet.
+> See [Jetson diagnostic results](docs/jetson_de10_diagnosis.md).
+
 # IGOR: software, RTL terverifikasi, dan DE10-Nano
 
 Seluruh hasil implementasi ada di folder **`./fpga`** pada root workspace.

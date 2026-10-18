@@ -1,7 +1,7 @@
 {
   "scope": "software fixtures; no physical hardware",
   "sha256": {
-    "software_integration/src/igor_controller/igor_controller/fpga_bridge.py": "06cb8d5df6a31680ab9d2e2cad8bb6bb1a4561e4087db9b68f2653354143a3cc",
+    "software_integration/src/igor_controller/igor_controller/fpga_bridge.py": "ee89e445fa424742202277811b38ae91b1a0d8cce20233d890b2f281ace13852",
     "software_integration/src/igor_controller/igor_controller/controller_node.py": "2ebe5e4e3ccefe93ae3a7242e42644d2b02bb1d3277bd6127b4b9875f77b758b",
     "software_integration/src/igor_controller/igor_controller/mcu_driver.py": "4a5c5699952083afd96047fc9a4adf73693931da889a5eae18d04ef358249c6b",
     "software_integration/src/igor_navigation/igor_navigation/controllers/cbf_safety_filter.py": "9fa53953647c9e05e9db4c7e18febe69f174ec0caa0fe065456ba0ec61b7991c",
