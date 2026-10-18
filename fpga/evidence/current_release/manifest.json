@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_utc": "2026-10-18T06:00:57.801693+00:00",
+  "generated_utc": "2026-10-18T06:08:55.826616+00:00",
   "scope": "FPGA simulation/build/handoff and user-supplied ASIC evidence; no physical FPGA/robot acceptance or new ASIC sign-off",
   "external_evidence": {
     "gatelevel_test_results": {
@@ -274,6 +274,10 @@
     "docs/TECHNICAL_REPORT.md": {
       "sha256": "d839c5137ce1a1ca47f6a3f8ce22636f9ad649fabde79387fe2dc4cf832375f9",
       "bytes": 4523
+    },
+    "docs/techniques.md": {
+      "sha256": "b7d3fd7438ac6d5993a6a61c566a806c500f6efc84f093b74e3fe8d0e6993620",
+      "bytes": 7035
     },
     "docs/TINYTAPEOUT.md": {
       "sha256": "68d38e3137d34c18d4dce0047ee6b81a5f32a8021ddb2092553c8fc9c195bdd5",
@@ -2728,7 +2732,7 @@
       "bytes": 1144
     },
     "evidence/current_acceptance/audit.json": {
-      "sha256": "def847f060b73bb4c8a577165ab380126edd3c614f4e9d78eda0dccc1fcc112c",
+      "sha256": "66796fd548bdb0b9f588bd72296919974a7c1db2b511f6f917469ce34e8b65f3",
       "bytes": 3877
     },
     "evidence/current_board_wrapper/board.gtkw": {
@@ -3884,8 +3888,8 @@
       "bytes": 5080
     },
     "README.md": {
-      "sha256": "1121e95e8550870241b7ac9dbe32305068b2ae3180ca39ca8442b0553c36d664",
-      "bytes": 15175
+      "sha256": "1808911670e2e136f0d9c5744d0c4c6c7c5fca856727d37a5aa7fbe1ae8a5f35",
+      "bytes": 15353
     },
     "reference_model/neural_reference.py": {
       "sha256": "88b45034827c71b00ca049b2284a1be64e5f34c070216edae3af7ebc3df1a347",
