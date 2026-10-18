@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Test the DE10-Nano source-policy/Parallel8 fabric UART (921600, 8N1).
 
 Request: 5a a5 01 94 + 74 little-endian Q8.8 words + CRC8 Maxim.
@@ -10,6 +10,8 @@ import argparse
 import math
 import struct
 import time
+import hashlib
+from pathlib import Path
 
 import serial
 
@@ -78,6 +80,8 @@ def read_response(ser, timeout):
 
 
 def run_uart_test(port, baud, iterations, timeout=1.0):
+    source = Path(__file__).resolve()
+    print(f'Script: {source} | SHA256: {hashlib.sha256(source.read_bytes()).hexdigest()}')
     print(f'IGOR source-policy UART | {port} | {baud} baud | TX=153B RX=11B CRC8 Maxim')
     obs = [0.8] * 64 + [0.0] * 10
     received = 0
@@ -116,7 +120,20 @@ if __name__ == '__main__':
     parser.add_argument('--baud', type=int, default=921600)
     parser.add_argument('--iter', type=int, default=50)
     parser.add_argument('--timeout', type=float, default=1.0)
+    parser.add_argument('--self-check', action='store_true',
+                        help='Verify protocol locally without opening a UART')
     args = parser.parse_args()
+    if args.self_check:
+        assert crc8_maxim(b'123456789') == 0xa1
+        packet = build_sensor_packet(0, [0.8] * 64 + [0.] * 10)
+        assert len(packet) == 153 and packet[:4] == bytes.fromhex('5a a5 01 94')
+        assert packet[-1] == crc8_maxim(packet[2:-1])
+        body = bytes.fromhex('02 06') + struct.pack('<3h', -256, 0, 256)
+        response = bytes.fromhex('5a a5') + body + bytes([crc8_maxim(body)])
+        assert parse_response_packet(response)['ai_results'] == [-1, 0, 1]
+        print('PASS: source-policy-v1 | baud=921600 | TX=153B RX=11B | CRC8 Maxim')
+        print(f'Script: {Path(__file__).resolve()}')
+        raise SystemExit(0)
     if args.iter <= 0 or args.baud <= 0 or not math.isfinite(args.timeout) or args.timeout <= 0:
         parser.error('--iter, --baud and --timeout must be positive')
     if args.baud != 921600:
