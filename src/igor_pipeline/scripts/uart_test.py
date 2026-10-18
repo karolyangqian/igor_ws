@@ -1,231 +1,130 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
+"""Test the DE10-Nano source-policy/Parallel8 fabric UART (921600, 8N1).
+
+Request: 5a a5 01 94 + 74 little-endian Q8.8 words + CRC8 Maxim.
+Response: 5a a5 02 06 + 3 little-endian Q8.8 words + CRC8 Maxim.
+The CRC covers opcode, length and payload. Protocol V2/CRC32 is for the
+HPS/UDP service, not this FPGA image. This test does not drive motors.
 """
-uart_test.py - UART Round-Trip Test for Project IGOR
-Jetson Orin Nano <-> DE10-Nano HPS via physical UART
-
-Usage:
-    python3 uart_test.py [--port /dev/ttyTHS0] [--baud 115200] [--iter 50]
-
-Protocol:
-    Serializes SensorPacketV2 and InferenceResponsePacketV2
-    over a raw UART byte stream using the same CRC32 framing
-    defined in protocol_v2.h.
-
-Packet layout (SensorPacketV2, little-endian):
-    magic           : uint32  (0x49474F52)
-    frame_id        : uint32
-    timestamp_ns    : uint64
-    linear_velocity : 3 x float32
-    angular_velocity: 3 x float32
-    sensor_data_len : uint32  (fixed 74)
-    sensor_data     : 74 x float32
-    q8_8_data       : 74 x int16
-    crc32           : uint32
-
-Packet layout (InferenceResponsePacketV2, little-endian):
-    magic           : uint32
-    frame_id        : uint32
-    timestamp_ns    : uint64
-    status_code     : uint32
-    num_outputs     : uint32  (fixed 3)
-    ai_results      : 3 x float32
-    q8_8_results    : 3 x int16
-    execution_cycles: uint32
-    crc32           : uint32
-"""
-
-import sys
-import time
-import struct
 import argparse
-import serial  # pip install pyserial
+import math
+import struct
+import time
 
-# ---------------------------------------------------------------------------
-# Protocol constants (mirrors protocol_v2.h)
-# ---------------------------------------------------------------------------
-PROTOCOL_MAGIC    = 0x49474F52  # "IGOR"
-IGOR_OBS_DIM      = 74
-IGOR_ACTION_DIM   = 3
+import serial
 
-# Struct format strings (little-endian, packed)
-# SensorPacketV2
-_SENSOR_FMT = "<IIQ3f3fI74f74h"                    # everything before crc32
-_SENSOR_PKT_FMT = _SENSOR_FMT + "I"               # full packet with crc32
-SENSOR_PKT_SIZE = struct.calcsize(_SENSOR_PKT_FMT)
-
-# InferenceResponsePacketV2
-_RESP_FMT   = "<IIQQII3f3hI"                       # everything before crc32
-_RESP_PKT_FMT = _RESP_FMT + "I"                   # full packet with crc32
-RESP_PKT_SIZE = struct.calcsize(_RESP_PKT_FMT)
-
-# Correct InferenceResponsePacketV2 layout:
-#   magic(4) frame_id(4) timestamp_ns(8) status_code(4) num_outputs(4)
-#   ai_results(3*4) q8_8_results(3*2) _pad(2) execution_cycles(4) crc32(4)
-_RESP_BODY_FMT = "<IIQii3f3hxxi"      # body before crc32 (with alignment padding)
-_RESP_FULL_FMT = _RESP_BODY_FMT + "I"
-RESP_PKT_SIZE  = struct.calcsize(_RESP_FULL_FMT)
+SENSOR_PKT_SIZE = 153
+RESP_PKT_SIZE = 11
+RESPONSE_HEADER = bytes.fromhex('5a a5 02 06')
 
 
-def crc32_ieee(data: bytes) -> int:
-    """Standard CRC-32 (IEEE 802.3 / 0xEDB88320 polynomial), matching protocol_v2.h."""
-    crc = 0xFFFFFFFF
-    for b in data:
-        crc ^= b
+def crc8_maxim(data):
+    crc = 0
+    for byte in data:
+        crc ^= byte
         for _ in range(8):
-            crc = (crc >> 1) ^ (0xEDB88320 if (crc & 1) else 0)
-    return (~crc) & 0xFFFFFFFF
+            crc = (crc >> 1) ^ (0x8c if crc & 1 else 0)
+    return crc
 
 
-def build_sensor_packet(frame_id: int, obs: list[float],
-                        lin_vel=(0.4, 0.0, 0.0),
-                        ang_vel=(0.0, 0.0, 0.1)) -> bytes:
-    """Build a binary SensorPacketV2 ready for UART TX."""
-    ts_ns = int(time.monotonic_ns())
-    q8_8 = [max(-32768, min(32767, int(round(v * 256.0)))) for v in obs]
-
-    body = struct.pack(
-        _SENSOR_FMT,
-        PROTOCOL_MAGIC, frame_id, ts_ns,
-        *lin_vel, *ang_vel,
-        IGOR_OBS_DIM,
-        *obs,
-        *q8_8,
-    )
-    crc = crc32_ieee(body)
-    return body + struct.pack("<I", crc)
+def build_sensor_packet(frame_id, obs):
+    # frame_id is a local counter; the fabric protocol has no sequence field.
+    if len(obs) != 74:
+        raise ValueError('Expected 74 observations')
+    for i, value in enumerate(obs):
+        if not math.isfinite(value) or not (0 if i < 64 else -1) <= value <= 1:
+            raise ValueError(f'Observation {i} is outside the FPGA normalized domain')
+    payload = struct.pack('<74h', *(round(v * 256) for v in obs))
+    body = bytes([1, len(payload)]) + payload
+    return bytes.fromhex('5a a5') + body + bytes([crc8_maxim(body)])
 
 
-def parse_response_packet(raw: bytes):
-    """
-    Unpack an InferenceResponsePacketV2 from raw bytes.
-    Returns (magic, frame_id, ts_ns, status, num_out, ai_results, q8_8_results,
-             execution_cycles, crc32) or raises ValueError on bad CRC / magic.
-    """
-    if len(raw) < RESP_PKT_SIZE:
-        raise ValueError(f"Response too short: {len(raw)} bytes (expected {RESP_PKT_SIZE})")
-
-    # Validate CRC over everything before the last 4 bytes
-    body = raw[:-4]
-    expected_crc = crc32_ieee(body)
-    (rx_crc,) = struct.unpack_from("<I", raw, RESP_PKT_SIZE - 4)
-
-    if rx_crc != expected_crc:
-        raise ValueError(f"CRC mismatch: got 0x{rx_crc:08X}, expected 0x{expected_crc:08X}")
-
-    fields = struct.unpack_from(_RESP_BODY_FMT, raw, 0)
-    (magic, frame_id, ts_ns, status_code, num_outputs,
-     ai0, ai1, ai2, q0, q1, q2, exec_cycles) = fields
-
-    if magic != PROTOCOL_MAGIC:
-        raise ValueError(f"Bad magic: 0x{magic:08X}")
-
-    return {
-        "frame_id":        frame_id,
-        "timestamp_ns":    ts_ns,
-        "status_code":     status_code,
-        "num_outputs":     num_outputs,
-        "ai_results":      [ai0, ai1, ai2],
-        "q8_8_results":    [q0, q1, q2],
-        "execution_cycles": exec_cycles,
-    }
+def parse_response_packet(raw):
+    if len(raw) != RESP_PKT_SIZE:
+        raise ValueError(f'Expected 11 response bytes, got {len(raw)}')
+    if raw[:4] != RESPONSE_HEADER:
+        raise ValueError(f'Bad response header: {raw[:4].hex(" ")}')
+    if raw[-1] != crc8_maxim(raw[2:-1]):
+        raise ValueError(f'CRC8 mismatch: {raw.hex(" ")}')
+    values = struct.unpack('<3h', raw[4:10])
+    if any(abs(v) > 256 for v in values):
+        raise ValueError(f'Residual outside [-1, 1]: {values}')
+    return {'q8_8_results': list(values), 'ai_results': [v / 256 for v in values]}
 
 
-def run_uart_test(port: str, baud: int, iterations: int):
-    print("=" * 66)
-    print("  Project IGOR - UART Round-Trip Test")
-    print(f"  Port: {port} | Baud: {baud} | Iterations: {iterations}")
-    print("=" * 66)
+def read_response(ser, timeout):
+    """Resynchronize after noise and collect fragmented reads within one deadline."""
+    deadline = time.monotonic() + timeout
+    pending = bytearray()
+    diagnostic = bytearray()
+    while time.monotonic() < deadline:
+        ser.timeout = min(0.02, max(0, deadline - time.monotonic()))
+        chunk = ser.read(1)
+        if not chunk:
+            continue
+        diagnostic.extend(chunk)
+        pending.extend(chunk)
+        while pending and not RESPONSE_HEADER.startswith(pending[:4]):
+            del pending[0]
+        if len(pending) == RESP_PKT_SIZE:
+            try:
+                return parse_response_packet(bytes(pending))
+            except ValueError:
+                del pending[0]
+                while pending and not RESPONSE_HEADER.startswith(pending[:4]):
+                    del pending[0]
+    raise ValueError(f'Timeout/no valid CRC8 response; received {len(diagnostic)} bytes; '
+                     f'RX first 64 bytes: {diagnostic[:64].hex(" ") or "(none)"}')
 
-    # Synthetic 74-D observation: 64 clear LiDAR rays + 10 zeros
-    obs = [0.8] * 64 + [0.0] * (IGOR_OBS_DIM - 64)
 
-    try:
-        ser = serial.Serial(
-            port=port,
-            baudrate=baud,
-            bytesize=serial.EIGHTBITS,
-            parity=serial.PARITY_NONE,
-            stopbits=serial.STOPBITS_ONE,
-            timeout=1.0,           # 1-second read timeout per byte
-        )
-    except serial.SerialException as e:
-        print(f"[ERROR] Cannot open {port}: {e}")
-        sys.exit(1)
-
-    print(f"[INFO] Opened {port} at {baud} baud. Packet size TX={SENSOR_PKT_SIZE}B RX={RESP_PKT_SIZE}B")
-    print()
-
-    sent = 0
+def run_uart_test(port, baud, iterations, timeout=1.0):
+    print(f'IGOR source-policy UART | {port} | {baud} baud | TX=153B RX=11B CRC8 Maxim')
+    obs = [0.8] * 64 + [0.0] * 10
     received = 0
-    dropped = 0
-    latencies_us = []
-
-    for frame_id in range(iterations):
-        pkt = build_sensor_packet(frame_id, obs)
-
-        t0 = time.perf_counter()
-        ser.reset_input_buffer()
-        ser.write(pkt)
-        ser.flush()
-        sent += 1
-
-        # Read exact number of response bytes
-        raw_resp = ser.read(RESP_PKT_SIZE)
-        t1 = time.perf_counter()
-        rtt_us = (t1 - t0) * 1e6
-
-        if len(raw_resp) < RESP_PKT_SIZE:
-            print(f"[Frame {frame_id:4d}] TIMEOUT — only {len(raw_resp)}/{RESP_PKT_SIZE} bytes received")
-            dropped += 1
-            continue
-
-        try:
-            resp = parse_response_packet(raw_resp)
-        except ValueError as e:
-            print(f"[Frame {frame_id:4d}] PARSE ERROR — {e}")
-            dropped += 1
-            continue
-
-        received += 1
-        latencies_us.append(rtt_us)
-
-        if frame_id % 10 == 0 or frame_id == iterations - 1:
-            ai = resp["ai_results"]
-            print(
-                f"[Frame {frame_id:4d}] "
-                f"Actions: [{ai[0]:+.4f}, {ai[1]:+.4f}, {ai[2]:+.4f}] | "
-                f"Status: 0x{resp['status_code']:08X} | "
-                f"Cycles: {resp['execution_cycles']} | "
-                f"RTT: {rtt_us:.0f} us"
-            )
-
-    ser.close()
-
-    print()
-    print("--- UART Test Summary ---")
-    print(f"Frames Sent:     {sent}")
-    print(f"Frames Received: {received}")
-    print(f"Frames Dropped:  {dropped}")
-    print(f"Packet Loss:     {dropped / sent * 100:.1f}%")
-    if latencies_us:
-        import statistics
-        print(f"Mean RTT:        {statistics.mean(latencies_us):.0f} us")
-        print(f"Median RTT:      {statistics.median(latencies_us):.0f} us")
-        print(f"Min RTT:         {min(latencies_us):.0f} us")
-        print(f"Max RTT:         {max(latencies_us):.0f} us")
-
-    return dropped == 0
+    latencies = []
+    with serial.Serial(port, baud, timeout=0.02, write_timeout=timeout,
+                       bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE,
+                       stopbits=serial.STOPBITS_ONE, xonxoff=False,
+                       rtscts=False, dsrdtr=False) as ser:
+        for frame_id in range(iterations):
+            ser.reset_input_buffer()
+            packet = build_sensor_packet(frame_id, obs)
+            start = time.perf_counter()
+            if ser.write(packet) != len(packet):
+                raise serial.SerialException('Incomplete UART write')
+            ser.flush()
+            try:
+                response = read_response(ser, timeout)
+            except ValueError as exc:
+                print(f'[Frame {frame_id:4d}] FAIL: {exc}')
+                continue
+            received += 1
+            elapsed = (time.perf_counter() - start) * 1e6
+            latencies.append(elapsed)
+            print(f'[Frame {frame_id:4d}] Residuals: {response["ai_results"]} | RTT: {elapsed:.0f} us')
+    print(f'Frames sent: {iterations} | received: {received} | dropped: {iterations-received}')
+    if latencies:
+        print(f'Mean RTT: {sum(latencies)/len(latencies):.0f} us (includes UART transfer)')
+    if received != iterations:
+        print('Check image/baud match and LED7:4 error code. Release KEY1 and press/release KEY0.')
+    return received == iterations
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="UART round-trip test for Project IGOR")
-    parser.add_argument("--port",  default="/dev/ttyTHS1",
-                        help="UART device on Jetson (default: /dev/ttyTHS1)")
-    parser.add_argument("--baud",  default=115200, type=int,
-                        help="Baud rate (default: 115200)")
-    parser.add_argument("--iter",  default=50, type=int,
-                        help="Number of test frames (default: 50)")
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--port', default='/dev/ttyTHS1')
+    parser.add_argument('--baud', type=int, default=921600)
+    parser.add_argument('--iter', type=int, default=50)
+    parser.add_argument('--timeout', type=float, default=1.0)
     args = parser.parse_args()
-
-    ok = run_uart_test(args.port, args.baud, args.iter)
-    sys.exit(0 if ok else 1)
+    if args.iter <= 0 or args.baud <= 0 or not math.isfinite(args.timeout) or args.timeout <= 0:
+        parser.error('--iter, --baud and --timeout must be positive')
+    if args.baud != 921600:
+        parser.error('The supplied source-policy/Parallel8 image requires --baud 921600')
+    try:
+        ok = run_uart_test(args.port, args.baud, args.iter, args.timeout)
+    except (serial.SerialException, OSError) as exc:
+        parser.exit(1, f'UART error: {exc}\n')
+    except KeyboardInterrupt:
+        parser.exit(130, 'UART test interrupted\n')
+    raise SystemExit(0 if ok else 1)
