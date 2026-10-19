@@ -13,6 +13,7 @@ foreach ($item in @(
     $shortcut = $shellObject.CreateShortcut((Join-Path $desktopDirectory ($item.Name + '.lnk')))
     $shortcut.TargetPath = $targetPath
     $shortcut.WorkingDirectory = Split-Path $fpgaDirectory -Parent
+    $shortcut.WindowStyle = 1
     $shortcut.Description = 'IGOR real LiDAR and laptop verification; timestamped evidence'
     $shortcut.Save()
     Write-Host "Created: $($item.Name) -> $targetPath"
