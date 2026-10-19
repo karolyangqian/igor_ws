@@ -20,6 +20,9 @@ setup(
     entry_points={
         'console_scripts': [
             'controller_node = igor_controller.controller_node:main',
+            'rectangle_route = igor_controller.rectangle_route_node:main',
+            'timed_rectangle = igor_controller.timed_rectangle_node:main',
+            'waypoint_global_planner_node = igor_controller.waypoint_global_planner_node:main',
         ],
     },
 )

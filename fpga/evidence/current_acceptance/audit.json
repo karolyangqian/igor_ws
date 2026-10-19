@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-17T17:58:06.713137+00:00",
+  "generated_utc": "2026-10-19T04:43:39.613715+00:00",
   "status": "FAIL",
   "source_evidence": {
     "policy": {
@@ -12,7 +12,7 @@
     },
     "safety": {
       "summary": "evidence/current_safety/summary.json",
-      "summary_sha256": "e323e6b1da9828453d72a3387acd0b814367e6b71838714eb244723babd656d3",
+      "summary_sha256": "cf405aaf5ff19ce7d3501dc15661aa5eb4653db3869d269c24f25e760f43aefe",
       "recorded_result_pass": true,
       "checked": 24,
       "mismatches": [],
@@ -44,7 +44,7 @@
     },
     "host": {
       "summary": "evidence/current_host/results.json",
-      "summary_sha256": "379e5e9a8515b1e09c7954fa0592e534674ddee412a073552d678fcb7f7b37d8",
+      "summary_sha256": "398ba9d869921baa9c0f1d1a8a329bc6c21e0a1336e2c38e623a4bc5495d6c9c",
       "recorded_result_pass": true,
       "checked": 6,
       "mismatches": [],
@@ -79,15 +79,15 @@
     },
     "planner": {
       "files_sha256": {
-        "sof": "c678a5be49c48e23d4483eaedc56089eda1ce42f3836bfdf4eaaecd28b2e0561",
-        "qsf": "1a886b6cfdf91a7484dd3a95c217987e3db38b8247277d586b889ca597b09daf",
-        "flow.rpt": "82787a8b16d31560e8a58a008105eead3a0bae498c40ac93dd5a54bbd7c42801",
-        "fit.summary": "92f089c5613bc2b79b6b3aac9a2b2d6968502d4aa6580d95b29fedce320948ad",
-        "sta.summary": "d6a615e7c8f4839fc66a81cbe294e2f5b6a657b52d1f53e064a13545ee0ce3fb",
-        "pin": "87bfe9524dd85d9c518c6561639566a37a10b9efb4f5c118ddddcc51d307255d"
+        "sof": "f8b4adb67a98214d188eeaae85fb9709c4faa64f65ae2613a110e4166c6d9333",
+        "qsf": "8f5c027954414e10faeeb85b8328cce70e9a5b77d8e4fc3af96e5d0708f445b2",
+        "flow.rpt": "76c1803a254963ef540ee336d2820e79cff0a6af590dcb6a97319732530e0d64",
+        "fit.summary": "54c7d7e8ebc706b3f8d64eeae9d407cc154afb529995d6d81759b66ddddcc677",
+        "sta.summary": "977d71f817d6898c71af77f0afe17e338684b6a5181339b9c489395e501f5eb7",
+        "pin": "ea0e313bf86a8a7d4c6a1d97c4bf0fad2e82ee2a47f5374cfbb24a2ec2dae67d"
       },
       "reported_flow_success": true,
-      "minimum_reported_slack_ns": 0.094,
+      "minimum_reported_slack_ns": 0.12,
       "all_reported_slacks_nonnegative": true,
       "source_to_build_provenance": "Use the separately generated release/build manifest; report presence and hashes alone do not prove the current source produced this SOF."
     }

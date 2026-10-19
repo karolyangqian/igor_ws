@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "generated_utc": "2026-10-17T13:03:57.267199+00:00",
+  "generated_utc": "2026-10-18T06:08:55.826616+00:00",
   "scope": "FPGA simulation/build/handoff and user-supplied ASIC evidence; no physical FPGA/robot acceptance or new ASIC sign-off",
   "external_evidence": {
     "gatelevel_test_results": {
@@ -100,8 +100,8 @@
       "bytes": 27599
     },
     "Bennaya.md": {
-      "sha256": "8b9ca9735b0e657522d3a8ca69bd6bd3ec343c2a3851224679bbc36fb5cf57b3",
-      "bytes": 32281
+      "sha256": "14cadaaaf7e1de7bc1a368aefe05cb88167ae7c7ac7d1daa3071835991b48d30",
+      "bytes": 32104
     },
     "bitstreams/igor_planner.sof": {
       "sha256": "84295ae937ab4a759efa1e4d21ebda09805559038bc4fef971894a8946d701d2",
@@ -111,17 +111,33 @@
       "sha256": "fb9fcd28136b647492d2284fef82beca34b97f8300ce0579c25e0745fa88cf4a",
       "bytes": 6690385
     },
+    "bitstreams/igor_src_policy_parallel8.cdf": {
+      "sha256": "3f93e79a8a27644a608d269765ecd3b41ba87be528ac9f11c143a919339f0d15",
+      "bytes": 424
+    },
     "bitstreams/igor_src_policy_parallel8.sof": {
       "sha256": "cb2e0de357a3865b4058f89d34b54f59ab8604db0865a7ceefff436bd6230b49",
       "bytes": 6690394
+    },
+    "bitstreams/OPEN_PROGRAMMER.bat": {
+      "sha256": "adcef05206074a8470653fa427b4572e08b2bcb454818975b21abba60c26cc47",
+      "bytes": 356
+    },
+    "bitstreams/PROGRAM_PARALLEL8.bat": {
+      "sha256": "b22424091b563ef6f628ab5e69fb71db38f60d6e0043ae2be9279730447f70c6",
+      "bytes": 323
+    },
+    "bitstreams/README.md": {
+      "sha256": "732723148a7dfad166cb198f33670e2ec6d9ab77f8231f3c60d1f9bc79793305",
+      "bytes": 4912
     },
     "bitstreams/SHA256SUMS.txt": {
       "sha256": "d7b2c759f638ae77bbd181dd35192116cfdcb05252ec04efa9e5aa009283fe96",
       "bytes": 268
     },
     "BUILD_STATUS.md": {
-      "sha256": "317575b5b48190e0f3482ed36cd706aa1275bc403d92d1db7da200de0e4f0eaa",
-      "bytes": 2815
+      "sha256": "071856d899fd6fd3d95b87ef64e3a3a118342d543ac86844f67714c6577cc408",
+      "bytes": 2945
     },
     "BUKA_PLANNER_QUARTUS.bat": {
       "sha256": "a5eaeee1c5a5838932effdc4af0f7df8492b5bc716f74365496d04cdd765b8b5",
@@ -208,8 +224,8 @@
       "bytes": 18832
     },
     "docs/BOARD_PROGRAMMING.md": {
-      "sha256": "c439e6bf155e275c3208fbe8040b48e141c81ad8df867feeaa93e71e3ab02018",
-      "bytes": 11114
+      "sha256": "bffc2bbe86180a3b0baa5dff7dc2844edde8d5091b7ee7b8a66a47a1e179cc15",
+      "bytes": 12334
     },
     "docs/DEMO_GUIDE.md": {
       "sha256": "93a0cc65a932f7f3c22c2f4e363a46f645fc2ca73e85e33c50c7479368a15ef7",
@@ -300,8 +316,8 @@
       "bytes": 9332
     },
     "docs/RTL_MODULES.md": {
-      "sha256": "6c88b4139fc676240e1066aa66a6d3ca8db7d9e69da14e4e12fa5e0c4b147fd1",
-      "bytes": 3575
+      "sha256": "0487ee2c6f0fb71469be9a6689cbc34a5bda0add9ea18a1ee678f161b1857d76",
+      "bytes": 3179
     },
     "docs/RTL_PORT_REFERENCE.md": {
       "sha256": "9dc6092b070fae85a125ee0097d98dfa65ff28784ad4f40eead8cdbb50045581",
@@ -318,6 +334,10 @@
     "docs/TECHNICAL_REPORT.md": {
       "sha256": "d839c5137ce1a1ca47f6a3f8ce22636f9ad649fabde79387fe2dc4cf832375f9",
       "bytes": 4523
+    },
+    "docs/techniques.md": {
+      "sha256": "b7d3fd7438ac6d5993a6a61c566a806c500f6efc84f093b74e3fe8d0e6993620",
+      "bytes": 7035
     },
     "docs/TINYTAPEOUT.md": {
       "sha256": "68d38e3137d34c18d4dce0047ee6b81a5f32a8021ddb2092553c8fc9c195bdd5",
@@ -2772,7 +2792,7 @@
       "bytes": 1144
     },
     "evidence/current_acceptance/audit.json": {
-      "sha256": "f760992fc1ab4f21a0cd257b049d862097c73a537532ecbb93ab6db444669bb3",
+      "sha256": "66796fd548bdb0b9f588bd72296919974a7c1db2b511f6f917469ce34e8b65f3",
       "bytes": 3877
     },
     "evidence/current_board_wrapper/board.gtkw": {
@@ -3063,9 +3083,41 @@
       "sha256": "bfb1cb05ce1a2c38f7f2f4219055dd953d0432f72a6963109139bfa131f1a375",
       "bytes": 1673
     },
+    "evidence/current_programming/20261018T0558125221956Z/detected_board.cdf": {
+      "sha256": "76e6c1f8b8e741f7a2fd9699d26c08eea324754e0e4ed862685e8ac663b76885",
+      "bytes": 342
+    },
+    "evidence/current_programming/20261018T0558125221956Z/inspection.json": {
+      "sha256": "83b0d9518ab6126d82e10f8203fd763081e8e15cd58c11f9ab5c37f618bb1201",
+      "bytes": 3215
+    },
+    "evidence/current_programming/20261018T0558125221956Z/jtag_chain.log": {
+      "sha256": "fe408a348dc4027df403fbdf39404d909b8ca86ced3a113d2c19ff2f8a1f6c25",
+      "bytes": 85
+    },
+    "evidence/current_programming/20261018T0558125221956Z/jtag_inventory.log": {
+      "sha256": "9c3354f668055a300204a159e234071820b89ab062dd8304e4f86c8c78a0d542",
+      "bytes": 1664
+    },
+    "evidence/current_programming/20261018T0558125221956Z/programming.log": {
+      "sha256": "9ada70a8bb59bd6d59afa1f091c521abd3e5c6034bb0103e509b594a71028420",
+      "bytes": 2345
+    },
+    "evidence/current_programming/20261018T0558125221956Z/programming_from_cdf.log": {
+      "sha256": "f638a10d789abaed936db4e05e809b04088a88a0bcc28b8bfc0dabfe4eae1079",
+      "bytes": 2218
+    },
+    "evidence/current_programming/20261018T0558125221956Z/quartus_auto_detect.log": {
+      "sha256": "51844bbd54bc97001462c1cec2c441f96bb0fe86b276b31fc6ad2f3fa627ee50",
+      "bytes": 1785
+    },
+    "evidence/current_programming/20261018T0558125221956Z/release_check.log": {
+      "sha256": "a7df7654eb53c7c0491e0c14836d340e9e0cc93684eb8431eb79538f630b1d62",
+      "bytes": 137
+    },
     "evidence/current_programming/tooling_tests.json": {
-      "sha256": "fe6af7eb18b4bc86e4efe2271b9d484ae013f171e9d9f91d1ec7030f1977af04",
-      "bytes": 755
+      "sha256": "c74f98b96f7c42b825375610c41f6684ecbca58c508129abbde40dd7595f25d6",
+      "bytes": 1162
     },
     "evidence/current_safety/cases.csv": {
       "sha256": "544b46bcc48d3916468756ba5fce6fe2a47538587cf352430f37ae1720f099b8",
@@ -3904,8 +3956,8 @@
       "bytes": 5080
     },
     "README.md": {
-      "sha256": "36212ed47073666340310e734ad8845a3c0faf7117f40135c593d61c4fb58687",
-      "bytes": 15035
+      "sha256": "1808911670e2e136f0d9c5744d0c4c6c7c5fca856727d37a5aa7fbe1ae8a5f35",
+      "bytes": 15353
     },
     "reference_model/neural_reference.py": {
       "sha256": "88b45034827c71b00ca049b2284a1be64e5f34c070216edae3af7ebc3df1a347",
@@ -3959,6 +4011,10 @@
       "sha256": "0ffa473f3e055cc518cd3eb919fc998e8bc50fb076af8f7b52e11d7cf30fcfd9",
       "bytes": 194
     },
+    "robot/jetauto/FPGA_UART_TTL/rebuild.ps1": {
+      "sha256": "90a76edd1f82bdcc3ad1623394e318761005b00ca90220874574b31326991752",
+      "bytes": 523
+    },
     "robot/jetauto/FPGA_UART_TTL/rtl/stm_packet_tx.v": {
       "sha256": "733c659023f2661e0f4bf391c24a6cbf7d562f2943e2d1766e365c84714203c3",
       "bytes": 4212
@@ -3974,6 +4030,10 @@
     "robot/jetauto/FPGA_UART_TTL/tb/tb_packet.v": {
       "sha256": "50c026bdf4c4030546b1113714392c3d280a10583dc1336a52f5584d3691042c",
       "bytes": 3074
+    },
+    "robot/jetauto/FPGA_UART_TTL_MULTISPEED/build_quartus.ps1": {
+      "sha256": "1343ee20360ae5cdd3b603668c70bf3769397e250f1f435a0a68a697468cee4a",
+      "bytes": 624
     },
     "robot/jetauto/FPGA_UART_TTL_MULTISPEED/evidence/build_provenance.json": {
       "sha256": "e74a25e875d2b94440d57b31ba083b6f459c2e415fcd0c1fd3aed562736e6783",
@@ -4002,6 +4062,10 @@
     "robot/jetauto/FPGA_UART_TTL_MULTISPEED/rtl/stm_uart_multispeed_top.v": {
       "sha256": "6ed422168aab23911ffcdfe5391d685c8f93201002eca0d470bfd0af96ec9afa",
       "bytes": 2325
+    },
+    "robot/jetauto/FPGA_UART_TTL_MULTISPEED/run_verilog_tests.ps1": {
+      "sha256": "60ab1577a41778e1403f349ea8e634bfcefc7e53e9be40da3bc0aec3c2c4fd48",
+      "bytes": 1085
     },
     "robot/jetauto/FPGA_UART_TTL_MULTISPEED/tb/rtl_captured_packets.hex": {
       "sha256": "c8fb97eb5b42544fbc2035bed61ce2d0a96a82374f113dd1ac29bffd452c3f43",
@@ -4046,6 +4110,10 @@
     "robot/jetauto/sdk_original.py": {
       "sha256": "03ebbf421944b926f5054b254b0a5248ec57d76511fd56ebf9e2b4015990d87d",
       "bytes": 23898
+    },
+    "robot/jetauto/show_uart_live.ps1": {
+      "sha256": "9cffbadda49e088cbf4d67bc4a6e54525bf97c86153c34fdda99d91be2db7666",
+      "bytes": 798
     },
     "robot/jetauto/source_provenance.json": {
       "sha256": "47644df7a9c0ea56da9fb015627ea414474d8cb43e4cbe5ec1b70e244d4023c2",
@@ -4340,8 +4408,8 @@
       "bytes": 2065
     },
     "scripts/freeze_release.py": {
-      "sha256": "ff12f857d9dbb26d7069b3d74f08d80275349871ea6c346f7c0f9e9e527e2412",
-      "bytes": 16357
+      "sha256": "bb63de3da75874e34fc3fac752e9f59a30f81e6dc198b31d869645b012801b70",
+      "bytes": 16601
     },
     "scripts/generate_neural_logic_rom.py": {
       "sha256": "f9e5027dc46f499c28b0bf10fed09ee26615912ed3ddaee47ec24fd03156be7a",
@@ -4360,8 +4428,8 @@
       "bytes": 3887
     },
     "scripts/program_fpga.ps1": {
-      "sha256": "77d7a5a25fd5bbd0a4aa5eeeae7599cc0bb5efc6574dc98e1c4797dd9d31b207",
-      "bytes": 9020
+      "sha256": "5139dca20e4f80e5156e53f3821b1cd9bfd5be61c0a25b7ae2de099cdbcee410",
+      "bytes": 12248
     },
     "scripts/release_integrity.py": {
       "sha256": "7c0fc051e754e0d416e872a0008c31ab151770da82e39c4a5c2839d597f550ef",
@@ -4882,6 +4950,10 @@
     "verification/test_neural.py": {
       "sha256": "624c767f1e62b9add193a40b0e0210369a9e44407aea65d1710358e3727e1410",
       "bytes": 1874
+    },
+    "verification/test_program_fpga.ps1": {
+      "sha256": "4c37d2160ed152843beb2d7e233b51913448fc5708ee7308aa62f25870deff3a",
+      "bytes": 10991
     },
     "verification/test_top.py": {
       "sha256": "4c1af4a3d0bdf39320e25112485f704853e9e326e566c2e298667da9ac3c0005",

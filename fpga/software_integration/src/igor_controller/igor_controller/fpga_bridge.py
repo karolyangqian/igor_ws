@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-fpga_bridge.py - Terasic DE10-Nano FPGA Accelerator Serial Bridge
+fpga_bridge.py - Terasic DE10-Nano UART / HPS Ethernet Accelerator Bridge
 Target Platform: DE10-Nano Cyclone V FPGA via UART (/dev/fpga @ 115200 / 921600 bps)
 PERURI Chip Hackathon 2026 - Project IGOR
 
@@ -17,6 +17,16 @@ import struct
 import logging
 from typing import Optional, List, Tuple
 import numpy as np
+try:
+    from .ethernet_protocol import UDPLink
+except ImportError:
+    # Standalone regression tools load this module directly by filename.
+    import importlib.util
+    from pathlib import Path
+    _spec = importlib.util.spec_from_file_location('igor_udp_protocol', Path(__file__).with_name('ethernet_protocol.py'))
+    _udp_protocol = importlib.util.module_from_spec(_spec)
+    _spec.loader.exec_module(_udp_protocol)
+    UDPLink = _udp_protocol.UDPLink
 
 try:
     import serial
@@ -57,7 +67,7 @@ def checksum_crc8(data: bytes) -> int:
 
 class FPGABridge:
     """
-    Hardware bridge communicating with Terasic DE10-Nano FPGA accelerator.
+    Hardware bridge over fabric UART or udp://HPS-IP:8080. UDP errors latch; no automatic mock.
     """
     HEADER_B1 = 0x5A
     HEADER_B2 = 0xA5
@@ -68,16 +78,18 @@ class FPGABridge:
         self,
         port: str = "/dev/fpga",
         baudrate: int = 921600,
-        timeout: float = 0.02,
+        timeout: Optional[float] = None,
         mock: bool = False
     ):
         self.port = port
         self.baudrate = baudrate
-        self.timeout = timeout
+        self.timeout = (0.3 if port.startswith('udp://') or baudrate == 9600 else 0.02) if timeout is None else timeout
         self.mock = mock
         self.last_exchange_ok = False
         self.last_error = None
         self._fault_latched = False
+        self.is_udp = self.port.startswith('udp://')
+        self.udp_link = None
 
         self.ser: Optional[serial.Serial] = None
         self._connect()
@@ -86,6 +98,12 @@ class FPGABridge:
         if self.mock:
             logger.warning("FPGABridge operating in explicitly requested MOCK mode")
             return
+        if self.is_udp:
+            try:
+                self.udp_link = UDPLink(self.port, self.timeout)
+                return
+            except Exception as exc:
+                raise FPGACommunicationError(f'Cannot initialize UDP link: {exc}') from exc
         if serial is None:
             raise FPGACommunicationError("pyserial is unavailable in hardware mode")
 
@@ -101,7 +119,7 @@ class FPGABridge:
             self.ser = None
             raise FPGACommunicationError(f"Cannot open FPGA {self.port}: {e}") from e
 
-    def infer(self, observation_74: np.ndarray) -> np.ndarray:
+    def infer(self, observation_74: np.ndarray, nominal_twist=None) -> np.ndarray:
         """
         Sends 74-element observation vector to FPGA and returns 3-element action vector.
         
@@ -134,6 +152,17 @@ class FPGABridge:
                 # Gentle braking
                 return np.array([-0.4, 0.0, 0.0], dtype=np.float32)
             return np.array([0.0, 0.0, 0.0], dtype=np.float32)
+
+        if self.is_udp:
+            try:
+                values = self.udp_link.infer_q88(q8_8_data)
+                self.last_exchange_ok = True
+                self.last_error = None
+                return np.array(values, dtype=np.float32) / 256.0
+            except Exception as exc:
+                self.last_error = str(exc)
+                self._fault_latched = True
+                raise FPGACommunicationError(f'FPGA UDP exchange failed: {exc}') from exc
 
         # Build packet: 2 header + 1 cmd + 1 len (148) + 148 payload + 1 crc = 153 bytes
         payload = bytearray()
@@ -191,6 +220,9 @@ class FPGABridge:
             raise FPGACommunicationError(f"FPGA exchange failed: {e}") from e
 
     def close(self) -> None:
+        if self.udp_link:
+            self.udp_link.close()
+            self.udp_link = None
         if self.ser and self.ser.is_open:
             try:
                 self.ser.close()

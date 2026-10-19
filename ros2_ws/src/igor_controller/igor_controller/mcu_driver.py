@@ -109,7 +109,8 @@ class STM32Driver:
                 port=self.port,
                 baudrate=self.baudrate,
                 timeout=0.05,
-                write_timeout=0.05
+                write_timeout=0.05,
+                exclusive=True
             )
             self.ser.rts = False
             self.ser.dtr = False
@@ -232,6 +233,8 @@ class STM32Driver:
           M3 (Index 2): Front-Right (Mirrored)
           M4 (Index 3): Rear-Right  (Mirrored)
         """
+        if any(not math.isfinite(float(v)) or abs(float(v)) > 5 for v in (rps_m1,rps_m2,rps_m3,rps_m4)):
+            return False
         if self.mock:
             return True
 

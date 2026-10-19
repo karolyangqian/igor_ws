@@ -111,8 +111,10 @@ def write_build_status(records):
               'ada di [bitstreams/](bitstreams/). Ubah source, bobot, QSF/SDC/pinplan berarti receipt '
               'lama tidak berlaku dan harus dibangun ulang.', '',
               '## Status perangkat fisik', '',
-              '**JTAG fisik ditunda sesuai arahan pengguna.** Inspeksi lokal melaporkan No JTAG hardware available. '
-              'Tidak ada programming, motor/robot, daya, atau latensi fisik baru yang diklaim. '
+              'Status konfigurasi fisik terbaru dicatat per percobaan pada '
+              '[evidence/current_programming/](evidence/current_programming/), dengan project, SHA256 SOF, '
+              'chain, log Quartus dan field `hardware_programmed`. Programming SRAM yang sukses '
+              'tidak otomatis membuktikan fungsi UART, motor/robot, daya atau latensi fisik. '
               'Lihat [BOARD_PROGRAMMING.md](docs/BOARD_PROGRAMMING.md), '
               '[GPIO_AND_HPS.md](docs/GPIO_AND_HPS.md), dan '
               '[FINAL_ACCEPTANCE.md](docs/FINAL_ACCEPTANCE.md) untuk prosedur dan pekerjaan tersisa.', '']
@@ -198,7 +200,7 @@ def freeze():
     tracked = set()
     source_trees = ['rtl', 'assets', 'reference_model', 'verification', 'scripts', 'ci', 'src', 'test', 'robot/jetauto',
                     'software_integration/src', 'fpga_de10_nano/src_policy', 'fpga_de10_nano/quartus']
-    source_extensions = {'.v','.sv','.vh','.svh','.vhd','.py','.mem','.mif','.hex','.h','.cpp','.sby','.json','.yaml','.yml','.qpf','.qsf','.sdc','.tcl','.gtkw'}
+    source_extensions = {'.v','.sv','.vh','.svh','.vhd','.py','.ps1','.mem','.mif','.hex','.h','.cpp','.sby','.json','.yaml','.yml','.qpf','.qsf','.sdc','.tcl','.gtkw'}
     for tree in source_trees:
         for path in (ROOT / tree).rglob('*'):
             if not path.is_file() or any(part in {'db','incremental_db','__pycache__','build','sim_build','output_files','artifacts','evaluations','logs'} for part in path.relative_to(ROOT).parts):
@@ -215,7 +217,7 @@ def freeze():
                    ROOT / 'evidence/parallel8_architecture',
                    ROOT / 'verification/src_policy/artifacts']:
         if folder.exists():
-            tracked.update(p for p in folder.rglob('*') if p.is_file() and p.suffix in {'.json','.csv','.log','.hex','.gtkw','.gz','.rpt','.summary','.png'})
+            tracked.update(p for p in folder.rglob('*') if p.is_file() and p.suffix in {'.json','.csv','.log','.hex','.gtkw','.gz','.rpt','.summary','.png','.cdf'})
     # Native GTKWave captures plus checkpoint/build identity and capture scripts.
     visual = ROOT / 'evidence/visual_review'
     if visual.exists():
@@ -225,7 +227,7 @@ def freeze():
         tracked.update(local(name) for name in record['source_sha256'])
         tracked.update(local(name) for name in record['report_sha256'])
         tracked.add(local(record['log']))
-    tracked.update(path for path in bitstreams.iterdir() if path.is_file() and path.suffix in {'.sof','.txt'})
+    tracked.update(path for path in bitstreams.iterdir() if path.is_file() and path.suffix in {'.sof','.txt','.md','.bat','.cdf'})
     tracked.update(ROOT.glob('*.md'))
     tracked.update(ROOT.glob('*.bat'))
     tracked.update(ROOT.glob('requirements*.txt'))
