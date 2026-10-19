@@ -1,5 +1,12 @@
 # Program IGOR Parallel8 on DE10-Nano
 
+**Physical UART on JP7:** use
+[PROGRAM_PARALLEL8_JP7.bat](PROGRAM_PARALLEL8_JP7.bat) to program RX on JP7 pin 1
+and TX on pin 2. [TEST_JP7_UART.bat](TEST_JP7_UART.bat) runs the binary protocol
+test through a USB–TTL COM adapter. The [JP7 project guide](../experiments/parallel8_jp7/README.md)
+contains wiring, baud and project instructions; [bring-up evidence](../evidence/jp7_uart/README.md)
+distinguishes successful programming from pending physical UART validation.
+
 **USB-Blaster console option (19 October 2026):**
 double-click the Desktop shortcut **IGOR - JTAG Terminal**, or
 [OPEN_JTAG_TERMINAL.bat](OPEN_JTAG_TERMINAL.bat). It programs the separate
