@@ -32,10 +32,11 @@ class LidarSubsampler:
         self,
         raw_ranges: Union[np.ndarray, List[float]],
         angle_min: float = 0.0,
-        angle_max: float = 2.0 * np.pi
+        angle_max: float = 2.0 * np.pi,
+        yaw_offset: float = 0.0
     ) -> np.ndarray:
         """
-        Resamples a 360-degree LaserScan (supporting arbitrary angle_min and angle_max)
+        Resamples a 360-degree LaserScan (supporting arbitrary angle_min, angle_max, and yaw_offset)
         into 64 frontal beams [-pi/2, +pi/2] using robust Sector Min-Pooling.
         Preserves the closest obstacle in each angular sector and prevents narrow obstacle loss.
         """
@@ -44,7 +45,7 @@ class LidarSubsampler:
         if n_raw == 0:
             return np.full(self.num_target_rays, self.max_range, dtype=np.float32)
 
-        angles = np.linspace(angle_min, angle_max, n_raw, endpoint=False)
+        angles = np.linspace(angle_min, angle_max, n_raw, endpoint=False) + yaw_offset
         # Wrap all angles to [-pi, pi]
         wrapped_angles = (angles + np.pi) % (2.0 * np.pi) - np.pi
 
@@ -74,9 +75,10 @@ class LidarSubsampler:
         self,
         raw_ranges: Union[np.ndarray, List[float]],
         raw_angle_min: float = -np.pi,
-        raw_angle_max: float = np.pi
+        raw_angle_max: float = np.pi,
+        yaw_offset: float = 0.0
     ) -> np.ndarray:
         """
         Resamples raw 360 scan array into 64 frontal beams using Sector Min-Pooling.
         """
-        return self.subsample_from_laserscan(raw_ranges, angle_min=raw_angle_min, angle_max=raw_angle_max)
+        return self.subsample_from_laserscan(raw_ranges, angle_min=raw_angle_min, angle_max=raw_angle_max, yaw_offset=yaw_offset)

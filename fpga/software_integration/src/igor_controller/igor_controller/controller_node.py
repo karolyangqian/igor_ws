@@ -57,6 +57,7 @@ class IgorControllerNode(Node):
         self.declare_parameter('fpga_baudrate', 921600)
         self.declare_parameter('control_rate_hz', 50.0)
         self.declare_parameter('use_mock_serial', False)
+        self.declare_parameter('lidar_yaw_offset', 0.0)
 
         self.algorithm = str(self.get_parameter('algorithm').value).lower()
         self.use_fpga = bool(self.get_parameter('use_fpga').value)
@@ -65,6 +66,7 @@ class IgorControllerNode(Node):
         self.fpga_baudrate = int(self.get_parameter('fpga_baudrate').value)
         self.control_rate_hz = float(self.get_parameter('control_rate_hz').value)
         self.use_mock_serial = bool(self.get_parameter('use_mock_serial').value)
+        self.lidar_yaw_offset = float(self.get_parameter('lidar_yaw_offset').value)
 
         self.get_logger().info("==================================================================")
         self.get_logger().info("  IGOR CONTROLLER INITIALIZING (Hiwonder JetAuto Mecanum AMR)")
@@ -72,6 +74,7 @@ class IgorControllerNode(Node):
         self.get_logger().info(f"  FPGA Acceleration  : {self.use_fpga}")
         self.get_logger().info(f"  MCU Port           : {self.mcu_port}")
         self.get_logger().info(f"  FPGA Port          : {self.fpga_port}")
+        self.get_logger().info(f"  LiDAR Yaw Offset   : {self.lidar_yaw_offset:.4f} rad")
         self.get_logger().info("==================================================================")
 
         # =====================================================================
@@ -270,8 +273,13 @@ class IgorControllerNode(Node):
 
         # 1. Process LiDAR scan to 64 frontal beams
         if self.latest_ranges is not None and len(self.latest_ranges) > 0:
+            yaw_offset = getattr(self, 'lidar_yaw_offset', 0.0)
             beams_m = self.lidar_subsampler.subsample_from_laserscan(
-                self.latest_ranges, angle_min=self.scan_angle_min, angle_max=self.scan_angle_end)
+                self.latest_ranges,
+                angle_min=self.scan_angle_min,
+                angle_max=self.scan_angle_end,
+                yaw_offset=yaw_offset
+            )
             beams_norm = np.clip(beams_m / 3.50, 0.0, 1.0).astype(np.float32)
             d_min = float(np.min(beams_m))
         else:
