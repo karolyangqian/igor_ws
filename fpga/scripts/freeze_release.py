@@ -215,6 +215,7 @@ def freeze():
                    ROOT / 'evidence/chip_highlights',
                    ROOT / 'evidence/bennaya_answers',
                    ROOT / 'evidence/parallel8_architecture',
+                   ROOT / 'evidence/asic_clock_scenarios',
                    ROOT / 'verification/src_policy/artifacts']:
         if folder.exists():
             tracked.update(p for p in folder.rglob('*') if p.is_file() and p.suffix in {'.json','.csv','.log','.hex','.gtkw','.gz','.rpt','.summary','.png','.cdf'})

@@ -1,10 +1,10 @@
 {
-  "generated_utc": "2026-10-19T04:43:39.613715+00:00",
-  "status": "FAIL",
+  "generated_utc": "2026-10-18T03:09:12.592692+00:00",
+  "status": "PASS",
   "source_evidence": {
     "policy": {
       "summary": "verification/src_policy/artifacts/results.json",
-      "summary_sha256": "5b08492fac237fd08aceb45aa0abdbb59d14b680f5073b75375f8ae979b89505",
+      "summary_sha256": "c9256acf2101a6ac02f54c4e1e364070179c52af458af88133b83f78ad8d4621",
       "recorded_result_pass": true,
       "checked": 7,
       "mismatches": [],
@@ -12,7 +12,7 @@
     },
     "safety": {
       "summary": "evidence/current_safety/summary.json",
-      "summary_sha256": "cf405aaf5ff19ce7d3501dc15661aa5eb4653db3869d269c24f25e760f43aefe",
+      "summary_sha256": "653d54904b16bb78a449ed9fbd571c8dd4461819500e3084a6c4f0628780b55e",
       "recorded_result_pass": true,
       "checked": 24,
       "mismatches": [],
@@ -20,31 +20,15 @@
     },
     "board_wrapper": {
       "summary": "evidence/current_board_wrapper/summary.json",
-      "summary_sha256": "5c7fe37da6d249512a55b66efd03850478a1103c641371fc2d0b864ee8035013",
+      "summary_sha256": "3930e9b8a9c1c7768aaf43216a276f3988ba0f40a6af7b310d8e96fb85da6f88",
       "recorded_result_pass": true,
       "checked": 12,
-      "mismatches": [
-        {
-          "path": "verification/src_policy/artifacts/observations.hex",
-          "expected": "558331b4b29da0c029184fb1772f0027ef05164aa694995fe367869b6d291a76",
-          "actual": "26c5bc07c80a4cd3fab67abdf920f07afc0a39c80cde493e9885540fcf3767b7"
-        },
-        {
-          "path": "verification/src_policy/artifacts/expected.hex",
-          "expected": "7e658f000d3debcfd80469429dec1db5155cfe6bb2346a46ae0fca2585d6e4a4",
-          "actual": "3125ce09ec3d5fc97d1a2a9eccdf28d5cfc47ef710c6ee9939ca0dde0bdb083c"
-        },
-        {
-          "path": "verification/src_policy/artifacts/model_provenance.json",
-          "expected": "59e79d103425c169179de60e25ad5483b9c177fc42a81806ebb74f9a823dd7ce",
-          "actual": "db228dc462db9e30a199a64a028a491f21f08369046405b109ae2e6eb94360a9"
-        }
-      ],
-      "passed": false
+      "mismatches": [],
+      "passed": true
     },
     "host": {
       "summary": "evidence/current_host/results.json",
-      "summary_sha256": "398ba9d869921baa9c0f1d1a8a329bc6c21e0a1336e2c38e623a4bc5495d6c9c",
+      "summary_sha256": "31bb49a0fed8d9ab8ebbd356cd7ef6465ad31e92796d899c9471d17575c72dd7",
       "recorded_result_pass": true,
       "checked": 6,
       "mismatches": [],
@@ -65,12 +49,12 @@
   "build_report_observations": {
     "policy": {
       "files_sha256": {
-        "sof": "57e7f5b3645e4067fd4892a15aecf3f3f977d6d4bdf4fd3d7533b5df63c85a99",
+        "sof": "fb9fcd28136b647492d2284fef82beca34b97f8300ce0579c25e0745fa88cf4a",
         "qsf": "17ab47770fb3a204122ede58084199297ac21bd15594d43b9162f3d3d27a4853",
-        "flow.rpt": "36850fdcd1c047798e0ca37576593f9f07f7cec6f84bdcbd1018f9e2e706fd10",
-        "fit.summary": "25560457559c181910cfc2476384d956d20bac7b7e4d49a0f7c66d708f87a822",
-        "sta.summary": "4b06aafab1cb14f4810073c8685f3b8e2985b96821325bd105f2550f97fa9cec",
-        "pin": "43465bfab836119808232cfeafda2965399bb3ffbff4672533de414b5fa7ec47"
+        "flow.rpt": "594d0f44e7292ae4a7fdb59969361987183e7dcf5a7e0658648bf5297a49057d",
+        "fit.summary": "f4c3e002d867998aaa4d841c10a8fb30d71c21d4e6d079b9a97e772fdc3604d9",
+        "sta.summary": "d0fcf959bdce4592ddc86fb1ad606a1c08987936d1a409c3835b35655d5526ae",
+        "pin": "56a6db6f924d425b0c2087f18b88c33fb3c01f36e3f009fd93057b582e8594fe"
       },
       "reported_flow_success": true,
       "minimum_reported_slack_ns": 0.116,
@@ -79,15 +63,15 @@
     },
     "planner": {
       "files_sha256": {
-        "sof": "f8b4adb67a98214d188eeaae85fb9709c4faa64f65ae2613a110e4166c6d9333",
-        "qsf": "8f5c027954414e10faeeb85b8328cce70e9a5b77d8e4fc3af96e5d0708f445b2",
-        "flow.rpt": "76c1803a254963ef540ee336d2820e79cff0a6af590dcb6a97319732530e0d64",
-        "fit.summary": "54c7d7e8ebc706b3f8d64eeae9d407cc154afb529995d6d81759b66ddddcc677",
-        "sta.summary": "977d71f817d6898c71af77f0afe17e338684b6a5181339b9c489395e501f5eb7",
-        "pin": "ea0e313bf86a8a7d4c6a1d97c4bf0fad2e82ee2a47f5374cfbb24a2ec2dae67d"
+        "sof": "84295ae937ab4a759efa1e4d21ebda09805559038bc4fef971894a8946d701d2",
+        "qsf": "8ef01895c71f4afe27a5ee4d4521776ac0fb68f7fc6317570f91d72873b57ece",
+        "flow.rpt": "e9e535840732be1ddb6967aec9a5d11f6b4e01315d7e402182a929c1da787c81",
+        "fit.summary": "3e05fa2b79701600eecb69432d291c74bd4770941c2bd0aa9d38d47c7260d0da",
+        "sta.summary": "2e8ad555c8144a93a1645eb70c19da55a8a941a087cff441418b027ae5020158",
+        "pin": "6242e6f719cb4e22d88f9b3443938cf11ef2260f0b93e9b01a22af1f340c7f0b"
       },
       "reported_flow_success": true,
-      "minimum_reported_slack_ns": 0.12,
+      "minimum_reported_slack_ns": 0.094,
       "all_reported_slacks_nonnegative": true,
       "source_to_build_provenance": "Use the separately generated release/build manifest; report presence and hashes alone do not prove the current source produced this SOF."
     }

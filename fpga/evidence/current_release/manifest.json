@@ -148,8 +148,8 @@
       "bytes": 437
     },
     "CHIP_ADVANTAGES.md": {
-      "sha256": "b43818fb767b07784278ae256b78acd98b766a9a5c81961b07dd5274651fe43c",
-      "bytes": 30453
+      "sha256": "2a1f0ccea291331d341a3371c5c2a6f3ec73cf604036352ea0a3d8886af561c9",
+      "bytes": 36241
     },
     "ci/gds_user_reference.yml": {
       "sha256": "320acdd0aa91ebc6061ea75447e8520edfa4e56410ee3efa5830db0792b5948d",
@@ -346,6 +346,14 @@
     "docs/VERIFICATION.md": {
       "sha256": "58ccdfd7a931ac409f64d191b121c618cd8b1d2c92edbd7d994596305e8448b7",
       "bytes": 3008
+    },
+    "evidence/asic_clock_scenarios/clock_scenarios.csv": {
+      "sha256": "4cdd111b39ec154b962ac653286022868e50833459a30e79dba0f2c929ba404f",
+      "bytes": 921
+    },
+    "evidence/asic_clock_scenarios/scenarios.json": {
+      "sha256": "6688cf73990e93ee36284cbc351affbd7552b27b7c6f77b9fd9eaac5f5780821",
+      "bytes": 4394
     },
     "evidence/asic_import/gatelevel_test_results/manifest.json": {
       "sha256": "4a9fdd688a21a5aab870d3698361c3f0ecf1a0915fcf5f1a115a2f613a92698e",
@@ -2776,7 +2784,7 @@
       "bytes": 12736
     },
     "evidence/bennaya_answers/traceability.json": {
-      "sha256": "75e63ad03533b2b281514944d2c7813715db93361de9117cc7fd58e9bea123a8",
+      "sha256": "63378ee9a851f12bc151b528c267c5423beb5530b23e52e0efa634fc89e4cc7b",
       "bytes": 30255
     },
     "evidence/chip_highlights/regression.log": {
@@ -2792,7 +2800,7 @@
       "bytes": 1144
     },
     "evidence/current_acceptance/audit.json": {
-      "sha256": "66796fd548bdb0b9f588bd72296919974a7c1db2b511f6f917469ce34e8b65f3",
+      "sha256": "40e016cafd5472ccdc90d8bbcec9ded7bcd40a783ab6af16a43ad1d9eda76923",
       "bytes": 3877
     },
     "evidence/current_board_wrapper/board.gtkw": {
@@ -4407,9 +4415,13 @@
       "sha256": "080df0e7e4de11f2f62a135cb31189581e63edadd61a529514a7e43bc0506583",
       "bytes": 2065
     },
+    "scripts/estimate_asic_clock_scenarios.py": {
+      "sha256": "fb811171284757e2f17e20bbcf5126f3684fe7caf079b2094a7e4f28261d2ad2",
+      "bytes": 4872
+    },
     "scripts/freeze_release.py": {
-      "sha256": "bb63de3da75874e34fc3fac752e9f59a30f81e6dc198b31d869645b012801b70",
-      "bytes": 16601
+      "sha256": "6096363f26ee8c8cdf6639d0f5288c19ff9fa881ab0a35390f9940885112a9bc",
+      "bytes": 16884
     },
     "scripts/generate_neural_logic_rom.py": {
       "sha256": "f9e5027dc46f499c28b0bf10fed09ee26615912ed3ddaee47ec24fd03156be7a",
