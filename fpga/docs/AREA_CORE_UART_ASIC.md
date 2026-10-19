@@ -2,6 +2,8 @@
 
 Analysis: 19 October 2026. All FPGA figures below are for the **Parallel8 921600-baud implementation**, not the baseline serial core. Physical ASIC figures come from the imported IHP CMOS5L Tiny Tapeout reports. Calculations and source hashes: [parallel8_area.json](../evidence/area_analysis/parallel8_area.json). Reproduce from repository root: `python fpga/scripts/report_parallel8_area.py`.
 
+Visual evidence: [10 parameter screenshots and source index](../evidence/parameter_screenshots/README.md), including [core/UART hierarchy](../evidence/parameter_screenshots/02_core_uart_hierarchy.png), [raw ASIC areas](../evidence/parameter_screenshots/07_asic_area_raw.png), and [derived percentages](../evidence/parameter_screenshots/08_calculations.png). These are browser screenshots of labelled local report excerpts, not the native Quartus GUI; original report hashes and line numbers accompany every capture.
+
 ## 1. Pure core versus core with UART
 
 The Fitter's **Resource Utilization by Entity** table isolates the core hierarchy inside the accepted board build. These are post-fit hierarchical attributions, not a separately fitted standalone-core experiment. Fractional ALMs are Quartus allocation/packing estimates; physical devices do not contain fractional ALMs.
