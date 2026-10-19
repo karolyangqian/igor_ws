@@ -1,5 +1,7 @@
 # IGOR FPGA — mulai di sini
 
+**FPGA → laptop datalogger:** [timestamp, lokasi manual, CSV/JSONL dan shortcut Desktop](docs/FPGA_DATALOGGER.md). Jalankan setelah image observer diprogram; logger membaca hasil melalui USB-Blaster JTAG.
+
 **Uji mock numerik pada FPGA fisik:** [panduan 256 pola, oracle Q8.8, dan shortcut Desktop](docs/MOCK_BOARD_VERIFICATION.md). Input COM12 dan pembacaan hasil JTAG dicatat terpisah dari pengujian jalur balik UART.
 
 
