@@ -1,8 +1,13 @@
-﻿"""IGOR Protocol V2: packed little endian UDP, 492-byte request / 50-byte response.
+"""IGOR Protocol V2: packed little endian UDP, 492-byte request / 50-byte response.
 
 Q8.8 is authoritative. Redundant float fields must agree with its quantization.
 No retries, mock fallback, or unverified zero actions are permitted.
 """
+try:
+    from .authenticated_transport import from_environment
+except ImportError:
+    from authenticated_transport import from_environment
+
 import math
 import socket
 import struct
@@ -71,6 +76,7 @@ class UDPLink:
         if not separator or not host or not port.isdigit() or not 1<=int(port)<=65535:
             raise ProtocolError('Invalid UDP endpoint')
         if not math.isfinite(timeout) or timeout<=0:raise ProtocolError('Invalid timeout')
+        self.auth=from_environment(b"host")
         self.timeout=timeout;self.counter=0;self.last_stamp=0;self.last_response=None;self.failed=False
         self.socket=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         try:self.socket.connect((host,int(port)))
@@ -85,6 +91,7 @@ class UDPLink:
         stamp=max(time.monotonic_ns(),self.last_stamp+1)
         self.last_stamp=stamp
         packet=build_request_q88(values,self.counter,stamp)
+        if self.auth:packet=self.auth.seal(packet)
         deadline=time.monotonic()+self.timeout
         try:
             if self.socket.send(packet)!=len(packet):raise ProtocolError('Short UDP send')
@@ -93,6 +100,7 @@ class UDPLink:
                 if remaining<=0:raise ProtocolError('UDP exchange deadline expired')
                 self.socket.settimeout(remaining)
                 raw=self.socket.recv(65535)
+                if self.auth:raw=self.auth.open(raw)
                 response=parse_response(raw)
                 if time.monotonic()>deadline:raise ProtocolError('UDP response exceeded deadline')
                 if response['frame_id']!=self.counter or response['timestamp_ns']!=stamp:

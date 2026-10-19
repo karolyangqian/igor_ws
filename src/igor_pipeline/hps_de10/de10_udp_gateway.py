@@ -21,6 +21,7 @@ for _candidate in [
     if _candidate.is_dir():
         sys.path.insert(0, str(_candidate))
         break
+from authenticated_transport import from_environment
 from ethernet_protocol import (parse_request,build_response,ProtocolError,
     STATUS_OK,STATUS_PL_TIMEOUT,STATUS_TEST_ONLY,STATUS_BACKEND_FAULT)
 
@@ -69,6 +70,7 @@ class MockBackend:
 
 class Gateway:
     def __init__(self,host,port,backend,allowed_client=None,log=None):
+        self.auth=from_environment(b"device")
         self.backend=backend;self.log=log;self.allowed_client=allowed_client
         self.socket=socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
         try:self.socket.bind((host,port))
@@ -83,8 +85,10 @@ class Gateway:
             try:raw,peer=self.socket.recvfrom(65535)
             except socket.timeout:continue
             if self.allowed_client and peer[0]!=self.allowed_client:continue
-            try:request=parse_request(raw)
-            except ProtocolError as exc:
+            try:
+                if self.auth:raw=self.auth.open(raw)
+                request=parse_request(raw)
+            except (ProtocolError, ValueError) as exc:
                 print(f'DROP {peer}: {exc}',file=sys.stderr,flush=True);continue
             # One outstanding request per peer. Duplicates/out-of-order datagrams
             # must not trigger the unsequenced UART accelerator again.
@@ -102,6 +106,7 @@ class Gateway:
                 # Unexpected backend errors cannot permit later hardware actions.
                 if hasattr(self.backend,'failed'):self.backend.failed=True
             response=build_response(request['frame_id'],stamp,values,status=status,cycles=0)
+            if self.auth:response=self.auth.seal(response)
             self.socket.sendto(response,peer)
             if self.log:
                 self.log.write(json.dumps({'peer':peer,'frame_id':request['frame_id'],

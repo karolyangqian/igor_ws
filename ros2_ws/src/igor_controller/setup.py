@@ -11,7 +11,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=['setuptools', 'numpy', 'pyserial'],
+    install_requires=['setuptools', 'numpy', 'pyserial', 'cryptography>=3.4.8'],
     zip_safe=True,
     maintainer='Karol',
     maintainer_email='karol@todo.todo',

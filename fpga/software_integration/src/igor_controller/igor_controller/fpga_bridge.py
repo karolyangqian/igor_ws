@@ -12,7 +12,13 @@ RX Packet (FPGA -> Host, 11 Bytes):
   [0x5A, 0xA5, 0x02, 0x06] + [3 x int16 Q8.8 Little-Endian] + [CRC-8]
 """
 
+try:
+    from .authenticated_transport import from_environment, read_serial_frame, serial_frame
+except ImportError:
+    from authenticated_transport import from_environment, read_serial_frame, serial_frame
+
 import time
+import hashlib
 import struct
 import logging
 from typing import Optional, List, Tuple
@@ -85,6 +91,7 @@ class FPGABridge:
         self.baudrate = baudrate
         self.timeout = (0.3 if port.startswith('udp://') or baudrate == 9600 else 0.02) if timeout is None else timeout
         self.mock = mock
+        self.auth = None if mock else from_environment(b"host")
         self.last_exchange_ok = False
         self.last_error = None
         self._fault_latched = False
@@ -176,6 +183,9 @@ class FPGABridge:
         try:
             deadline = time.monotonic() + self.timeout
             self.ser.reset_input_buffer()
+            if self.auth:
+                request_digest = hashlib.sha256(tx_packet).digest()
+                tx_packet = serial_frame(self.auth.seal(bytes(tx_packet)))
             written = self.ser.write(tx_packet)
             if written != len(tx_packet):
                 raise FPGACommunicationError(f"Short FPGA write: {written}/{len(tx_packet)}")
@@ -185,7 +195,11 @@ class FPGABridge:
             self.ser.timeout = remaining
 
             # Read response: 11 bytes
-            rx_buf = self.ser.read(11)
+            rx_buf = self.auth.open(read_serial_frame(self.ser)) if self.auth else self.ser.read(11)
+            if self.auth:
+                if rx_buf[:32] != request_digest:
+                    raise FPGACommunicationError("Authenticated UART response request mismatch")
+                rx_buf = rx_buf[32:]
             if time.monotonic() > deadline:
                 raise FPGACommunicationError("FPGA exchange exceeded its total deadline")
             if len(rx_buf) < 11:

@@ -137,19 +137,14 @@ class CLDRLController(BaseController):
 
         if imu_data is not None and len(imu_data) >= 6:
             ax, ay, az, gx, gy, gz = imu_data[:6]
-            # Safety check: if gyro is provided in deg/s (e.g. |gz| > 6.0), convert to rad/s
-            gz_rad_s = float(np.radians(gz)) if abs(gz) > 6.0 else float(gz)
-            # Match Gym V3 training contract:
-            # obs[64..65]: ax, ay / 3.0
-            # obs[66..68]: 0.0, 0.0, 0.0 (gravity Z, pitch, roll are 0.0 in 2D training)
-            # obs[69]: gz in rad/s / 2.0
+            # IMU contract is SI: m/s^2 and rad/s. Match training Z gravity.
             norm_imu = np.array([
                 np.clip(ax / 3.0, -1.0, 1.0),
                 np.clip(ay / 3.0, -1.0, 1.0),
-                0.0,
-                0.0,
-                0.0,
-                np.clip(gz_rad_s / 2.0, -1.0, 1.0),
+                np.clip(az / 9.81, -1.0, 1.0),
+                np.clip(gx / 2.0, -1.0, 1.0),
+                np.clip(gy / 2.0, -1.0, 1.0),
+                np.clip(gz / 2.0, -1.0, 1.0),
             ], dtype=np.float32)
         else:
             norm_imu = np.zeros(6, dtype=np.float32)

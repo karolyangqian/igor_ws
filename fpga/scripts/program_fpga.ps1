@@ -182,6 +182,11 @@ try {
                 if (!(Get-Command $Python -ErrorAction SilentlyContinue)) { throw "Python '$Python' is unavailable. Select -Python or run the release check in a configured shell." }
                 $null = Run-QuartusTool $Python @($freezeScript, '--check') 'release_check.log'
                 $report.full_release_verified = $true
+                $authScript = Join-Path $fpgaRoot '../tools/bitstream_auth.py'
+                $signatureFile = "$programSof.ed25519"
+                if (!(Test-Path -LiteralPath $signatureFile -PathType Leaf)) { throw "Missing daily Ed25519 bitstream signature: $signatureFile" }
+                $null = Run-QuartusTool $Python @($authScript, 'verify', $programSof, $signatureFile) 'bitstream_auth.log'
+                $report.bitstream_signature_verified = $true
                 try {
                     $WhatIfPreference = $requestedWhatIf
                     $performProgram = $PSCmdlet.ShouldProcess("$($chain.name), FPGA @$DeviceIndex", "Configure SRAM with $relativeSof SHA256=$($report.sof_sha256)")

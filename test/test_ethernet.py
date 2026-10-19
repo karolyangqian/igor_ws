@@ -62,6 +62,20 @@ class EthernetTests(unittest.TestCase):
         with patch('serial.Serial',return_value=fixture):backend=gateway.UARTBackend('TEST',9600,.3)
         return backend,fixture
 
+    def test_authenticated_udp_to_uart_fixture(self):
+        from authenticated_transport import Authenticator
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+        host, device = Ed25519PrivateKey.generate(), Ed25519PrivateKey.generate()
+        backend, fixture = self.uart_backend()
+        server = self.server(backend)
+        server.auth = Authenticator(device, host.public_key(), b'device')
+        link = self.link(server)
+        link.auth = Authenticator(host, device.public_key(), b'host')
+        case = CASES[0]
+        result = link.infer_q88(case['observation_q88'])
+        self.assertEqual(result, list(struct.unpack('<3h', bytes.fromhex(case['rx_hex'])[4:10])))
+        self.assertEqual(len(fixture.writes), 1)
+
     def test_exact_protocol_sizes_roundtrip_all_cases(self):
         self.assertEqual(protocol.REQUEST.size,492);self.assertEqual(protocol.RESPONSE.size,50)
         for case in CASES:
