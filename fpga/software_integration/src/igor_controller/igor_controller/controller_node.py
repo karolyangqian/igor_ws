@@ -417,22 +417,27 @@ class IgorControllerNode(Node):
 
         # Command loss timeout (> 0.5s)
         if not 0.0 <= now - command_time < 0.5:
-            self.cmd_linear_x = 0.0
-            self.cmd_linear_y = 0.0
-            self.cmd_angular_z = 0.0
+            if hasattr(self, 'cmd_linear_x'): self.cmd_linear_x = 0.0
+            if hasattr(self, 'cmd_linear_y'): self.cmd_linear_y = 0.0
+            if hasattr(self, 'cmd_angular_z'): self.cmd_angular_z = 0.0
             self._stop_for_fault("COMMAND_STALE")
-            return
-
-        command = np.array([self.cmd_linear_x, self.cmd_linear_y, self.cmd_angular_z])
-        if not np.all(np.isfinite(command)) or np.any(np.abs(command) > [0.60, 0.50, 2.0]):
-            self._stop_for_fault("COMMAND_INVALID")
             return
 
         freshness_timeout = getattr(self, 'freshness_timeout_sec', 0.5)
         if not getattr(self, 'use_mock_serial', False) and (
-            scan_time is None or not 0.0 <= now - scan_time < freshness_timeout
+            getattr(self, 'latest_ranges', None) is None
+            or scan_time is None
+            or not 0.0 <= now - scan_time <= freshness_timeout
         ):
             self._stop_for_fault(getattr(self, 'scan_error', None) or "SCAN_MISSING_OR_STALE")
+            return
+
+        cmd_x = getattr(self, 'cmd_linear_x', 0.0)
+        cmd_y = getattr(self, 'cmd_linear_y', 0.0)
+        cmd_z = getattr(self, 'cmd_angular_z', 0.0)
+        command = np.array([cmd_x, cmd_y, cmd_z])
+        if not np.all(np.isfinite(command)) or np.any(np.abs(command) > [0.60, 0.50, 2.0]):
+            self._stop_for_fault("COMMAND_INVALID")
             return
 
         # =====================================================================
@@ -563,7 +568,17 @@ class IgorControllerNode(Node):
                 try:
                     raw_action = self.fpga.infer(obs)
                 except FPGACommunicationError as exc:
-                    self._stop_for_fault(f"FPGA_TRANSPORT: {exc}")
+                    self.mcu.send_motor_speeds(0.0, 0.0, 0.0, 0.0)
+                    self.pub_safe_twist.publish(Twist())
+                    if hasattr(self, 'pub_safety_alert') and self.pub_safety_alert is not None:
+                        self.pub_safety_alert.publish(Bool(data=True))
+                    diag = String()
+                    diag.data = json.dumps({
+                        'fault': f'FPGA_TRANSPORT: {exc}', 'safety_permit': False,
+                        'safe': [0.0, 0.0, 0.0]})
+                    self.pub_diag.publish(diag)
+                    if hasattr(self, 'get_logger'):
+                        self.get_logger().error(f'FPGA transport failed; motors stopped: {exc}')
                     return
 
                 # Apply Asymmetric Braking Authority

@@ -1,4 +1,4 @@
-﻿"""Localhost UDP + fixture UART integration. No physical FPGA/network acceptance."""
+"""Localhost UDP + fixture UART integration. No physical FPGA/network acceptance."""
 import ast
 from contextlib import redirect_stdout
 import importlib.util
@@ -18,7 +18,7 @@ import unittest
 from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[1]
-PACKAGE=ROOT/'src/igor_controller/igor_controller'
+PACKAGE=ROOT/'ros2_ws/src/igor_controller/igor_controller'
 sys.path.insert(0,str(PACKAGE))
 import ethernet_protocol as protocol
 

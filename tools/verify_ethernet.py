@@ -55,7 +55,7 @@ def main():
             try:server.wait(timeout=5)
             except subprocess.TimeoutExpired:server.kill();server.wait(timeout=5)
     files=[ROOT/'eth_direction.md',ROOT/'docs/connect_de10.md',ROOT/'test/test_ethernet.py',ROOT/'test/test_connect_de10.py',ROOT/'tools/connect_de10.py',ROOT/'tools/de10_connect.py',ROOT/'tools/package_de10_connect.py',Path(__file__).resolve()]
-    for folder in ['src/igor_controller/igor_controller','src/igor_pipeline/hps_de10',
+    for folder in ['ros2_ws/src/igor_controller/igor_controller','src/igor_pipeline/hps_de10',
                    'src/igor_pipeline/protocol','src/igor_pipeline/scripts',
                    'fpga/software_integration/src/igor_controller/igor_controller']:
         files += [p for p in (ROOT/folder).glob('*') if p.is_file() and p.suffix in ('.py','.h','.c','.json','.example')]

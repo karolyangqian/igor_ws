@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """HPS UDP gateway. Real backend uses a LOCAL USB-UART adapter to fabric UART.
 No /dev/mem, fabricated cycle counter, or automatic mock fallback.
 """
@@ -13,7 +13,14 @@ import struct
 import sys
 import time
 
-sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'igor_controller/igor_controller'))
+for _candidate in [
+    Path(__file__).resolve().parents[3] / 'ros2_ws/src/igor_controller/igor_controller',
+    Path(__file__).resolve().parents[2] / 'igor_controller/igor_controller',
+    Path(__file__).resolve().parents[2] / 'src/igor_controller/igor_controller',
+]:
+    if _candidate.is_dir():
+        sys.path.insert(0, str(_candidate))
+        break
 from ethernet_protocol import (parse_request,build_response,ProtocolError,
     STATUS_OK,STATUS_PL_TIMEOUT,STATUS_TEST_ONLY,STATUS_BACKEND_FAULT)
 

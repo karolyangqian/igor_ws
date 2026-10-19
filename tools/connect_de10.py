@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Satu perintah di Jetson: siapkan IP, bootstrap HPS melalui USB console,
 SSH/deploy gateway, lalu validasi Ethernet. Biarkan terminal terbuka.
 Default hanya menguji jaringan; --hardware menguji inferensi FPGA asli.
@@ -22,7 +22,7 @@ import time
 import uuid
 
 ROOT=Path(__file__).resolve().parents[1]
-ASSETS=['src/igor_controller/igor_controller/ethernet_protocol.py',
+ASSETS=['ros2_ws/src/igor_controller/igor_controller/ethernet_protocol.py',
         'src/igor_pipeline/hps_de10/de10_udp_gateway.py']
 
 class ConnectionError(RuntimeError):pass

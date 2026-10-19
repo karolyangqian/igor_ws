@@ -1,4 +1,4 @@
-﻿"""Build one self-contained Jetson connection script, including gateway/client assets."""
+"""Build one self-contained Jetson connection script, including gateway/client assets."""
 import base64
 import hashlib
 import io
@@ -7,7 +7,7 @@ from pathlib import Path
 import zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
-NAMES=['tools/connect_de10.py','src/igor_controller/igor_controller/ethernet_protocol.py',
+NAMES=['tools/connect_de10.py','ros2_ws/src/igor_controller/igor_controller/ethernet_protocol.py',
        'src/igor_pipeline/hps_de10/de10_udp_gateway.py','src/igor_pipeline/scripts/ethernet_test.py',
        'src/igor_pipeline/scripts/uart_q88_vectors.json']
 TEMPLATE='''#!/usr/bin/env python3

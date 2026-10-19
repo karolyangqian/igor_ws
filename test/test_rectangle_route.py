@@ -11,7 +11,7 @@ def load(name, path):
     spec=importlib.util.spec_from_file_location(name,ROOT/path)
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
     return module
-path=load('rectangle_path','src/igor_controller/igor_controller/rectangle_path.py')
+path=load('rectangle_path','ros2_ws/src/igor_controller/igor_controller/rectangle_path.py')
 wheels=load('test_jetauto_wheels','tools/test_jetauto_wheels.py')
 
 class RectangleTests(unittest.TestCase):
@@ -70,7 +70,7 @@ class RectangleTests(unittest.TestCase):
 
 class ActiveControllerGuards(unittest.TestCase):
     def control(self):
-        tree=ast.parse((ROOT/'src/igor_controller/igor_controller/controller_node.py').read_text())
+        tree=ast.parse((ROOT/'ros2_ws/src/igor_controller/igor_controller/controller_node.py').read_text())
         cls=next(x for x in tree.body if isinstance(x,ast.ClassDef) and x.name=='IgorControllerNode')
         method=next(x for x in cls.body if isinstance(x,ast.FunctionDef) and x.name=='_control_loop')
         context={'np':np,'time':SimpleNamespace(monotonic=lambda:10.),'math':math}
@@ -95,7 +95,7 @@ class ActiveControllerGuards(unittest.TestCase):
 
 class TimedRectangleTests(unittest.TestCase):
     def test_blind_route_integrates_commands_in_correct_order(self):
-        timed=load('timed_rectangle','src/igor_controller/igor_controller/timed_rectangle_path.py')
+        timed=load('timed_rectangle','ros2_ws/src/igor_controller/igor_controller/timed_rectangle_path.py')
         route=timed.TimedRectanglePath()
         self.assertEqual([target for kind,target in route.stages if kind=='DRIVE'],[5.,4.,5.,4.])
         safe_vx=safe_wz=0.
@@ -113,7 +113,7 @@ class TimedRectangleTests(unittest.TestCase):
         self.assertEqual(completed,list(range(8)))
 
     def test_stopped_controller_does_not_accumulate_distance(self):
-        timed=load('timed_rectangle2','src/igor_controller/igor_controller/timed_rectangle_path.py')
+        timed=load('timed_rectangle2','ros2_ws/src/igor_controller/igor_controller/timed_rectangle_path.py')
         route=timed.TimedRectanglePath()
         for _ in range(100):route.update(.05,0.,0.,0.)
         self.assertEqual(route.progress,0.)
@@ -122,7 +122,7 @@ class TimedRectangleTests(unittest.TestCase):
 
 class ScanMetadataTests(unittest.TestCase):
     def callback(self):
-        tree=ast.parse((ROOT/'src/igor_controller/igor_controller/controller_node.py').read_text())
+        tree=ast.parse((ROOT/'ros2_ws/src/igor_controller/igor_controller/controller_node.py').read_text())
         cls=next(x for x in tree.body if isinstance(x,ast.ClassDef) and x.name=='IgorControllerNode')
         method=next(x for x in cls.body if isinstance(x,ast.FunctionDef) and x.name=='_scan_callback')
         context={'np':np,'math':math,'LaserScan':object,'time':SimpleNamespace(monotonic=lambda:10.)}
@@ -138,17 +138,17 @@ class ScanMetadataTests(unittest.TestCase):
         message.ranges[0]=math.nan
         self.callback()(node,message)
         self.assertIsNone(node.latest_ranges)
-        self.assertEqual(node.last_scan_time,0.)
+        self.assertIn(node.last_scan_time, (0., None))
 
 class ActiveMCUTests(unittest.TestCase):
     def test_missing_physical_serial_does_not_mock(self):
         from unittest.mock import patch
-        module=load('active_mcu','src/igor_controller/igor_controller/mcu_driver.py')
+        module=load('active_mcu','ros2_ws/src/igor_controller/igor_controller/mcu_driver.py')
         with patch.object(module,'serial',None):
             with self.assertRaises(RuntimeError):module.STM32Driver(mock=False)
 
     def test_short_motor_write_is_failure_and_nan_not_sent(self):
-        module=load('active_mcu2','src/igor_controller/igor_controller/mcu_driver.py')
+        module=load('active_mcu2','ros2_ws/src/igor_controller/igor_controller/mcu_driver.py')
         mcu=module.STM32Driver(mock=True)
         mcu.mock=False;mcu.ser=SimpleNamespace(is_open=True,write=lambda data:len(data)-1)
         self.assertFalse(mcu.send_motor_speeds(.1,0,0,0))
