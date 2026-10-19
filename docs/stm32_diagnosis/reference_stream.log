@@ -1,0 +1,135 @@
+Connecting to STM32 at /dev/rrc (baudrate: 1000000)...
+Connected! Streaming microcontroller packets in human-readable format...
+Press Ctrl+C to stop.
+
+17:10:56.805 [CRC OK] [IMU       ] Acc [g]: (+0.000, +0.000, +0.000) | Gyro [°/s]: (  +0.00,   +0.00,   +0.00)
+17:10:57.218 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.268 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.307 [CRC OK] [IMU       ] Acc [g]: (+1.257, +0.314, +0.471) | Gyro [°/s]: (  +4.95,   +7.05,   -1.63)
+17:10:57.318 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.368 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.418 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.468 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.518 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.568 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.618 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.668 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.718 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.768 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.807 [CRC OK] [IMU       ] Acc [g]: (+0.103, -0.928, -0.078) | Gyro [°/s]: (  +6.76,   +4.30,   -0.33)
+17:10:57.818 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.868 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.918 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:57.968 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.018 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.068 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.118 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.168 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.217 [CRC OK] [BATTERY/SYS] Battery Voltage: 4.200 V (4200 mV)
+17:10:58.218 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.268 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.308 [CRC OK] [IMU       ] Acc [g]: (+0.057, -0.941, -0.089) | Gyro [°/s]: (  +6.70,   +4.27,   -0.49)
+17:10:58.318 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.368 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.418 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.468 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.518 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.568 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.618 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.668 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.718 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.768 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.808 [CRC OK] [IMU       ] Acc [g]: (+0.058, -0.940, -0.088) | Gyro [°/s]: (  +6.90,   +4.38,   -0.45)
+17:10:58.818 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.868 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.918 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:58.968 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.018 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.068 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.118 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.168 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.218 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.267 [CRC OK] [BATTERY/SYS] Battery Voltage: 4.199 V (4199 mV)
+17:10:59.268 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.308 [CRC OK] [IMU       ] Acc [g]: (+0.058, -0.939, -0.088) | Gyro [°/s]: (  +6.63,   +4.29,   -0.30)
+17:10:59.318 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.368 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.418 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.468 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.518 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.568 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.618 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.668 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.718 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.768 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.808 [CRC OK] [IMU       ] Acc [g]: (+0.058, -0.940, -0.089) | Gyro [°/s]: (  +6.61,   +4.25,   -0.24)
+17:10:59.818 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.868 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.918 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:10:59.968 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.018 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.068 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.118 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.168 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.218 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.269 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.309 [CRC OK] [IMU       ] Acc [g]: (+0.059, -0.940, -0.088) | Gyro [°/s]: (  +6.75,   +4.36,   -0.39)
+17:11:00.317 [CRC OK] [BATTERY/SYS] Battery Voltage: 4.202 V (4202 mV)
+17:11:00.318 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.368 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.418 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.468 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.518 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.568 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.618 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.668 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.718 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.768 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.809 [CRC OK] [IMU       ] Acc [g]: (+0.058, -0.940, -0.089) | Gyro [°/s]: (  +6.75,   +4.28,   -0.31)
+17:11:00.818 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.868 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.918 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:00.968 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.019 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.068 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.118 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.168 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.218 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.268 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.309 [CRC OK] [IMU       ] Acc [g]: (+0.058, -0.940, -0.088) | Gyro [°/s]: (  +6.79,   +4.25,   -0.38)
+17:11:01.318 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.367 [CRC OK] [BATTERY/SYS] Battery Voltage: 4.202 V (4202 mV)
+17:11:01.368 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.418 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.468 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.518 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.568 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.618 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.668 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.718 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.768 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.810 [CRC OK] [IMU       ] Acc [g]: (+0.058, -0.940, -0.089) | Gyro [°/s]: (  +6.72,   +4.40,   -0.43)
+17:11:01.818 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.868 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.918 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:01.968 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.018 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.068 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.118 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.168 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.218 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.268 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.318 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.318 [CRC OK] [IMU       ] Acc [g]: (+0.058, -0.940, -0.088) | Gyro [°/s]: (  +6.61,   +4.26,   -0.52)
+17:11:02.368 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.417 [CRC OK] [BATTERY/SYS] Battery Voltage: 4.204 V (4204 mV)
+17:11:02.418 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.468 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.518 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+17:11:02.568 [CRC OK] [GAMEPAD   ] Sticks: L(+0.00, -0.00), R(+0.00, -0.00) | D-Pad: Center | Buttons: [None]
+
+============================================================
+Stream closed.
+Total packets received: 706
+CRC errors:            0
+============================================================

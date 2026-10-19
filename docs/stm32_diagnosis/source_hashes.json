@@ -1,0 +1,6 @@
+{
+  "ros2_ws/src/igor_controller/igor_controller/mcu_driver.py": "0681de371a5a31f6c9e4c85db98fd880f81e6b06b483e6cfa77efe58f1a4782c",
+  "ros2_ws/src/igor_controller/igor_controller/controller_node.py": "c69258119ce0393efacb13d7f0d4f6aaf953cd0caecc1c92cc3c87fd0dc405d7",
+  "ros2_ws/src/igor_bringup/launch/bringup.launch.py": "15aae33969b351965c1aa2d7d4f01c32fc43ccefebab3ce9a5a9e552cee3f9bf",
+  "test/test_mcu_recovery.py": "359c1648586ffd247761638815f6a2725ad87b9a685b474cf2c45b1d744d2711"
+}

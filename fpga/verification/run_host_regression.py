@@ -19,6 +19,8 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_TREE = ROOT / 'software_integration/src'
 SOURCE = SOURCE_TREE / 'igor_controller/igor_controller'
+# Standalone file loading must also resolve the transport's sibling modules.
+sys.path.insert(0, str(SOURCE))
 spec = importlib.util.spec_from_file_location('tested_fpga_bridge', SOURCE / 'fpga_bridge.py')
 bridge = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(bridge)
@@ -194,6 +196,20 @@ class ControllerTests(unittest.TestCase):
         n,c=self.fixture()
         n.fpga=SimpleNamespace(infer=lambda obs: (_ for _ in ()).throw(bridge.FPGACommunicationError('CRC')))
         self.assert_stop(n,c,'FPGA_TRANSPORT')
+    def test_mcu_reconnect_clears_cached_command_and_requires_new_command(self):
+        n,c=self.fixture(); n.mcu.reconnect_count=1
+        self.assert_stop(n,c,'MCU_RECONNECTED_AWAITING_COMMAND')
+        self.assertEqual(n.last_cmd_time,0.)
+        self.assertEqual((n.cmd_linear_x,n.cmd_linear_y,n.cmd_angular_z),(0.,0.,0.))
+        c.clear()
+        self.assert_stop(n,c,'COMMAND_STALE')
+    def test_mcu_reconnect_during_inference_stops_old_session_command(self):
+        n,c=self.fixture(); n.mcu.reconnect_count=0
+        def infer(obs):
+            n.mcu.reconnect_count=1
+            return np.zeros(3)
+        n.fpga.infer=infer
+        self.assert_stop(n,c,'MCU_RECONNECTED_AWAITING_COMMAND')
     def test_command_watchdog_stops_without_inference(self):
         n,c=self.fixture(); n.last_cmd_time-=1
         self.assert_stop(n,c,'COMMAND_STALE')

@@ -1,14 +1,14 @@
 {
   "scope": "software fixtures; no physical hardware",
   "sha256": {
-    "software_integration/src/igor_controller/igor_controller/fpga_bridge.py": "ee89e445fa424742202277811b38ae91b1a0d8cce20233d890b2f281ace13852",
-    "software_integration/src/igor_controller/igor_controller/controller_node.py": "222882b50b5248f5fa7b5013fc9294521b5d779d6b5722d329cf356957477b96",
-    "software_integration/src/igor_controller/igor_controller/mcu_driver.py": "e8109c40367c188a5b8cda1da4060792f776b44054cb3edb65056e592a413098",
+    "software_integration/src/igor_controller/igor_controller/fpga_bridge.py": "f60dda112bbe7c358ad80a7bd6f2c192e77016832cefb9f9d1770860164d8d48",
+    "software_integration/src/igor_controller/igor_controller/controller_node.py": "c69258119ce0393efacb13d7f0d4f6aaf953cd0caecc1c92cc3c87fd0dc405d7",
+    "software_integration/src/igor_controller/igor_controller/mcu_driver.py": "0681de371a5a31f6c9e4c85db98fd880f81e6b06b483e6cfa77efe58f1a4782c",
     "software_integration/src/igor_navigation/igor_navigation/controllers/cbf_safety_filter.py": "5c738853848837dae548a6c94b90c477b0a511c3e9f18af4f758eb410a149c6f",
     "software_integration/src/igor_navigation/igor_navigation/drivers/lidar_subsampler.py": "1177ffbd10cee9b6b32754e1488907adf052374e924fd1d221ca12fd389e30f1",
-    "verification/run_host_regression.py": "4c95d3956971b7db20125ee9eb20010163f437a2a27fec70d56c2b3e5a1ff53c"
+    "verification/run_host_regression.py": "fff0d06b11dc48b171d885b314820763fb8d85939e847e8c16fa5d24e9a43694"
   },
-  "tests": 29,
+  "tests": 31,
   "failures": 0,
   "errors": 0,
   "success": true

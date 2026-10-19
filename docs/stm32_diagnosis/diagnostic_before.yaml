@@ -1,0 +1,2 @@
+data: '{"algo": "cl_drl_cbf", "fpga": false, "mock": false, "safe": [0.0, 0.0, 0.0], "rps": [0.0, 0.0, 0.0, 0.0], "safety_permit": false, "fault": "COMMAND_STALE", "motor_tx_confirmed": true, "battery_v": 4.21, "imu_pkts": 410, "crc_err": 0, "timestamp": 1792404562.8287435}'
+---

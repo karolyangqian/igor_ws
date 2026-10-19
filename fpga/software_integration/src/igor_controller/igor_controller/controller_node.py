@@ -84,7 +84,7 @@ class IgorControllerNode(Node):
         # Declare ROS 2 Parameters
         self.declare_parameter('algorithm', 'cl_drl_cbf')
         self.declare_parameter('use_fpga', False)
-        self.declare_parameter('mcu_port', '/dev/ttyACM0')
+        self.declare_parameter('mcu_port', '/dev/rrc')
         self.declare_parameter('fpga_port', '/dev/fpga')
         self.declare_parameter('fpga_baudrate', 921600)
         self.declare_parameter('fpga_timeout', 0.3)
@@ -357,6 +357,8 @@ class IgorControllerNode(Node):
         self.cmd_linear_y = float(np.clip(msg.linear.y * scale, -max_vy, max_vy))
         self.cmd_angular_z = float(np.clip(msg.angular.z * scale, -max_wz, max_wz))
         self.last_cmd_time = time.monotonic()
+        if hasattr(self.mcu, 'acknowledge_command'):
+            self.mcu.acknowledge_command(getattr(self, '_mcu_generation', 0))
         if getattr(self, 'watchdog', None):
             self.watchdog.kick()
 
@@ -403,6 +405,14 @@ class IgorControllerNode(Node):
         """Main 50 Hz control execution loop."""
         now = time.monotonic()
         dt = 1.0 / getattr(self, 'control_rate_hz', 50.0)
+        generation = getattr(self.mcu, 'reconnect_count', 0)
+        previous = getattr(self, '_mcu_generation', 0)
+        self._mcu_generation = generation
+        if generation != previous:
+            self.cmd_linear_x = self.cmd_linear_y = self.cmd_angular_z = 0.
+            self.last_cmd_time = 0.
+            self._stop_for_fault("MCU_RECONNECTED_AWAITING_COMMAND")
+            return
         command_time = getattr(self, 'last_cmd_time', 0.0)
         scan_time = getattr(self, 'last_scan_time', None)
 
@@ -731,6 +741,16 @@ class IgorControllerNode(Node):
             motor_rps = raw_rps
 
         rps1, rps2, rps3, rps4 = float(motor_rps[0]), float(motor_rps[1]), float(motor_rps[2]), float(motor_rps[3])
+
+        # Inference/filtering may span a background MCU reconnect. Never send
+        # a command computed from the previous serial session to the new one.
+        latest_generation = getattr(self.mcu, 'reconnect_count', 0)
+        if latest_generation != generation:
+            self._mcu_generation = latest_generation
+            self.cmd_linear_x = self.cmd_linear_y = self.cmd_angular_z = 0.
+            self.last_cmd_time = 0.
+            self._stop_for_fault("MCU_RECONNECTED_AWAITING_COMMAND")
+            return
 
         # Transmit motor speed packet to STM32
         if not self.mcu.send_motor_speeds(rps1, rps2, rps3, rps4):

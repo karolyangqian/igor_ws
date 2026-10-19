@@ -23,6 +23,7 @@ import uuid
 
 ROOT=Path(__file__).resolve().parents[1]
 ASSETS=['ros2_ws/src/igor_controller/igor_controller/ethernet_protocol.py',
+       'ros2_ws/src/igor_controller/igor_controller/authenticated_transport.py',
         'src/igor_pipeline/hps_de10/de10_udp_gateway.py']
 
 class ConnectionError(RuntimeError):pass

@@ -1,0 +1,109 @@
+test_each_bad_response_is_an_error (__main__.BridgeTests) ... FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+ok
+test_failed_exchange_latches_against_late_valid_response (__main__.BridgeTests) ... FPGABridge operating in explicitly requested MOCK mode
+ok
+test_input_shape_nan_infinity_and_domain (__main__.BridgeTests) ... FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+ok
+test_no_automatic_mock_if_port_missing (__main__.BridgeTests) ... ok
+test_no_automatic_mock_if_serial_missing (__main__.BridgeTests) ... ok
+test_quantization_ties_even_and_negative (__main__.BridgeTests) ... FPGABridge operating in explicitly requested MOCK mode
+ok
+test_short_write_and_serial_exception (__main__.BridgeTests) ... FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+ok
+test_source_packet_and_integer_actions (__main__.BridgeTests) ... FPGABridge operating in explicitly requested MOCK mode
+ok
+test_total_deadline_rejects_slow_write_and_slow_read (__main__.BridgeTests) ... FPGABridge operating in explicitly requested MOCK mode
+FPGABridge operating in explicitly requested MOCK mode
+ok
+test_command_expires_during_compute (__main__.ControllerTests) ... ok
+test_command_watchdog_stops_without_inference (__main__.ControllerTests) ... ok
+test_final_envelope_and_all_axis_limits_after_filter (__main__.ControllerTests) ... ok
+test_incomplete_fov_scan_is_invalid (__main__.ControllerTests) ... ok
+test_invalid_command_stops (__main__.ControllerTests) ... ok
+test_invalid_scan_does_not_refresh_lease_or_become_clear (__main__.ControllerTests) ... ok
+test_mcu_reconnect_clears_cached_command_and_requires_new_command (__main__.ControllerTests) ... ok
+test_mcu_reconnect_during_inference_stops_old_session_command (__main__.ControllerTests) ... ok
+test_missing_and_frozen_lidar_stop (__main__.ControllerTests) ... ok
+test_missing_stale_and_future_imu_stop (__main__.ControllerTests) ... ok
+test_nonfinite_filter_output_stops (__main__.ControllerTests) ... ok
+test_nonfinite_sensor_stops (__main__.ControllerTests) ... ok
+test_real_cbf_no_longer_bypasses_critical_distance_stop (__main__.ControllerTests) ... ok
+test_scan_expires_during_compute (__main__.ControllerTests) ... ok
+test_scan_metadata_and_positive_infinity_no_return (__main__.ControllerTests) ... ok
+test_transport_failure_stops_original_nonzero_command (__main__.ControllerTests) ... ok
+test_valid_zero_residual_preserves_valid_operator_command (__main__.ControllerTests) ... ok
+test_wall_clock_jump_does_not_extend_motor_leases (__main__.ControllerTests) ... ok
+test_zero_operator_command_cannot_become_policy_motion (__main__.ControllerTests) ... ok
+test_explicit_mock_imu_timestamp_is_monotonic (__main__.MCUTests) ... STM32Driver operating in explicitly requested MOCK mode
+ok
+test_no_automatic_mock_if_serial_missing_or_port_unavailable (__main__.MCUTests) ... ok
+test_short_motor_write_is_not_success (__main__.MCUTests) ... STM32Driver operating in explicitly requested MOCK mode
+Short STM32 write: 26/27
+ok
+
+----------------------------------------------------------------------
+Ran 31 tests in 0.076s
+
+OK
+test_bad_packets_returns_and_long_or_backward_revolutions_rejected (__main__.LidarRegression) ... ok
+test_complete_scan_uses_previous_marker_stamp_and_no_next_scan_point (__main__.LidarRegression) ... ok
+test_explicit_mock_is_the_only_synthetic_mode (__main__.LidarRegression) ... ok
+test_fragmented_measurements_resynchronize_and_publish_completed_scan (__main__.LidarRegression) ... ok
+test_frozen_sensor_does_not_republish_or_refresh_timestamp (__main__.LidarRegression) ... ok
+test_invalid_configuration_rejected (__main__.LidarRegression) ... ok
+test_invalid_descriptor_fails_and_closes_port (__main__.LidarRegression) ... ok
+test_no_automatic_mock_when_port_missing (__main__.LidarRegression) ... ok
+test_no_automatic_mock_when_serial_missing (__main__.LidarRegression) ... ok
+test_partial_revolution_never_publishes_default_free_scan (__main__.LidarRegression) ... ok
+test_publish_once_at_acquisition_timestamp_and_correct_geometry (__main__.LidarRegression) ... ok
+test_queued_stale_or_future_scan_never_publishes (__main__.LidarRegression) ... ok
+test_repeated_bin_cannot_fake_coverage_and_keeps_nearest (__main__.LidarRegression) ... ok
+test_scan_bins_never_carry_previous_revolution (__main__.LidarRegression) ... ok
+test_segmented_valid_descriptor_and_boot_no_scan (__main__.LidarRegression) ... ok
+test_stream_exception_invalidates_unpublished_scan (__main__.LidarRegression) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.025s
+
+OK
+======================================================================
+  PROJECT IGOR: SOFTWARE INTEGRATION SYNCHRONIZATION
+  Canonical Source : /home/toyotateamaitb/igor_ws/ros2_ws/src
+  FPGA Mirror      : /home/toyotateamaitb/igor_ws/fpga/software_integration/src
+  Standalone Nav   : /home/toyotateamaitb/igor_navigation
+======================================================================
+
+[1/2] Syncing packages to fpga/software_integration/src/...
+  -> Copying igor_bringup...
+  -> Copying igor_controller...
+  -> Copying igor_navigation...
+
+[2/2] Syncing igor_navigation modules to project root...
+
+✔ File synchronization complete!
+
+======================================================================
+  RUNNING REGRESSION TEST SUITES
+======================================================================
+
+[Test 1/2] Running Host Regression: run_host_regression.py...
+
+[Test 2/2] Running LiDAR Regression: run_lidar_regression.py...
+
+✔ All regression tests passed with 100% success!
+✔ Verification evidence has been refreshed automatically.

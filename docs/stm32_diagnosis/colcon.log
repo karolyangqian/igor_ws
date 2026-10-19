@@ -1,0 +1,14 @@
+Starting >>> waypoint_action
+Starting >>> igor_navigation
+Finished <<< waypoint_action [1.42s]
+Starting >>> waypoint_client
+Starting >>> waypoint_server
+Finished <<< igor_navigation [3.50s]
+Starting >>> igor_controller
+Finished <<< waypoint_client [3.74s]
+Finished <<< waypoint_server [3.74s]
+Finished <<< igor_controller [2.95s]
+Starting >>> igor_bringup
+Finished <<< igor_bringup [2.72s]
+
+Summary: 6 packages finished [9.76s]

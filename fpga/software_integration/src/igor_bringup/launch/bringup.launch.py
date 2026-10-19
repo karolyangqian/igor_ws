@@ -36,7 +36,7 @@ def generate_launch_description():
 
     mcu_port_arg = DeclareLaunchArgument(
         'mcu_port',
-        default_value='/dev/ttyACM0',
+        default_value='/dev/rrc',
         description='Serial port for JetAuto STM32 chassis controller'
     )
 

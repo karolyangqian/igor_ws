@@ -1,0 +1,143 @@
+test_check_only_has_no_mutations_or_console_access (test_connect_de10.ConnectTests) ... ok
+test_console_autodetection_does_not_probe_robot_ports (test_connect_de10.ConnectTests) ... ok
+test_console_command_ignores_echo_and_handles_fragments (test_connect_de10.ConnectTests) ... ok
+test_console_failed_command_not_success (test_connect_de10.ConnectTests) ... ok
+test_console_sudo_password_is_not_a_shell_command (test_connect_de10.ConnectTests) ... ok
+test_enumerated_ftdi_gets_driver_then_port_is_rechecked (test_connect_de10.ConnectTests) ... ok
+test_hps_setup_runs_only_after_identity_check (test_connect_de10.ConnectTests) ... ok
+test_jetson_interface_and_ambiguity (test_connect_de10.ConnectTests) ... ok
+test_local_machine_identity (test_connect_de10.ConnectTests) ... ok
+test_neighbor_discovery_uses_only_wired_subnet_and_valid_entries (test_connect_de10.ConnectTests) ... ok
+test_reject_jetson_identity (test_connect_de10.ConnectTests) ... ok
+test_remote_directory_quotes_user_input (test_connect_de10.ConnectTests) ... ok
+test_serial_argument_is_shell_quoted (test_connect_de10.ConnectTests) ... ok
+test_ssh_probe_binds_jetson_wired_address (test_connect_de10.ConnectTests) ... ok
+test_standalone_script_extracts_assets_and_runs_without_repo (test_connect_de10.ConnectTests) ... ok
+test_usb_absent_does_not_load_random_drivers (test_connect_de10.ConnectTests) ... ok
+test_usb_inventory_from_sysfs (test_connect_de10.ConnectTests) ... ok
+test_wrong_console_never_changes_remote_ip (test_connect_de10.ConnectTests) ... ok
+test_authenticated_udp_to_uart_fixture (test_ethernet.EthernetTests) ... ok
+test_c_struct_interoperability (test_ethernet.EthernetTests) ... ok
+test_cli_capture_redecode_and_network_only_labels (test_ethernet.EthernetTests) ... ok
+test_coarse_clock_still_produces_unique_transactions (test_ethernet.EthernetTests) ... ok
+test_duplicate_datagram_does_not_trigger_uart_again (test_ethernet.EthernetTests) ... ok
+test_exact_protocol_sizes_roundtrip_all_cases (test_ethernet.EthernetTests) ... ok
+test_malformed_request_never_reaches_uart (test_ethernet.EthernetTests) ... DROP ('127.0.0.1', 51565): Request length 501 != 492
+ok
+test_mock_explicitly_not_production_success (test_ethernet.EthernetTests) ... ok
+test_old_hal_cannot_map_unreserved_physical_ddr (test_ethernet.EthernetTests) ... ok
+test_production_bridge_uses_same_udp_protocol (test_ethernet.EthernetTests) ... ok
+test_real_localhost_udp_to_uart_fixture_16_cases (test_ethernet.EthernetTests) ... ok
+test_reject_lengths_crc_nonfinite_and_redundant_float (test_ethernet.EthernetTests) ... ok
+test_source_and_packaged_clients_identical (test_ethernet.EthernetTests) ... ok
+test_source_controller_transport_handler_commands_full_stop (test_ethernet.EthernetTests) ... ok
+test_stale_identity_ignored_and_timeout_latched (test_ethernet.EthernetTests) ... ok
+test_uart_error_latches_server_and_client (test_ethernet.EthernetTests) ... BACKEND LATCHED: Invalid UART response: 00 00 00 00 00 00 00 00 00 00 00; reset FPGA and restart gateway
+ok
+test_uart_total_deadline_not_just_read_timeout (test_ethernet.EthernetTests) ... BACKEND LATCHED: UART write deadline expired; reset FPGA and restart gateway
+ok
+test_crc_burst_resets_then_accepts_good_frame (test_mcu_recovery.MCURecoveryTests) ... STM32Driver operating in explicitly requested MOCK mode
+ok
+test_missing_port_still_raises_at_startup (test_mcu_recovery.MCURecoveryTests) ... ok
+test_partial_frame_expires_before_next_valid_frame (test_mcu_recovery.MCURecoveryTests) ... STM32Driver operating in explicitly requested MOCK mode
+ok
+test_reconnect_cooldown_invalidation_and_count (test_mcu_recovery.MCURecoveryTests) ... STM32Driver operating in explicitly requested MOCK mode
+STM32 reconnected; STOP sent, awaiting fresh telemetry/command
+ok
+test_reconnect_retries_and_cancels_on_shutdown (test_mcu_recovery.MCURecoveryTests) ... STM32Driver operating in explicitly requested MOCK mode
+STM32 reconnect failed: gone
+ok
+test_rx_exception_recovers_and_restarts_parser (test_mcu_recovery.MCURecoveryTests) ... STM32Driver operating in explicitly requested MOCK mode
+STM32 RX failed: USB unplug
+STM32 reconnected; STOP sent, awaiting fresh telemetry/command
+ok
+test_safe_open_lines_precede_open_and_initial_packet_is_stop (test_mcu_recovery.MCURecoveryTests) ... STM32Driver operating in explicitly requested MOCK mode
+ok
+test_short_initial_stop_closes_port (test_mcu_recovery.MCURecoveryTests) ... STM32Driver operating in explicitly requested MOCK mode
+ok
+test_write_failure_invalidates_imu_and_blocks_followup_motion (test_mcu_recovery.MCURecoveryTests) ... STM32Driver operating in explicitly requested MOCK mode
+Failed to transmit motor speeds: unplugged
+ok
+test_duplicate_sram_instance_rejected (test_netgen_json.NetgenJSONTests) ... ok
+test_invalid_unicode_identifier_escape (test_netgen_json.NetgenJSONTests) ... ok
+test_literal_hdl_identifier_escapes (test_netgen_json.NetgenJSONTests) ... ok
+test_missing_supply_connection_rejected (test_netgen_json.NetgenJSONTests) ... ok
+test_power_adapter_preserves_connections_and_other_cells (test_netgen_json.NetgenJSONTests) ... ok
+test_report_retains_original_and_mismatch_data (test_netgen_json.NetgenJSONTests) ... ok
+test_structurally_invalid_report_still_fails (test_netgen_json.NetgenJSONTests) ... ok
+test_valid_escapes_and_unicode_unchanged (test_netgen_json.NetgenJSONTests) ... ok
+test_active_source_expired_command_stops (test_rectangle_route.ActiveControllerGuards) ... ok
+test_active_source_stale_or_missing_scan_stops_before_inference (test_rectangle_route.ActiveControllerGuards) ... ok
+test_missing_physical_serial_does_not_mock (test_rectangle_route.ActiveMCUTests) ... ok
+test_short_motor_write_is_failure_and_nan_not_sent (test_rectangle_route.ActiveMCUTests) ... STM32Driver operating in explicitly requested MOCK mode
+Short STM32 write: 26/27
+ok
+test_frozen_pose_times_out_and_never_claims_distance (test_rectangle_route.RectangleTests) ... ok
+test_invalid_dimensions_and_speed (test_rectangle_route.RectangleTests) ... ok
+test_measured_motion_first_five_then_four_with_four_left_turns (test_rectangle_route.RectangleTests) ... ok
+test_no_right_corner_to_correct_large_overshoot (test_rectangle_route.RectangleTests) ... ok
+test_nonfinite_and_path_deviation_latch_zero (test_rectangle_route.RectangleTests) ... ok
+test_wheel_frame_matches_wire_contract (test_rectangle_route.RectangleTests) ... ok
+test_actual_slamtec_359_degree_scan_accepted (test_rectangle_route.ScanMetadataTests) ... ok
+test_blind_route_integrates_commands_in_correct_order (test_rectangle_route.TimedRectangleTests) ... ok
+test_stopped_controller_does_not_accumulate_distance (test_rectangle_route.TimedRectangleTests) ... ok
+test_bad_readback_and_short_transport (test_reference_model.HostTests) ... ok
+test_invalid_program_ranges_have_no_spi_side_effects (test_reference_model.HostTests) ... ok
+test_load_frames_endianness_and_readback (test_reference_model.HostTests) ... ok
+test_read_program_at_last_word (test_reference_model.HostTests) ... ok
+test_branch_conditions_and_signed_boundaries (test_reference_model.ModelTests) ... ok
+test_demo_fits_and_ownership_is_disjoint (test_reference_model.ModelTests) ... ok
+test_firmware_error_flag (test_reference_model.ModelTests) ... ok
+test_geometry_matches_rtl (test_reference_model.ModelTests) ... ok
+test_literal_fetch_pause_and_restart (test_reference_model.ModelTests) ... ok
+test_masked_open_drain_and_literal_wrap (test_reference_model.ModelTests) ... ok
+test_rejected_encodings (test_reference_model.ModelTests) ... ok
+test_round_robin_and_halt (test_reference_model.ModelTests) ... ok
+test_uart_baud_selection_and_firmware_boundaries (test_reference_model.ModelTests) ... ok
+test_wait_full_byte_and_enable_freeze (test_reference_model.ModelTests) ... ok
+test_branches_literal_wrap_and_pin_wait (test_rtl.RTLTests) ... ok
+test_four_protocol_contexts_concurrently (test_rtl.RTLTests) ... ok
+test_host_protection_stop_restart_and_reset (test_rtl.RTLTests) ... ok
+test_i2c_nack_stops_before_data (test_rtl.RTLTests) ... ok
+test_i2c_open_drain_ack_and_stretch (test_rtl.RTLTests) ... ok
+test_memory_geometry_live_read_and_invalid_high_address (test_rtl.RTLTests) ... ok
+test_pin_ownership_rejects_overlap_and_releases_old_mask (test_rtl.RTLTests) ... ok
+test_randomized_execution_and_ena (test_rtl.RTLTests) ... ok
+test_spi_mode0_wire_transfer (test_rtl.RTLTests) ... ok
+test_targeted_sram_programming_preserves_other_addresses (test_rtl.RTLTests) ... ok
+test_uart_rx_baud_mismatch (test_rtl.RTLTests) ... ok
+test_uart_rx_data_patterns_timing_and_pin_mapping (test_rtl.RTLTests) ... ok
+test_uart_rx_framing_error_status (test_rtl.RTLTests) ... ok
+test_uart_rx_idle_qualification (test_rtl.RTLTests) ... ok
+test_uart_rx_start_glitch_and_valid_frame (test_rtl.RTLTests) ... ok
+test_uart_rx_wire_frame (test_rtl.RTLTests) ... ok
+test_uart_tx_patterns_and_period_boundaries (test_rtl.RTLTests) ... ok
+test_uart_tx_wire_frame (test_rtl.RTLTests) ... ok
+test_daily_rotation_and_old_key_rejection (test_security_auth.AuthenticationTests) ... ok
+test_expiry_and_rollback (test_security_auth.AuthenticationTests) ... ok
+test_host_authenticated_uart_exchange (test_security_auth.AuthenticationTests) ... ok
+test_roundtrip_tamper_replay_and_reflection (test_security_auth.AuthenticationTests) ... ok
+test_wrong_identity_truncation_and_daily_artifact (test_security_auth.AuthenticationTests) ... ok
+test_cpu_z_and_gyro_use_si (test_security_auth.NormalizationTests) ... ok
+test_training_and_ros_z_contract (test_security_auth.NormalizationTests) ... ok
+test_macro_partial_mask_enable_and_output_hold (test_sram.SRAMTests) ... ok
+test_wrapper_byte_preservation_read_edge_and_reset_retention (test_sram.SRAMTests) ... ok
+test_corrupted_echo_fails (test_uart_diagnose.DiagnosticTests) ... ok
+test_exact_loopback_both_bauds (test_uart_diagnose.DiagnosticTests) ... ok
+test_idle_never_transmits_and_records_noise (test_uart_diagnose.DiagnosticTests) ... ok
+test_noise_blocks_loopback_transmission (test_uart_diagnose.DiagnosticTests) ... ok
+test_reject_invalid (test_uart_fabric.UARTTests) ... ok
+test_resync_corruption_and_fragments (test_uart_fabric.UARTTests) ... ok
+test_wire_contract (test_uart_fabric.UARTTests) ... ok
+test_capture_rejects_tampering_and_missing_frames (test_uart_q88.Q88Tests) ... ok
+test_fixture_integrity (test_uart_q88.Q88Tests) ... ok
+test_hardware_suite_with_simulated_serial_fixture (test_uart_q88.Q88Tests) ... ok
+test_hardware_valid_crc_wrong_model_is_failure (test_uart_q88.Q88Tests) ... ok
+test_integer_endian_and_domains (test_uart_q88.Q88Tests) ... ok
+test_main_test_marks_numeric_mismatch_failed (test_uart_q88.Q88Tests) ... ok
+test_portable_installer_and_repeat_backup (test_uart_q88.Q88Tests) ... ok
+
+----------------------------------------------------------------------
+Ran 120 tests in 32.969s
+
+OK

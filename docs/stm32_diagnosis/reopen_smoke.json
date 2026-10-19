@@ -1,0 +1,17 @@
+{
+  "nonzero_motor_commands_sent": false,
+  "fault_injection": "software transport-failure event; not physical unplug",
+  "before": {
+    "imu_packets": 105,
+    "imu_time": 17532.537152922,
+    "reconnect_count": 0
+  },
+  "after": {
+    "imu_packets": 108,
+    "imu_time": 17533.714301637,
+    "reconnect_count": 1,
+    "motion_enabled": false,
+    "crc_errors": 0
+  },
+  "passed": true
+}

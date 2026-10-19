@@ -80,7 +80,7 @@ class ActiveControllerGuards(unittest.TestCase):
     def test_active_source_stale_or_missing_scan_stops_before_inference(self):
         for scan,t in [(None,0),(np.ones(360),9.)]:
             reasons=[]
-            node=SimpleNamespace(control_rate_hz=50.,last_cmd_time=10.,use_mock_serial=False,
+            node=SimpleNamespace(mcu=SimpleNamespace(reconnect_count=0),control_rate_hz=50.,last_cmd_time=10.,use_mock_serial=False,
                 latest_ranges=scan,last_scan_time=t,freshness_timeout_sec=.025,
                 _stop_for_fault=reasons.append)
             self.control()(node)
@@ -88,7 +88,7 @@ class ActiveControllerGuards(unittest.TestCase):
 
     def test_active_source_expired_command_stops(self):
         reasons=[]
-        node=SimpleNamespace(control_rate_hz=50.,last_cmd_time=9.,_stop_for_fault=reasons.append)
+        node=SimpleNamespace(mcu=SimpleNamespace(reconnect_count=0),control_rate_hz=50.,last_cmd_time=9.,_stop_for_fault=reasons.append)
         self.control()(node)
         self.assertEqual(reasons,['COMMAND_STALE'])
 

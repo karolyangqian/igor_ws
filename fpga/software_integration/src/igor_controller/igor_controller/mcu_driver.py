@@ -71,7 +71,7 @@ class STM32Driver:
 
     def __init__(
         self,
-        port: str = "/dev/ttyACM0",
+        port: str = "/dev/rrc",
         baudrate: int = 1000000,
         mock: bool = False
     ):
@@ -82,6 +82,10 @@ class STM32Driver:
         self.ser: Optional[serial.Serial] = None
         self._lock = threading.Lock()
         self._running = False
+        self._stop_event = threading.Event()
+        self._transport_failed = threading.Event()
+        self.reconnect_count = 0
+        self._motion_enabled = True
         self._rx_thread: Optional[threading.Thread] = None
 
         # Latest IMU State: ax, ay, az (in g), gx, gy, gz (in deg/s)
@@ -105,18 +109,7 @@ class STM32Driver:
             raise RuntimeError("pyserial is unavailable for the physical STM32 driver")
 
         try:
-            self.ser = serial.Serial(
-                port=self.port,
-                baudrate=self.baudrate,
-                timeout=0.05,
-                write_timeout=0.05,
-                exclusive=True
-            )
-            self.ser.rts = False
-            self.ser.dtr = False
-            time.sleep(0.05)
-            if not self.send_motor_speeds(0.0, 0.0, 0.0, 0.0):
-                raise RuntimeError("Cannot transmit initial STM32 STOP")
+            self.ser = self._open_port()
             self._running = True
             self._rx_thread = threading.Thread(target=self._rx_loop, daemon=True)
             self._rx_thread.start()
@@ -128,6 +121,74 @@ class STM32Driver:
             self.ser = None
             raise RuntimeError(f"Cannot initialize physical STM32 {self.port}: {e}") from e
 
+    def _open_port(self):
+        """Configure control lines before opening, as in stream_stm32.py.
+
+        An OS/USB driver can still glitch physical lines; verify on the board.
+        Every newly opened connection receives STOP before being published.
+        """
+        port = serial.Serial(port=None, baudrate=self.baudrate, timeout=0.05,
+                             write_timeout=0.05, exclusive=True)
+        try:
+            port.rts = False
+            port.dtr = False
+            port.port = self.port
+            port.open()
+            port.reset_input_buffer()
+            port.reset_output_buffer()
+            packet = self._motor_packet((0., 0., 0., 0.))
+            if port.write(packet) != len(packet):
+                raise RuntimeError("Cannot transmit initial STM32 STOP")
+            # Avoid an unbounded tcdrain/flush on a disconnected USB device.
+            return port
+        except Exception:
+            port.close()
+            raise
+
+    @classmethod
+    def _motor_packet(cls, speeds):
+        payload = bytearray([cls.SUB_CMD_MOTOR_SPEED, 4])
+        for idx, rps in enumerate(speeds):
+            payload.extend(struct.pack("<Bf", idx, float(rps)))
+        packet = bytearray([cls.START_BYTE1, cls.START_BYTE2, cls.FUNC_MOTOR, len(payload)])
+        packet.extend(payload)
+        packet.append(checksum_crc8(packet[2:]))
+        return bytes(packet)
+
+    def _invalidate_telemetry(self):
+        self._motion_enabled = False
+        with self._imu_lock:
+            self._latest_imu_time = 0.
+        with self._battery_lock:
+            self._battery_voltage = 0.
+
+    def _recover_transport(self):
+        """RX worker owns recovery; control callbacks never open a serial port."""
+        with self._lock:
+            old, self.ser = self.ser, None
+        self._invalidate_telemetry()
+        if old is not None:
+            try:
+                old.close()
+            except Exception:
+                pass
+        while self._running and not self._stop_event.wait(1.0):
+            try:
+                port = self._open_port()
+            except Exception as exc:
+                logger.warning("STM32 reconnect failed: %s", exc)
+                continue
+            with self._lock:
+                if not self._running:
+                    port.close()
+                    return False
+                self.ser = port
+                self.reconnect_count += 1
+                self._transport_failed.clear()
+            logger.warning("STM32 reconnected; STOP sent, awaiting fresh telemetry/command")
+            return True
+        return False
+
     def _rx_loop(self) -> None:
         """Background state-machine thread reading incoming serial stream."""
         state = 0  # 0: wait 0xAA, 1: wait 0x55, 2: func, 3: len, 4: data, 5: crc
@@ -135,11 +196,29 @@ class STM32Driver:
         length = 0
         buf = bytearray()
 
-        while self._running and self.ser and self.ser.is_open:
+        consecutive_crc_errors = 0
+        last_bytes = time.monotonic()
+        last_valid = last_bytes
+        while self._running:
+            if self._transport_failed.is_set() or self.ser is None or not self.ser.is_open:
+                if not self._recover_transport():
+                    break
+                state = 0
+                buf.clear()
+                consecutive_crc_errors = 0
+                last_bytes = last_valid = time.monotonic()
             try:
                 raw_bytes = self.ser.read(64)
+                now = time.monotonic()
+                if state and now - last_bytes > 0.1:
+                    state = 0
+                    buf.clear()
                 if not raw_bytes:
+                    if now - last_valid > 1.0:
+                        self._transport_failed.set()
+                        self._invalidate_telemetry()
                     continue
+                last_bytes = now
 
                 for b in raw_bytes:
                     if state == 0:
@@ -176,6 +255,8 @@ class STM32Driver:
                         crc = b
                         expected_crc = checksum_crc8(bytes([func_id, length]) + bytes(buf))
                         if crc == expected_crc:
+                            consecutive_crc_errors = 0
+                            last_valid = time.monotonic()
                             if func_id == self.FUNC_IMU and len(buf) >= 24:
                                 ax, ay, az, gx, gy, gz = struct.unpack('<6f', bytes(buf[:24]))
                                 with self._imu_lock:
@@ -188,10 +269,19 @@ class STM32Driver:
                                     self._battery_voltage = v_mv / 1000.0
                         else:
                             self.crc_errors += 1
+                            consecutive_crc_errors += 1
+                            if consecutive_crc_errors >= 8:
+                                self.ser.reset_input_buffer()
+                                state = 0
+                                buf.clear()
+                                consecutive_crc_errors = 0
+                                self._invalidate_telemetry()
+                                break
                         state = 1 if b == self.START_BYTE1 else 0
             except Exception as e:
-                logger.debug(f"RX loop read exception: {e}")
-                time.sleep(0.01)
+                logger.warning("STM32 RX failed: %s", e)
+                self._transport_failed.set()
+                self._invalidate_telemetry()
 
     def get_latest_imu(self) -> Tuple[Tuple[float, float, float], Tuple[float, float, float], float]:
         """
@@ -217,6 +307,12 @@ class STM32Driver:
         with self._battery_lock:
             return self._battery_voltage
 
+    def acknowledge_command(self, generation):
+        """Only a new controller command for the current session can rearm motion."""
+        with self._lock:
+            if generation == self.reconnect_count and not self._transport_failed.is_set():
+                self._motion_enabled = True
+
     def send_motor_speeds(
         self,
         rps_m1: float,
@@ -241,38 +337,38 @@ class STM32Driver:
         if not self.ser or not self.ser.is_open:
             return False
 
-        # Construct payload: [SUB_CMD, count=4] + 4x [motor_idx, float32_speed]
-        payload = bytearray([self.SUB_CMD_MOTOR_SPEED, 4])
-        for idx, rps in enumerate([rps_m1, rps_m2, rps_m3, rps_m4]):
-            payload.extend(struct.pack("<Bf", idx, float(rps)))
-
-        packet = bytearray([self.START_BYTE1, self.START_BYTE2, self.FUNC_MOTOR, len(payload)])
-        packet.extend(payload)
-        packet.append(checksum_crc8(bytes(packet[2:])))
+        packet = self._motor_packet((rps_m1, rps_m2, rps_m3, rps_m4))
 
         try:
             with self._lock:
-                count = self.ser.write(bytes(packet))
-                if hasattr(self.ser, 'flush'):
-                    self.ser.flush()
+                if self._transport_failed.is_set() or self.ser is None or not self.ser.is_open:
+                    return False
+                if not self._motion_enabled and any((rps_m1, rps_m2, rps_m3, rps_m4)):
+                    return False
+                count = self.ser.write(packet)
             if count != len(packet):
                 logger.error(f"Short STM32 write: {count}/{len(packet)}")
+                self._transport_failed.set()
+                self._invalidate_telemetry()
                 return False
             return True
         except Exception as e:
             logger.error(f"Failed to transmit motor speeds: {e}")
+            self._transport_failed.set()
+            self._invalidate_telemetry()
             return False
 
     def close(self) -> None:
         """Stop motors and safely close serial link."""
         self._running = False
+        self._stop_event.set()
         try:
             self.send_motor_speeds(0.0, 0.0, 0.0, 0.0)
         except Exception:
             pass
 
         if self._rx_thread and self._rx_thread.is_alive():
-            self._rx_thread.join(timeout=0.2)
+            self._rx_thread.join(timeout=1.0)
 
         if self.ser and self.ser.is_open:
             try:
