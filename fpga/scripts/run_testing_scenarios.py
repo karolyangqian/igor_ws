@@ -8,6 +8,7 @@ import re
 import subprocess
 import sys
 import time
+from usb_serial_roles import fpga_port
 
 FPGA = Path(__file__).resolve().parents[1]
 REPO = FPGA.parent
@@ -16,8 +17,10 @@ REPO = FPGA.parent
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--skip-board', action='store_true', help='Report board stages as NOT_RUN')
+    parser.add_argument('--lidar-only', action='store_true', help='Real LiDAR plus software/RTL; no STM, FPGA serial or JTAG access')
     parser.add_argument('--lidar-port', default='auto', help='RPLIDAR A1 CH340 adapter port or auto')
     parser.add_argument('--stm-port', default='auto', help='STM CH9102 port or auto')
+    parser.add_argument('--fpga-port', default='auto', help='FPGA Prolific USB-UART port or auto')
     args = parser.parse_args()
     out = FPGA / 'evidence/testing_scenarios' / dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     out.mkdir(parents=True)
@@ -75,11 +78,20 @@ def main():
         motion_requested=False, note='Software fixtures, RTL simulation and board checks are separate from robot acceptance.'), indent=2) + '\n', encoding='utf-8')
     print('Evidence:', out, flush=True)
     try:
-        if args.skip_board:
+        if args.lidar_only:
+            run('lidar_communication_and_feature_format', [sys.executable, str(FPGA / 'scripts/lidar_ai_reader.py'), '--port', args.lidar_port, '--seconds', '15', '--output', str(out / 'lidar_ai')])
+            sensor_summary = out / 'lidar_ai/summary.json'
+            if sensor_summary.is_file():
+                sensor = json.loads(sensor_summary.read_text(encoding='utf-8'))
+                if not sensor.get('scan_ok'):
+                    unavailable('lidar_measurement_quality', sensor.get('quality_gate_reason', 'Sensor quality not established'))
+            unavailable('STM_telemetry', 'LiDAR-only profile; STM not accessed', 'NOT_RUN')
+        elif args.skip_board:
             unavailable('laptop_sensor_preflight', 'Explicit --skip-board selection', 'NOT_RUN')
         else:
             run('laptop_sensor_preflight', [sys.executable, str(FPGA / 'scripts/laptop_sensor_preflight.py'),
                                           '--lidar-port', args.lidar_port, '--stm-port', args.stm_port,
+                                          '--scan-mode', 'express',
                                           '--output', str(out / 'sensors')])
         for filename in ('test_rectangle_route.py', 'test_uart_fabric.py', 'test_uart_q88.py', 'test_ethernet.py', 'test_security_auth.py'):
             name = filename.removesuffix('.py')
@@ -89,15 +101,24 @@ def main():
                 run(name, [sys.executable, '-m', 'unittest', 'discover', '-s', 'test', '-p', filename, '-q'], unit=True)
         run('laptop_fault_contracts', [sys.executable, '-m', 'unittest', 'discover', '-s', 'fpga/verification', '-p', 'test_laptop_scenario_contracts.py', '-q'], unit=True)
         run('laptop_sensor_decoder', [sys.executable, '-m', 'unittest', 'discover', '-s', 'fpga/verification', '-p', 'test_laptop_sensor_decode.py', '-q'], unit=True)
+        run('lidar_ai_features', [sys.executable, '-m', 'unittest', 'discover', '-s', 'fpga/verification', '-p', 'test_lidar_ai_features.py', '-q'], unit=True)
+        run('lidar_express_decoder', [sys.executable, '-m', 'unittest', 'discover', '-s', 'fpga/verification', '-p', 'test_lidar_express.py', '-q'], unit=True)
         run('model_identity_oracle', [sys.executable, str(FPGA / 'scripts/verify_mock_inference.py'), '--self-test'])
         run('parallel8_rtl_256_vectors', [sys.executable, str(FPGA / 'scripts/verify_mock_inference.py'), '--rtl-sim'])
-        if args.skip_board:
+        if args.skip_board or args.lidar_only:
             for name in ('physical_parallel8_256_vectors', 'physical_uart_return', 'passive_datalogger'):
-                unavailable(name, 'Explicit --skip-board selection', 'NOT_RUN')
+                unavailable(name, 'Explicit --skip-board or --lidar-only selection', 'NOT_RUN')
         else:
             # The board is an inference endpoint; this script never opens STM COM9 or commands motors.
-            run('physical_parallel8_256_vectors', [sys.executable, str(FPGA / 'scripts/verify_board_jtag.py'), '--port', 'COM12', '--program'])
-            run('physical_uart_return', [sys.executable, str(FPGA / 'scripts/verify_mock_inference.py'), '--port', 'COM12'])
+            try:
+                selected_port = fpga_port(args.fpga_port)
+            except RuntimeError as exc:
+                unavailable('physical_parallel8_256_vectors', str(exc))
+                unavailable('physical_uart_return', str(exc))
+            else:
+                print('Detected FPGA UART:', selected_port, flush=True)
+                run('physical_parallel8_256_vectors', [sys.executable, str(FPGA / 'scripts/verify_board_jtag.py'), '--port', selected_port, '--program'])
+                run('physical_uart_return', [sys.executable, str(FPGA / 'scripts/verify_mock_inference.py'), '--port', selected_port])
             run('passive_datalogger', [sys.executable, str(FPGA / 'scripts/fpga_datalogger.py'), '--duration', '3', '--location', 'Scenario runner - physical location unspecified'])
         for name, reason in (
             ('laptop_motion_readiness', 'See actual sensor stage logs. Physical pose, verified IMU units and a validated laptop motor-control session are still required; no motion is started by this runner.'),

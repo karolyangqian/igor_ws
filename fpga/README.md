@@ -1,5 +1,7 @@
 # IGOR FPGA — mulai di sini
 
+**LiDAR dari laptop:** [panduan Express Scan, 64 kandidat input AI, validity mask dan tes A/B/C](docs/LIDAR_AI_LAPTOP.md). Shortcut Desktop: **IGOR - LiDAR AI Live**, **IGOR - Testing ABC**, **IGOR - LiDAR AI Logs**.
+
 **Live input → output otomatis:** [terminal, repeat timer 1 detik, status komunikasi dan CSV/JSONL](docs/LIVE_INPUT_OUTPUT.md). Shortcut Desktop: **IGOR - LIVE Input Output Auto Check**.
 
 **Testing scenarios dari laptop:** [runner, pemetaan A/B/C, hasil dan shortcut](docs/TESTING_SCENARIO_RUNNER.md); [dokumen asli pengguna](testing_scenario.md).

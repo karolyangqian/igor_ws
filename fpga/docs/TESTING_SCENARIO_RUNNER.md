@@ -1,5 +1,7 @@
 # Testing scenarios dari laptop Windows
 
+**Pembaruan 20 Oktober 2026:** shortcut **IGOR - Testing ABC** kini memilih profil LiDAR saja bila FPGA/STM tidak tersedia. Shortcut **IGOR - LiDAR AI Live** mengulang scan dan logging 64 kandidat fitur dengan validity mask. Lihat [panduan LiDAR AI laptop](LIDAR_AI_LAPTOP.md) untuk cara pakai, hasil COM17, driver 3.4 dan batas kualitas pengukuran. Tidak ada perubahan RTL atau protokol FPGA untuk fitur ini.
+
 Dokumen yang dikirim disimpan utuh sebagai `fpga/testing_scenario.md`. Contoh path dan link di dalam dokumen asal mengacu pada root repo/sistem pembuatnya. Sesuai klarifikasi pengguna, **Jetson dan ROS bukan prasyarat untuk runner laptop**. Semua file tambahan berada dalam `fpga/`; source referensi `src/` tidak diubah.
 
 Klik Desktop **IGOR - Testing Scenarios** untuk menjalankan `fpga/scripts/run_testing_scenarios.py`. Tutup logger/terminal JTAG lain sebelum menjalankan suite. Board dan COM12 harus tersedia, Jetson dilepas dari pin UART, dan kabel adapter sesuai panduan mock board. Runner memprogram observer image, mengirim observasi sintetis hanya ke FPGA, dan membaca sensor STM32 secara pasif. Tidak ada perintah motor.
