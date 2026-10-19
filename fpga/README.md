@@ -1,5 +1,7 @@
 # IGOR FPGA — mulai di sini
 
+**Live input → output otomatis:** [terminal, repeat timer 1 detik, status komunikasi dan CSV/JSONL](docs/LIVE_INPUT_OUTPUT.md). Shortcut Desktop: **IGOR - LIVE Input Output Auto Check**.
+
 **Testing scenarios dari laptop:** [runner, pemetaan A/B/C, hasil dan shortcut](docs/TESTING_SCENARIO_RUNNER.md); [dokumen asli pengguna](testing_scenario.md).
 
 **FPGA → laptop datalogger:** [timestamp, lokasi manual, CSV/JSONL dan shortcut Desktop](docs/FPGA_DATALOGGER.md). Jalankan setelah image observer diprogram; logger membaca hasil melalui USB-Blaster JTAG.
