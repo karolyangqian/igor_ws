@@ -1,5 +1,7 @@
 # LiDAR nyata ke input AI — laptop Windows
 
+**Baseline yang disetujui pengguna, 20 Oktober 2026:** RPLIDAR A1 dengan CH340 driver **3.4.2014.8**, **Express Scan**, **115200 baud 8N1**, deteksi COM otomatis dan preprocessing 64 fitur yang telah diuji. Gunakan konfigurasi ini untuk pengujian berikutnya. Bukti validasi berasal dari commit `85454e2` dan sesi Express di bawah. Standard Scan hanya untuk diagnosis dengan pilihan eksplisit; tidak ada fallback otomatis yang menyembunyikan kegagalan Express. Kalibrasi presisi jarak/yaw dan acceptance robot lengkap tetap merupakan pengujian terpisah.
+
 ## Shortcut dan pemakaian
 
 | Desktop shortcut | Fungsi |
@@ -22,7 +24,7 @@ Python 3.11 lokal, numpy dan pyserial tersedia. Launcher memilih Python tersebut
 
 `COM → identitas/health → capsule Express 84 byte + XOR → 32 node → rotasi lengkap → grid baru 360 bin → 64 beam depan → normalisasi /3,50 → Q8.8`.
 
-Logger baru default **Express Scan**, setelah firmware COM17 mengembalikan descriptor `a5 5a 54 00 00 40 82`. Setiap capsule diverifikasi header, panjang dan XOR; sudut sampel memerlukan capsule berikutnya. Koreksi sudut Q3 dan interpolasi mengikuti [algoritma primer SDK Slamtec](https://github.com/Slamtec/rplidar_sdk/blob/master/sdk/src/dataunpacker/unpacker/handler_capsules.cpp). Capsule checksum rusak dibuang dan kontinuitas cache dibatalkan. Express tidak memiliki quality fisik per sampel: field quality berasal dari validitas jarak nonzero sesuai SDK, ditandai `quality_source` di node JSONL. Standard 5 byte tetap tersedia dengan `--scan-mode standard`; default preflight lama tidak diubah.
+Logger baru default **Express Scan**, setelah firmware COM17 mengembalikan descriptor `a5 5a 54 00 00 40 82`. Setiap capsule diverifikasi header, panjang dan XOR; sudut sampel memerlukan capsule berikutnya. Koreksi sudut Q3 dan interpolasi mengikuti [algoritma primer SDK Slamtec](https://github.com/Slamtec/rplidar_sdk/blob/master/sdk/src/dataunpacker/unpacker/handler_capsules.cpp). Capsule checksum rusak dibuang dan kontinuitas cache dibatalkan. Express tidak memiliki quality fisik per sampel: field quality berasal dari validitas jarak nonzero sesuai SDK, ditandai `quality_source` di node JSONL. Standard 5 byte tetap tersedia dengan `--scan-mode standard`; Express juga menjadi default preflight dan shortcut pemeriksaan sensor.
 
 Parser mengikuti [definisi resmi Slamtec](https://github.com/Slamtec/rplidar_sdk/blob/master/sdk/include/sl_lidar_cmd.h): distance Q2 /4000 meter, angle Q6 /64 derajat. Quality nol, nonfinite dan jarak di luar 0,15–12 m tidak menjadi pengukuran grid. Sudut dibulatkan ke derajat; sampel valid terakhir pada bin menang. Grid dibuat baru setiap rotasi agar data lama tidak tertahan.
 

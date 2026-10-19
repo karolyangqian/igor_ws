@@ -36,7 +36,7 @@ def decode_node(raw):
     return dict(start=bool(raw[0] & 1), quality=raw[0] >> 2, angle_deg=angle, distance_m=distance)
 
 
-def lidar_check(name, output, seconds, on_scan=None, scan_mode='standard'):
+def lidar_check(name, output, seconds, on_scan=None, scan_mode='express'):
     if scan_mode not in ('standard', 'express'):
         raise ValueError('Unknown scan mode')
     result = dict(port=name, baud=115200, identity_ok=False, health_ok=False, scan_ok=False,
@@ -200,7 +200,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--lidar-port', default='auto')
     parser.add_argument('--stm-port', default='auto')
-    parser.add_argument('--scan-mode', choices=['standard', 'express'], default='standard')
+    parser.add_argument('--scan-mode', choices=['standard', 'express'], default='express')
     parser.add_argument('--seconds', type=float, default=5)
     parser.add_argument('--output', type=Path)
     args = parser.parse_args()
