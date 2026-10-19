@@ -16,6 +16,8 @@ REPO = FPGA.parent
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--skip-board', action='store_true', help='Report board stages as NOT_RUN')
+    parser.add_argument('--lidar-port', default='auto', help='RPLIDAR A1 CH340 adapter port or auto')
+    parser.add_argument('--stm-port', default='auto', help='STM CH9102 port or auto')
     args = parser.parse_args()
     out = FPGA / 'evidence/testing_scenarios' / dt.datetime.now(dt.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     out.mkdir(parents=True)
@@ -61,6 +63,8 @@ def main():
         r.update(log=str(logfile), duration_s=round(time.monotonic() - began, 3))
         records.append(r)
         print(f"{r['status']}: {name}" + (f" ({r['tests_run']} tests)" if unit else ''), flush=True)
+        if r['status'] != 'PASS':
+            print('Failure details (full output in log):\n' + '\n'.join(output.splitlines()[-8:])[-2000:], flush=True)
         save()
 
     specification = FPGA / 'testing_scenario.md'
@@ -71,6 +75,12 @@ def main():
         motion_requested=False, note='Software fixtures, RTL simulation and board checks are separate from robot acceptance.'), indent=2) + '\n', encoding='utf-8')
     print('Evidence:', out, flush=True)
     try:
+        if args.skip_board:
+            unavailable('laptop_sensor_preflight', 'Explicit --skip-board selection', 'NOT_RUN')
+        else:
+            run('laptop_sensor_preflight', [sys.executable, str(FPGA / 'scripts/laptop_sensor_preflight.py'),
+                                          '--lidar-port', args.lidar_port, '--stm-port', args.stm_port,
+                                          '--output', str(out / 'sensors')])
         for filename in ('test_rectangle_route.py', 'test_uart_fabric.py', 'test_uart_q88.py', 'test_ethernet.py', 'test_security_auth.py'):
             name = filename.removesuffix('.py')
             if not (REPO / 'test' / filename).is_file():
@@ -78,6 +88,7 @@ def main():
             else:
                 run(name, [sys.executable, '-m', 'unittest', 'discover', '-s', 'test', '-p', filename, '-q'], unit=True)
         run('laptop_fault_contracts', [sys.executable, '-m', 'unittest', 'discover', '-s', 'fpga/verification', '-p', 'test_laptop_scenario_contracts.py', '-q'], unit=True)
+        run('laptop_sensor_decoder', [sys.executable, '-m', 'unittest', 'discover', '-s', 'fpga/verification', '-p', 'test_laptop_sensor_decode.py', '-q'], unit=True)
         run('model_identity_oracle', [sys.executable, str(FPGA / 'scripts/verify_mock_inference.py'), '--self-test'])
         run('parallel8_rtl_256_vectors', [sys.executable, str(FPGA / 'scripts/verify_mock_inference.py'), '--rtl-sim'])
         if args.skip_board:
@@ -89,7 +100,7 @@ def main():
             run('physical_uart_return', [sys.executable, str(FPGA / 'scripts/verify_mock_inference.py'), '--port', 'COM12'])
             run('passive_datalogger', [sys.executable, str(FPGA / 'scripts/fpga_datalogger.py'), '--duration', '3', '--location', 'Scenario runner - physical location unspecified'])
         for name, reason in (
-            ('laptop_robot_sensor_preflight', 'LiDAR is not connected; no measured robot pose or verified laptop motor-control session. Jetson/ROS is not required by this laptop adaptation.'),
+            ('laptop_motion_readiness', 'See actual sensor stage logs. Physical pose, verified IMU units and a validated laptop motor-control session are still required; no motion is started by this runner.'),
             ('A1_measured_rectangle', 'Requires fresh independently measured /pose, operator, clear 5x4m area, agreed geometry tolerances, bag and measured corners'),
             ('A2_command_estimated_rectangle', 'Route algorithm is tested on laptop; physical motion still needs real LiDAR, sensor preflight and supervision; not dimensional acceptance'),
             ('B_live_inputs_outputs_and_IMU_units', 'Requires real controller trace, calibrated IMU units, LiDAR, active robot run and measured deadline results'),
