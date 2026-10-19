@@ -1,0 +1,50 @@
+# Testing scenarios dari laptop Windows
+
+Dokumen yang dikirim disimpan utuh sebagai `fpga/testing_scenario.md`. Contoh path dan link di dalam dokumen asal mengacu pada root repo/sistem pembuatnya. Sesuai klarifikasi pengguna, **Jetson dan ROS bukan prasyarat untuk runner laptop**. Semua file tambahan berada dalam `fpga/`; source referensi `src/` tidak diubah.
+
+Klik Desktop **IGOR - Testing Scenarios** untuk menjalankan `fpga/scripts/run_testing_scenarios.py`. Tutup logger/terminal JTAG lain sebelum menjalankan suite. Board dan COM12 harus tersedia, Jetson dilepas dari pin UART, dan kabel adapter sesuai panduan mock board. Runner memprogram observer image, mengirim observasi sintetis hanya ke FPGA, dan tidak membuka COM9 atau mengirim perintah motor.
+
+## Pemetaan tujuan dokumen ke laptop
+
+| Tujuan | Implementasi runner | Makna hasil |
+|---|---|---|
+| A: rectangle 5×4 m dan empat belok kiri | `test_rectangle_route.py`: route dengan pose fixture dan command-estimated route, stale pose/scan/command, penyimpangan dan wheel frame | Membuktikan algoritma pada fixture; tidak mengukur lintasan robot fisik. |
+| B: input/output inferensi | Cek model/bank/oracle, simulasi RTL 256 pola, 256 transaksi FPGA fisik via COM12/JTAG, kemudian datalogger bertimestamp | Membuktikan perhitungan Q8.8 pada pola yang diuji. Input bench sintetis, bukan pembacaan LiDAR. |
+| C: fault FPGA → STOP dan latch | Dua unit test `test_laptop_scenario_contracts.py` menjalankan handler exception dari source controller dan latch bridge | Membuktikan handler software mengirim empat nol/return dan latch menolak retry. Tidak membuktikan motor fisik berhenti atau stopping distance. |
+| UART | Tiga test fabric, tujuh test Q8.8, lalu baseline balasan UART COM12 yang nyata | Fixture dan physical UART diberi status terpisah; tidak ada fallback yang mengubah timeout menjadi PASS. |
+| Ethernet | 16 test localhost UDP/fixture | Tidak dianggap bukti koneksi Ethernet board. Memerlukan izin localhost UDP. |
+| Security auth | Nama test persis yang disebut dokumen diperiksa keberadaannya | `test/test_security_auth.py` tidak tersedia pada checkout saat implementasi; BLOCKED, bukan PASS 0 tests. |
+| Sensor dan gerak fisik | Checklist unresolved dalam summary | LiDAR belum terpasang; pose, IMU units, floor trial dan cabut kabel fisik tidak dapat digantikan oleh fixture. |
+
+Total software yang tersedia saat implementasi: 39 test repository ditambah 2 fault-contract test laptop. Dua test tambahan hanya memanggil source reference dengan fixture; tidak mengubah controller atau firmware. Harness contoh ROS dari dokumen juga diekstrak ke `fpga/scripts/igor_trace_controller.py` untuk referensi bila lingkungan ROS tersedia; runner Windows tidak menjalankannya.
+
+## Log dan status
+
+Setiap klik membuat folder baru `fpga/evidence/testing_scenarios/<timestamp UTC>/`. `session.json` menyimpan commit, platform dan SHA-256 dokumen. Setiap tahap memiliki `.log` sendiri; `summary.json` memuat command, exit code, jumlah unittest, durasi dan status. Folder bukti terperinci dari script RTL/FPGA/datalogger ditunjuk dalam log tahap masing-masing.
+
+- `PASS`: tahap benar-benar selesai dengan exit code sukses; unittest harus menjalankan setidaknya satu test.
+- `FAIL`: tahap gagal, termasuk physical UART timeout.
+- `BLOCKED` / `NOT_RUN`: prasyarat belum tersedia atau dipilih untuk dilewati.
+- Overall hanya `PASS` jika seluruh tahap PASS. Exit 1 = ada FAIL; exit 2 = belum lengkap tanpa FAIL; exit 0 = semua PASS. Ketidaklengkapan tidak disembunyikan.
+
+Pada run awal, empat kelompok software, oracle, RTL, 256 pola board via JTAG dan datalogger lulus. Physical UART return COM12 gagal karena 0 byte balasan. Dua fault-contract test laptop ditambahkan setelah klarifikasi platform dan lulus terpisah. Simulasi/board yang lulus tidak menghapus kegagalan UART atau bukti fisik yang belum tersedia. Hasil terkini selalu dibaca dari folder sesi, bukan dari kalimat historis ini.
+
+CLI:
+
+```powershell
+python fpga/scripts/run_testing_scenarios.py
+python fpga/scripts/run_testing_scenarios.py --skip-board
+```
+
+Jangan menjalankan suite ini bersamaan dengan controller yang memiliki UART atau logger yang memiliki JTAG. `--skip-board` secara eksplisit menghasilkan NOT_RUN untuk tahap board; bukan suite lengkap yang lulus.
+
+## Port USB dan logging waktu
+
+**IGOR - FPGA Datalogger** membuka logger setelah image monitor diprogram. Isi lokasi manual; CSV mencatat waktu UTC/lokal dan output terakhir. **IGOR - Folder Data Logging** membuka folder sesi untuk mengakses CSV/JSONL. Lihat `FPGA_DATALOGGER.md` untuk arti setiap kolom dan keterbatasan snapshot.
+
+- USB-Blaster diperlukan untuk membaca logger JTAG saat ini. Melepasnya menghentikan komunikasi logger; konfigurasi FPGA dapat bertahan jika board tetap mendapat daya eksternal dan tidak direset/reconfigure.
+- Adapter USB-to-UART COM12 diperlukan untuk sumber input FPGA dari laptop saat ini. Melepasnya untuk memasang LiDAR menghilangkan jalur input tersebut. Logger JTAG masih bisa membaca hasil lama, tetapi itu tidak berarti ada inferensi LiDAR baru.
+- Mengganti adapter dengan LiDAR tidak otomatis menghubungkan data LiDAR ke FPGA. Masih diperlukan aplikasi pembentuk 74 fitur dan jalur input yang aktif.
+- Untuk mengaktifkan LiDAR, STM32, UART FPGA dan logger JTAG bersamaan tanpa mengubah RTL terverifikasi, gunakan port tambahan melalui USB hub yang memadai. Belum ada klaim acceptance gerak tanpa sensor tersebut.
+
+Tujuan akhir A/B/C tetap memerlukan LiDAR nyata, sensor/pose sesuai skenario, operator, rekaman gerak dan stopping time/distance. Runner laptop menjalankan bagian yang bisa diverifikasi sekarang dan mempertahankan bagian fisik sebagai unresolved.
