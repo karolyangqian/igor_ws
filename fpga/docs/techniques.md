@@ -1,5 +1,7 @@
 # Teknik optimasi RTL IGOR: weights, bias, dan accumulator
 
+Untuk cerita desain lengkap beserta 30 kelompok fun facts, angka fitted, screenshot GUI Quartus dan pustaka vendor, baca [Fun facts dan keputusan desain Parallel8](FUN_FACTS_AND_DESIGN_RATIONALE.md).
+
 Dokumen ini menjelaskan teknik yang sudah digunakan oleh core Parallel8 dan
 kandidat penghematan berikutnya. Istilah yang digunakan adalah **weights**,
 **bias**, dan **accumulator**. Kandidat belum mengubah RTL atau image pada board.
