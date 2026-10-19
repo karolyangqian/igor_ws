@@ -1,5 +1,8 @@
 # IGOR FPGA — mulai di sini
 
+**Uji mock numerik pada FPGA fisik:** [panduan 256 pola, oracle Q8.8, dan shortcut Desktop](docs/MOCK_BOARD_VERIFICATION.md). Input COM12 dan pembacaan hasil JTAG dicatat terpisah dari pengujian jalur balik UART.
+
+
 **Versi sederhana sesuai contoh:** [3 FSM lingkaran](docs/FSM_3_SIMPLE.md),
 dengan [file draw.io tiga halaman](docs/assets/igor_fsm_3_simple.drawio).
 
