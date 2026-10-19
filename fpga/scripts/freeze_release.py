@@ -58,7 +58,9 @@ def verify_build(name):
 
 def verify_software_model():
     relative = Path('igor_navigation/igor_navigation/weights/model_weights.json')
-    original = json.loads((ROOT.parent / 'src' / relative).read_text(encoding='utf-8'))
+    candidate = ROOT.parent / 'ros2_ws' / 'src' / relative
+    source_path = candidate if candidate.exists() else (ROOT.parent / 'src' / relative)
+    original = json.loads(source_path.read_text(encoding='utf-8'))
     deployed = json.loads((ROOT / 'software_integration/src' / relative).read_text(encoding='utf-8'))
     if any(original[key] != deployed[key] for key in ('w1','b1','w2','b2','w3','b3')):
         raise RuntimeError('Integrated host model differs from the source model verified against RTL')
@@ -109,8 +111,10 @@ def write_build_status(records):
               'ada di [bitstreams/](bitstreams/). Ubah source, bobot, QSF/SDC/pinplan berarti receipt '
               'lama tidak berlaku dan harus dibangun ulang.', '',
               '## Status perangkat fisik', '',
-              '**JTAG fisik ditunda sesuai arahan pengguna.** Inspeksi lokal melaporkan No JTAG hardware available. '
-              'Tidak ada programming, motor/robot, daya, atau latensi fisik baru yang diklaim. '
+              'Status konfigurasi fisik terbaru dicatat per percobaan pada '
+              '[evidence/current_programming/](evidence/current_programming/), dengan project, SHA256 SOF, '
+              'chain, log Quartus dan field `hardware_programmed`. Programming SRAM yang sukses '
+              'tidak otomatis membuktikan fungsi UART, motor/robot, daya atau latensi fisik. '
               'Lihat [BOARD_PROGRAMMING.md](docs/BOARD_PROGRAMMING.md), '
               '[GPIO_AND_HPS.md](docs/GPIO_AND_HPS.md), dan '
               '[FINAL_ACCEPTANCE.md](docs/FINAL_ACCEPTANCE.md) untuk prosedur dan pekerjaan tersisa.', '']
@@ -133,7 +137,8 @@ def check():
     # Pure software references are read-only external inputs, not release writes.
     for name, expected in doc.get('reference_sha256', {}).items():
         path = (ROOT.parent / name.replace('\\', '/')).resolve()
-        if not path.is_relative_to(ROOT.parent / 'src') or not path.is_file() or sha(path) != expected:
+        valid_parent = ROOT.parent / 'ros2_ws/src' if 'ros2_ws' in name else ROOT.parent / 'src'
+        if not path.is_relative_to(valid_parent) or not path.is_file() or sha(path) != expected:
             raise RuntimeError(f'Original software model reference changed: {name}')
     print(f"PASS release integrity: {len(doc['files'])} files; FPGA source-bound SOFs, timing and pins verified. Imported ASIC sign-off is assessed separately.")
 
@@ -195,7 +200,7 @@ def freeze():
     tracked = set()
     source_trees = ['rtl', 'assets', 'reference_model', 'verification', 'scripts', 'ci', 'src', 'test', 'robot/jetauto',
                     'software_integration/src', 'fpga_de10_nano/src_policy', 'fpga_de10_nano/quartus']
-    source_extensions = {'.v','.sv','.vh','.svh','.vhd','.py','.mem','.mif','.hex','.h','.cpp','.sby','.json','.yaml','.yml','.qpf','.qsf','.sdc','.tcl','.gtkw'}
+    source_extensions = {'.v','.sv','.vh','.svh','.vhd','.py','.ps1','.mem','.mif','.hex','.h','.cpp','.sby','.json','.yaml','.yml','.qpf','.qsf','.sdc','.tcl','.gtkw'}
     for tree in source_trees:
         for path in (ROOT / tree).rglob('*'):
             if not path.is_file() or any(part in {'db','incremental_db','__pycache__','build','sim_build','output_files','artifacts','evaluations','logs'} for part in path.relative_to(ROOT).parts):
@@ -213,7 +218,7 @@ def freeze():
                    ROOT / 'evidence/asic_clock_scenarios',
                    ROOT / 'verification/src_policy/artifacts']:
         if folder.exists():
-            tracked.update(p for p in folder.rglob('*') if p.is_file() and p.suffix in {'.json','.csv','.log','.hex','.gtkw','.gz','.rpt','.summary','.png'})
+            tracked.update(p for p in folder.rglob('*') if p.is_file() and p.suffix in {'.json','.csv','.log','.hex','.gtkw','.gz','.rpt','.summary','.png','.cdf'})
     # Native GTKWave captures plus checkpoint/build identity and capture scripts.
     visual = ROOT / 'evidence/visual_review'
     if visual.exists():
@@ -223,7 +228,7 @@ def freeze():
         tracked.update(local(name) for name in record['source_sha256'])
         tracked.update(local(name) for name in record['report_sha256'])
         tracked.add(local(record['log']))
-    tracked.update(path for path in bitstreams.iterdir() if path.is_file() and path.suffix in {'.sof','.txt'})
+    tracked.update(path for path in bitstreams.iterdir() if path.is_file() and path.suffix in {'.sof','.txt','.md','.bat','.cdf'})
     tracked.update(ROOT.glob('*.md'))
     tracked.update(ROOT.glob('*.bat'))
     tracked.update(ROOT.glob('requirements*.txt'))
@@ -249,7 +254,7 @@ def freeze():
             'kind':'User-supplied evidence import, not a new ASIC sign-off run'}
     provenance = json.loads((ROOT / 'verification/src_policy/artifacts/model_provenance.json').read_text(encoding='utf-8'))
     references = {name.replace('\\', '/'): value for name, value in provenance['sha256'].items()
-                  if name.replace('\\', '/').startswith('src/')}
+                  if name.replace('\\', '/').startswith('src/') or name.replace('\\', '/').startswith('ros2_ws/src/')}
     doc = {'schema': 1, 'generated_utc': datetime.now(timezone.utc).isoformat(),
            'scope': 'FPGA simulation/build/handoff and user-supplied ASIC evidence; no physical FPGA/robot acceptance or new ASIC sign-off',
            'external_evidence':external_evidence,

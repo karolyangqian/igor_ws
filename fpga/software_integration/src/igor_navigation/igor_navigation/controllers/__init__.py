@@ -20,6 +20,7 @@ CONTROLLER_REGISTRY = {
     "mini_dwa": MiniDWAShieldController,
     "drl_dwa": MiniDWAShieldController,
     "cl_drl_dwa": MiniDWAShieldController,
+    "cl_drl_dwa_shield": MiniDWAShieldController,
     "dwa": DWAController,
     "standalone_dwa": DWAController,
     "apf": APFController,

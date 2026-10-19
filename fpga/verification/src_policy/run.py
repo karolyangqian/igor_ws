@@ -16,7 +16,8 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 WORKSPACE = ROOT.parent
-SOURCE = WORKSPACE / "src/igor_navigation/igor_navigation/weights"
+CANDIDATE = WORKSPACE / "ros2_ws/src/igor_navigation/igor_navigation/weights"
+SOURCE = CANDIDATE if CANDIDATE.exists() else WORKSPACE / "src/igor_navigation/igor_navigation/weights"
 RTL = ROOT / "rtl/igor_src_policy"
 ARTIFACTS = HERE / "artifacts"
 SHAPES = {"w1": (128, 74), "b1": (128,), "w2": (64, 128), "b2": (64,),

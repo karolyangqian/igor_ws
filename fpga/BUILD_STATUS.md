@@ -32,4 +32,4 @@ Manifest [current_release/manifest.json](evidence/current_release/manifest.json)
 
 ## Status perangkat fisik
 
-**JTAG fisik ditunda sesuai arahan pengguna.** Inspeksi lokal melaporkan No JTAG hardware available. Tidak ada programming, motor/robot, daya, atau latensi fisik baru yang diklaim. Lihat [BOARD_PROGRAMMING.md](docs/BOARD_PROGRAMMING.md), [GPIO_AND_HPS.md](docs/GPIO_AND_HPS.md), dan [FINAL_ACCEPTANCE.md](docs/FINAL_ACCEPTANCE.md) untuk prosedur dan pekerjaan tersisa.
+Status konfigurasi fisik terbaru dicatat per percobaan pada [evidence/current_programming/](evidence/current_programming/), dengan project, SHA256 SOF, chain, log Quartus dan field `hardware_programmed`. Programming SRAM yang sukses tidak otomatis membuktikan fungsi UART, motor/robot, daya atau latensi fisik. Lihat [BOARD_PROGRAMMING.md](docs/BOARD_PROGRAMMING.md), [GPIO_AND_HPS.md](docs/GPIO_AND_HPS.md), dan [FINAL_ACCEPTANCE.md](docs/FINAL_ACCEPTANCE.md) untuk prosedur dan pekerjaan tersisa.

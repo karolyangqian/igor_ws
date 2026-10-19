@@ -17,10 +17,12 @@ setup(
     maintainer_email='karol@todo.todo',
     description='ROS 2 Controller Node, Heading Estimator, and Hardware Bridges for Hiwonder JetAuto AMR.',
     license='Apache-2.0',
-    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'controller_node = igor_controller.controller_node:main',
+            'rectangle_route = igor_controller.rectangle_route_node:main',
+            'timed_rectangle = igor_controller.timed_rectangle_node:main',
+            'waypoint_global_planner_node = igor_controller.waypoint_global_planner_node:main',
         ],
     },
 )

@@ -1,4 +1,26 @@
 {
   "verilog.linting.linter": "verilator",
-  "verilog.formatting.verilogHDL.formatter": "verible-verilog-format"
+  "verilog.formatting.verilogHDL.formatter": "verible-verilog-format",
+  "ROS2.distro": "humble",
+  "python.autoComplete.extraPaths": [
+    "/home/hadynata/vs-code-data/Python/igor_ws/build/igor_bringup",
+    "/home/hadynata/vs-code-data/Python/igor_ws/install/igor_bringup/lib/python3.10/site-packages",
+    "/home/hadynata/vs-code-data/Python/igor_ws/build/igor_controller",
+    "/home/hadynata/vs-code-data/Python/igor_ws/install/igor_controller/lib/python3.10/site-packages",
+    "/home/hadynata/vs-code-data/Python/igor_ws/build/igor_navigation",
+    "/home/hadynata/vs-code-data/Python/igor_ws/install/igor_navigation/lib/python3.10/site-packages",
+    "/opt/ros/humble/lib/python3.10/site-packages",
+    "/opt/ros/humble/local/lib/python3.10/dist-packages"
+  ],
+  "python.analysis.extraPaths": [
+    "/home/hadynata/vs-code-data/Python/igor_ws/build/igor_bringup",
+    "/home/hadynata/vs-code-data/Python/igor_ws/install/igor_bringup/lib/python3.10/site-packages",
+    "/home/hadynata/vs-code-data/Python/igor_ws/build/igor_controller",
+    "/home/hadynata/vs-code-data/Python/igor_ws/install/igor_controller/lib/python3.10/site-packages",
+    "/home/hadynata/vs-code-data/Python/igor_ws/build/igor_navigation",
+    "/home/hadynata/vs-code-data/Python/igor_ws/install/igor_navigation/lib/python3.10/site-packages",
+    "/opt/ros/humble/lib/python3.10/site-packages",
+    "/opt/ros/humble/local/lib/python3.10/dist-packages"
+  ],
+  "cmake.sourceDirectory": "/home/hadynata/vs-code-data/Python/igor_ws/waypoint_list/waypoint_action"
 }

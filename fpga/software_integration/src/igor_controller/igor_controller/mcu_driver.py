@@ -64,6 +64,7 @@ class STM32Driver:
     """
     START_BYTE1 = 0xAA
     START_BYTE2 = 0x55
+    FUNC_SYS    = 0x00
     FUNC_MOTOR  = 0x03
     FUNC_IMU    = 0x07
     SUB_CMD_MOTOR_SPEED = 0x01
@@ -90,6 +91,10 @@ class STM32Driver:
         self.total_imu_packets = 0
         self.crc_errors = 0
 
+        # Battery telemetry
+        self._battery_voltage = 0.0
+        self._battery_lock = threading.Lock()
+
         self._connect()
 
     def _connect(self) -> None:
@@ -104,8 +109,12 @@ class STM32Driver:
                 port=self.port,
                 baudrate=self.baudrate,
                 timeout=0.05,
-                write_timeout=0.05
+                write_timeout=0.05,
+                exclusive=True
             )
+            self.ser.rts = False
+            self.ser.dtr = False
+            time.sleep(0.05)
             if not self.send_motor_speeds(0.0, 0.0, 0.0, 0.0):
                 raise RuntimeError("Cannot transmit initial STM32 STOP")
             self._running = True
@@ -144,12 +153,21 @@ class STM32Driver:
                         else:
                             state = 0
                     elif state == 2:
-                        func_id = b
-                        state = 3
+                        # Function ID must be in valid protocol range [0, 10]
+                        if b <= 10:
+                            func_id = b
+                            state = 3
+                        else:
+                            state = 1 if b == self.START_BYTE1 else 0
                     elif state == 3:
-                        length = b
-                        buf = bytearray()
-                        state = 5 if length == 0 else 4
+                        # Valid packet lengths: IMU is 24, max across protocol is 48.
+                        # Reject invalid lengths to prevent swallowing real packets on false sync.
+                        if b <= 48 and (func_id != self.FUNC_IMU or b >= 24):
+                            length = b
+                            buf = bytearray()
+                            state = 5 if length == 0 else 4
+                        else:
+                            state = 1 if b == self.START_BYTE1 else 0
                     elif state == 4:
                         buf.append(b)
                         if len(buf) >= length:
@@ -164,9 +182,13 @@ class STM32Driver:
                                     self._latest_imu = (ax, ay, az, gx, gy, gz)
                                     self._latest_imu_time = time.monotonic()
                                     self.total_imu_packets += 1
+                            elif func_id == self.FUNC_SYS and len(buf) >= 3 and buf[0] == 0x04:
+                                v_mv = struct.unpack('<H', bytes(buf[1:3]))[0]
+                                with self._battery_lock:
+                                    self._battery_voltage = v_mv / 1000.0
                         else:
                             self.crc_errors += 1
-                        state = 0
+                        state = 1 if b == self.START_BYTE1 else 0
             except Exception as e:
                 logger.debug(f"RX loop read exception: {e}")
                 time.sleep(0.01)
@@ -185,6 +207,16 @@ class STM32Driver:
             t = self._latest_imu_time
         return ((ax, ay, az), (gx, gy, gz), t)
 
+    def get_battery_voltage(self) -> float:
+        """
+        Returns:
+            Battery voltage in Volts (e.g. 11.8V).
+        """
+        if self.mock:
+            return 12.0
+        with self._battery_lock:
+            return self._battery_voltage
+
     def send_motor_speeds(
         self,
         rps_m1: float,
@@ -201,6 +233,8 @@ class STM32Driver:
           M3 (Index 2): Front-Right (Mirrored)
           M4 (Index 3): Rear-Right  (Mirrored)
         """
+        if any(not math.isfinite(float(v)) or abs(float(v)) > 5 for v in (rps_m1,rps_m2,rps_m3,rps_m4)):
+            return False
         if self.mock:
             return True
 
@@ -219,6 +253,8 @@ class STM32Driver:
         try:
             with self._lock:
                 count = self.ser.write(bytes(packet))
+                if hasattr(self.ser, 'flush'):
+                    self.ser.flush()
             if count != len(packet):
                 logger.error(f"Short STM32 write: {count}/{len(packet)}")
                 return False

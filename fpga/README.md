@@ -1,5 +1,28 @@
 # IGOR FPGA — mulai di sini
 
+**Versi sederhana sesuai contoh:** [3 FSM lingkaran](docs/FSM_3_SIMPLE.md),
+dengan [file draw.io tiga halaman](docs/assets/igor_fsm_3_simple.drawio).
+
+[FSM core dan semua controller](docs/FSM_CORE_AND_CONTROLLERS.md) tersedia dalam
+[draw.io 19 halaman](docs/assets/igor_fsm_all.drawio), dengan kondisi transisi,
+aksi register, reset, fault/default dan sumber RTL.
+
+**Untuk langsung memprogram core Parallel8:** buka
+[bitstreams/README.md](bitstreams/README.md), lalu jalankan
+[PROGRAM_PARALLEL8.bat](bitstreams/PROGRAM_PARALLEL8.bat).
+[Project Programmer CDF](bitstreams/igor_src_policy_parallel8.cdf) sudah memilih
+SOF dan chain board aktual. **Programming fisik berhasil pada 18 Oktober 2026**;
+lihat [log Quartus](evidence/current_programming/20261018T0558125221956Z/programming.log).
+Tidak perlu kompilasi untuk memuat ulang SOF tersebut.
+
+Teknik optimasi **weights, bias, dan accumulator** dijelaskan dalam
+[docs/techniques.md](docs/techniques.md), termasuk kandidat penghematan resource
+dan syarat validasinya.
+
+[Block diagram core berbentuk chip](docs/IGOR_CORE_DIAGRAM.md) tersedia dalam
+[draw.io](docs/assets/igor_core_simple.drawio), [PNG](docs/assets/igor_core_simple.png)
+dan [SVG](docs/assets/igor_core_simple.svg).
+
 Seluruh implementasi dan keluaran baru berada di folder **`igor_ws/fpga`**.
 `../src` digunakan sebagai referensi software; `../peruri-iseedesign` digunakan
 sebagai referensi rancangan dan checklist. Proyek Quartus, RTL, bobot, pin

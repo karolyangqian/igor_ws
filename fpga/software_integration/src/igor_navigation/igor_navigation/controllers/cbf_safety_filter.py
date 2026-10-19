@@ -22,12 +22,20 @@ class CBFFilterController(CLDRLController):
         weights_path: Optional[str] = None,
         gamma: float = 3.5,
         safe_margin: float = 0.06,
-        name: str = "CL-DRL + CBF QP Filter"
+        name: str = "CL-DRL + CBF QP Filter",
+        robot_radius: float = 0.22,
+        d_safe: Optional[float] = None,
+        **kwargs
     ):
         super().__init__(weights_path=weights_path, name=name)
         self.gamma = gamma          # Barrier convergence rate (Nagumo parameter)
-        self.safe_margin = safe_margin  # Extra safety buffer margin (meters)
+        self.robot_radius = robot_radius
+        self.safe_margin = safe_margin if d_safe is None else max(0.0, d_safe - robot_radius)
         self.last_intervened = False
+
+    def filter_control(self, *args, **kwargs):
+        """Unified alias for filter_cbf."""
+        return self.filter_cbf(*args, **kwargs)
 
     def filter_cbf(
         self,
@@ -54,7 +62,7 @@ class CBFFilterController(CLDRLController):
 
         if obstacles:
             for obs in obstacles:
-                # Support various obstacle representations (object or dict or array)
+                # Support various obstacle representations (object or dict or tuple/array)
                 if hasattr(obs, "pos"):
                     ox, oy = obs.pos[0], obs.pos[1]
                     ovx = obs.vel[0] if hasattr(obs, "vel") else 0.0
@@ -65,6 +73,11 @@ class CBFFilterController(CLDRLController):
                     ovx = obs.get("vx", 0.0)
                     ovy = obs.get("vy", 0.0)
                     oradius = obs.get("radius", 0.25)
+                elif isinstance(obs, (tuple, list)):
+                    ox, oy = float(obs[0]), float(obs[1])
+                    oradius = float(obs[2]) if len(obs) > 2 else 0.25
+                    ovx = float(obs[3]) if len(obs) > 3 else 0.0
+                    ovy = float(obs[4]) if len(obs) > 4 else 0.0
                 else:
                     ox, oy = obs.x, obs.y
                     ovx = getattr(obs, "vx", 0.0)
@@ -75,7 +88,7 @@ class CBFFilterController(CLDRLController):
                 if dist > 1.50:  # Only evaluate within active alert zone
                     continue
 
-                r_safe = self.robot_radius + oradius + self.safe_margin
+                r_safe = self.robot_radius + oradius + getattr(self, "safe_margin", 0.06)
                 # Barrier function h(p) = ||p - p_obs||^2 - r_safe^2
                 h = (rx - ox)**2 + (ry - oy)**2 - r_safe**2
 
@@ -130,6 +143,11 @@ class CBFFilterController(CLDRLController):
             robot_pose=robot_pose
         )
 
+        # If operator command is idle, maintain zero velocity
+        is_cmd_active = (abs(cmd_vel[0]) > 0.01 or abs(cmd_vel[1]) > 0.01 or abs(cmd_vel[2]) > 0.02)
+        if not is_cmd_active:
+            return 0.0, 0.0, 0.0, info
+
         allowed_vx = info["allowed_vx"]
         pose = robot_pose if robot_pose is not None else (0.0, 0.0, 0.0)
 
@@ -156,3 +174,10 @@ class CBFFilterController(CLDRLController):
         })
 
         return cbf_vx, cbf_vy, cbf_omega, info
+
+
+# Canonical alias for external scripts and tests
+CBFSafetyFilter = CBFFilterController
+
+__all__ = ["CBFFilterController", "CBFSafetyFilter"]
+

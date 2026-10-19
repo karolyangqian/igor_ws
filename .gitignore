@@ -1,6 +1,12 @@
-build/
-install/
-log/
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
 __pycache__/
 # Local reference repository, disconnected from the main project
 /peruri-iseedesign/
+install/
+log/
+.vscode/*
+/tools/.igor_de10_connect/
+
+/igor_connect_*.log

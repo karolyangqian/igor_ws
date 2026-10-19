@@ -650,6 +650,22 @@ def export_all_model_weights(model: PPO, target_weights_dir: str, total_timestep
     export_mem("layer3_b.mem", b3_q)
     print(f"✔ FPGA BRAM .mem Hex Files Exported: {hw_dir}")
 
+    # 6. Kompilasi otomatis file memori monolitik FPGA (policy_weights.mem)
+    try:
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+        root_dir = os.path.dirname(base_dir) if os.path.basename(base_dir) == "ros2_ws" else base_dir
+        fpga_run_script = os.path.join(root_dir, "fpga/verification/src_policy/run.py")
+        if not os.path.exists(fpga_run_script):
+            fpga_run_script = "/home/karol/ITB/lomba/chip-peruri/peruri-ai-final/igor_ws/fpga/verification/src_policy/run.py"
+        if os.path.exists(fpga_run_script):
+            print("🔄 Mengompilasi berkas policy_weights.mem untuk FPGA DE10-Nano...")
+            ret = os.system(f"python3 {fpga_run_script}")
+            if ret == 0:
+                print("✔ Berkas fpga/rtl/igor_src_policy/policy_weights.mem berhasil diperbarui!")
+    except Exception as e:
+        print(f"⚠ Peringatan: Tidak dapat memperbarui policy_weights.mem secara otomatis: {e}")
+
+
 
 # ==============================================================================
 # 5. BENCHMARK EVALUATOR & FULL-DURATION GIF EXPORTER
@@ -1070,22 +1086,23 @@ def evaluate_and_generate_artifacts(
 # ==============================================================================
 
 def sync_to_ros2_workspace():
-    """Synchronizes weights and evaluations to igor_ws if present."""
-    ws_pkg_weights = "/home/karol/ITB/lomba/chip-peruri/peruri-ai-final/igor_ws/src/igor_navigation/igor_navigation/weights"
-    ws_pkg_eval = "/home/karol/ITB/lomba/chip-peruri/peruri-ai-final/igor_ws/src/igor_navigation/igor_navigation/evaluations"
+    """Synchronizes weights and evaluations to ros2_ws if present."""
+    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    ws_root = os.path.join(base_dir, "ros2_ws") if os.path.isdir(os.path.join(base_dir, "ros2_ws")) else base_dir
+    ws_pkg_weights = os.path.join(ws_root, "src/igor_navigation/igor_navigation/weights")
+    ws_pkg_eval = os.path.join(ws_root, "src/igor_navigation/igor_navigation/evaluations")
 
-    if os.path.exists(os.path.dirname(ws_pkg_weights)):
-        print("\n🔄 Menyinkronkan bobot dan evaluasi ke workspace ROS 2 igor_ws...")
+    if os.path.abspath(WEIGHTS_DIR) != os.path.abspath(ws_pkg_weights) and os.path.exists(os.path.dirname(ws_pkg_weights)):
+        print("\n🔄 Menyinkronkan bobot dan evaluasi ke workspace ROS 2...")
         shutil.copytree(WEIGHTS_DIR, ws_pkg_weights, dirs_exist_ok=True)
         shutil.copytree(EVALUATIONS_DIR, ws_pkg_eval, dirs_exist_ok=True)
-        print("✔ Berkas berhasil disalin ke igor_ws/src/igor_navigation.")
+        print(f"✔ Berkas berhasil disalin ke {ws_pkg_weights}.")
 
-        # Trigger colcon build
-        ws_root = "/home/karol/ITB/lomba/chip-peruri/peruri-ai-final/igor_ws"
+    if os.path.exists(os.path.join(ws_root, "src/igor_navigation/package.xml")):
         cmd = f'bash -c "source /opt/ros/humble/setup.bash && cd {ws_root} && colcon build --symlink-install --packages-select igor_navigation"'
         ret = os.system(cmd)
         if ret == 0:
-            print("✔ Colcon build berhasil meregistrasi bobot baru di workspace igor_ws!")
+            print(f"✔ Colcon build berhasil meregistrasi bobot baru di workspace {ws_root}!")
         else:
             print(f"⚠ Catatan: Colcon build mengembalikan kode keluar {ret}.")
 

@@ -21,7 +21,6 @@ setup(
     maintainer_email='karol@todo.todo',
     description='Master Bringup Launch, RPLiDAR Driver, and System Config for Hiwonder JetAuto Mecanum AMR.',
     license='Apache-2.0',
-    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'rplidar_driver = igor_bringup.rplidar_driver_node:main',
