@@ -1,5 +1,5 @@
 Timing Analyzer report for igor_jtag
-Mon Oct 19 19:23:52 2026
+Mon Oct 19 19:39:06 2026
 Quartus Prime Version 25.1std.0 Build 1129 10/21/2025 SC Standard Edition
 
 
@@ -103,14 +103,14 @@ on the Quartus Prime software download page.
 ; Number detected on machine ; 12          ;
 ; Maximum allowed            ; 4           ;
 ;                            ;             ;
-; Average used               ; 2.41        ;
+; Average used               ; 2.42        ;
 ; Maximum used               ; 4           ;
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;  47.3%      ;
-;     Processor 3            ;  47.1%      ;
-;     Processor 4            ;  47.0%      ;
+;     Processor 2            ;  47.9%      ;
+;     Processor 3            ;  47.3%      ;
+;     Processor 4            ;  46.7%      ;
 +----------------------------+-------------+
 
 
@@ -119,7 +119,7 @@ on the Quartus Prime software download page.
 +---------------------+--------+--------------------------+
 ; SDC File Path       ; Status ; Read at                  ;
 +---------------------+--------+--------------------------+
-; igor_src_policy.sdc ; OK     ; Mon Oct 19 19:23:37 2026 ;
+; igor_src_policy.sdc ; OK     ; Mon Oct 19 19:38:50 2026 ;
 +---------------------+--------+--------------------------+
 
 
@@ -138,8 +138,8 @@ on the Quartus Prime software download page.
 +------------+-----------------+---------------------+------+
 ; Fmax       ; Restricted Fmax ; Clock Name          ; Note ;
 +------------+-----------------+---------------------+------+
-; 77.46 MHz  ; 77.46 MHz       ; FPGA_CLK1_50        ;      ;
-; 106.64 MHz ; 106.64 MHz      ; altera_reserved_tck ;      ;
+; 77.17 MHz  ; 77.17 MHz       ; FPGA_CLK1_50        ;      ;
+; 102.62 MHz ; 102.62 MHz      ; altera_reserved_tck ;      ;
 +------------+-----------------+---------------------+------+
 This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
 
@@ -155,8 +155,8 @@ HTML report is unavailable in plain text report export.
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; FPGA_CLK1_50        ; 7.090  ; 0.000         ;
-; altera_reserved_tck ; 11.978 ; 0.000         ;
+; FPGA_CLK1_50        ; 7.041  ; 0.000         ;
+; altera_reserved_tck ; 11.794 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -165,8 +165,8 @@ HTML report is unavailable in plain text report export.
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; FPGA_CLK1_50        ; 0.261 ; 0.000         ;
-; altera_reserved_tck ; 0.672 ; 0.000         ;
+; FPGA_CLK1_50        ; 0.253 ; 0.000         ;
+; altera_reserved_tck ; 0.617 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -175,8 +175,8 @@ HTML report is unavailable in plain text report export.
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; FPGA_CLK1_50        ; 12.767 ; 0.000         ;
-; altera_reserved_tck ; 14.442 ; 0.000         ;
+; FPGA_CLK1_50        ; 11.048 ; 0.000         ;
+; altera_reserved_tck ; 14.644 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -185,8 +185,8 @@ HTML report is unavailable in plain text report export.
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; FPGA_CLK1_50        ; 0.744 ; 0.000         ;
-; altera_reserved_tck ; 1.057 ; 0.000         ;
+; FPGA_CLK1_50        ; 1.014 ; 0.000         ;
+; altera_reserved_tck ; 1.036 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -195,8 +195,8 @@ HTML report is unavailable in plain text report export.
 +---------------------+--------+---------------------+
 ; Clock               ; Slack  ; End Point TNS       ;
 +---------------------+--------+---------------------+
-; FPGA_CLK1_50        ; 8.843  ; 0.000               ;
-; altera_reserved_tck ; 15.753 ; 0.000               ;
+; FPGA_CLK1_50        ; 8.849  ; 0.000               ;
+; altera_reserved_tck ; 15.700 ; 0.000               ;
 +---------------------+--------+---------------------+
 
 
@@ -207,7 +207,7 @@ The design MTBF is not calculated because there are no specified synchronizers i
 Number of Synchronizer Chains Found: 3
 Shortest Synchronizer Chain: 2 Registers
 Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-Worst Case Available Settling Time: 29.179 ns
+Worst Case Available Settling Time: 29.060 ns
 
 
 
@@ -217,8 +217,8 @@ Worst Case Available Settling Time: 29.179 ns
 +------------+-----------------+---------------------+------+
 ; Fmax       ; Restricted Fmax ; Clock Name          ; Note ;
 +------------+-----------------+---------------------+------+
-; 81.35 MHz  ; 81.35 MHz       ; FPGA_CLK1_50        ;      ;
-; 105.79 MHz ; 105.79 MHz      ; altera_reserved_tck ;      ;
+; 78.54 MHz  ; 78.54 MHz       ; FPGA_CLK1_50        ;      ;
+; 104.24 MHz ; 104.24 MHz      ; altera_reserved_tck ;      ;
 +------------+-----------------+---------------------+------+
 This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
 
@@ -228,8 +228,8 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; FPGA_CLK1_50        ; 7.708  ; 0.000         ;
-; altera_reserved_tck ; 11.940 ; 0.000         ;
+; FPGA_CLK1_50        ; 7.267  ; 0.000         ;
+; altera_reserved_tck ; 11.870 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -238,8 +238,8 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; FPGA_CLK1_50        ; 0.249 ; 0.000         ;
-; altera_reserved_tck ; 0.669 ; 0.000         ;
+; FPGA_CLK1_50        ; 0.243 ; 0.000         ;
+; altera_reserved_tck ; 0.610 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -248,8 +248,8 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; FPGA_CLK1_50        ; 13.147 ; 0.000         ;
-; altera_reserved_tck ; 14.522 ; 0.000         ;
+; FPGA_CLK1_50        ; 11.489 ; 0.000         ;
+; altera_reserved_tck ; 14.770 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -258,8 +258,8 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; FPGA_CLK1_50        ; 0.662 ; 0.000         ;
-; altera_reserved_tck ; 0.935 ; 0.000         ;
+; FPGA_CLK1_50        ; 0.933 ; 0.000         ;
+; altera_reserved_tck ; 0.943 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -268,8 +268,8 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+--------+---------------------+
 ; Clock               ; Slack  ; End Point TNS       ;
 +---------------------+--------+---------------------+
-; FPGA_CLK1_50        ; 8.794  ; 0.000               ;
-; altera_reserved_tck ; 15.779 ; 0.000               ;
+; FPGA_CLK1_50        ; 8.796  ; 0.000               ;
+; altera_reserved_tck ; 15.734 ; 0.000               ;
 +---------------------+--------+---------------------+
 
 
@@ -280,7 +280,7 @@ The design MTBF is not calculated because there are no specified synchronizers i
 Number of Synchronizer Chains Found: 3
 Shortest Synchronizer Chain: 2 Registers
 Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-Worst Case Available Settling Time: 29.535 ns
+Worst Case Available Settling Time: 29.517 ns
 
 
 
@@ -290,8 +290,8 @@ Worst Case Available Settling Time: 29.535 ns
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; FPGA_CLK1_50        ; 12.027 ; 0.000         ;
-; altera_reserved_tck ; 14.579 ; 0.000         ;
+; FPGA_CLK1_50        ; 12.087 ; 0.000         ;
+; altera_reserved_tck ; 14.505 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -300,8 +300,8 @@ Worst Case Available Settling Time: 29.535 ns
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; FPGA_CLK1_50        ; 0.139 ; 0.000         ;
-; altera_reserved_tck ; 0.296 ; 0.000         ;
+; FPGA_CLK1_50        ; 0.137 ; 0.000         ;
+; altera_reserved_tck ; 0.285 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -310,8 +310,8 @@ Worst Case Available Settling Time: 29.535 ns
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; FPGA_CLK1_50        ; 15.460 ; 0.000         ;
-; altera_reserved_tck ; 15.707 ; 0.000         ;
+; FPGA_CLK1_50        ; 14.294 ; 0.000         ;
+; altera_reserved_tck ; 15.796 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -320,8 +320,8 @@ Worst Case Available Settling Time: 29.535 ns
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; FPGA_CLK1_50        ; 0.385 ; 0.000         ;
-; altera_reserved_tck ; 0.389 ; 0.000         ;
+; altera_reserved_tck ; 0.409 ; 0.000         ;
+; FPGA_CLK1_50        ; 0.499 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -330,8 +330,8 @@ Worst Case Available Settling Time: 29.535 ns
 +---------------------+--------+---------------------+
 ; Clock               ; Slack  ; End Point TNS       ;
 +---------------------+--------+---------------------+
-; FPGA_CLK1_50        ; 8.516  ; 0.000               ;
-; altera_reserved_tck ; 15.780 ; 0.000               ;
+; FPGA_CLK1_50        ; 8.512  ; 0.000               ;
+; altera_reserved_tck ; 15.726 ; 0.000               ;
 +---------------------+--------+---------------------+
 
 
@@ -342,7 +342,7 @@ The design MTBF is not calculated because there are no specified synchronizers i
 Number of Synchronizer Chains Found: 3
 Shortest Synchronizer Chain: 2 Registers
 Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-Worst Case Available Settling Time: 33.535 ns
+Worst Case Available Settling Time: 33.290 ns
 
 
 
@@ -352,8 +352,8 @@ Worst Case Available Settling Time: 33.535 ns
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; FPGA_CLK1_50        ; 13.533 ; 0.000         ;
-; altera_reserved_tck ; 14.850 ; 0.000         ;
+; FPGA_CLK1_50        ; 13.562 ; 0.000         ;
+; altera_reserved_tck ; 14.803 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -362,8 +362,8 @@ Worst Case Available Settling Time: 33.535 ns
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; FPGA_CLK1_50        ; 0.123 ; 0.000         ;
-; altera_reserved_tck ; 0.251 ; 0.000         ;
+; FPGA_CLK1_50        ; 0.119 ; 0.000         ;
+; altera_reserved_tck ; 0.230 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -372,8 +372,8 @@ Worst Case Available Settling Time: 33.535 ns
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; altera_reserved_tck ; 15.880 ; 0.000         ;
-; FPGA_CLK1_50        ; 16.295 ; 0.000         ;
+; FPGA_CLK1_50        ; 15.355 ; 0.000         ;
+; altera_reserved_tck ; 15.956 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -382,8 +382,8 @@ Worst Case Available Settling Time: 33.535 ns
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; altera_reserved_tck ; 0.305 ; 0.000         ;
-; FPGA_CLK1_50        ; 0.311 ; 0.000         ;
+; altera_reserved_tck ; 0.318 ; 0.000         ;
+; FPGA_CLK1_50        ; 0.421 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -392,8 +392,8 @@ Worst Case Available Settling Time: 33.535 ns
 +---------------------+--------+---------------------+
 ; Clock               ; Slack  ; End Point TNS       ;
 +---------------------+--------+---------------------+
-; FPGA_CLK1_50        ; 8.443  ; 0.000               ;
-; altera_reserved_tck ; 15.812 ; 0.000               ;
+; FPGA_CLK1_50        ; 8.442  ; 0.000               ;
+; altera_reserved_tck ; 15.780 ; 0.000               ;
 +---------------------+--------+---------------------+
 
 
@@ -404,7 +404,7 @@ The design MTBF is not calculated because there are no specified synchronizers i
 Number of Synchronizer Chains Found: 3
 Shortest Synchronizer Chain: 2 Registers
 Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-Worst Case Available Settling Time: 34.679 ns
+Worst Case Available Settling Time: 34.476 ns
 
 
 
@@ -414,9 +414,9 @@ Worst Case Available Settling Time: 34.679 ns
 +----------------------+--------+-------+----------+---------+---------------------+
 ; Clock                ; Setup  ; Hold  ; Recovery ; Removal ; Minimum Pulse Width ;
 +----------------------+--------+-------+----------+---------+---------------------+
-; Worst-case Slack     ; 7.090  ; 0.123 ; 12.767   ; 0.305   ; 8.443               ;
-;  FPGA_CLK1_50        ; 7.090  ; 0.123 ; 12.767   ; 0.311   ; 8.443               ;
-;  altera_reserved_tck ; 11.940 ; 0.251 ; 14.442   ; 0.305   ; 15.753              ;
+; Worst-case Slack     ; 7.041  ; 0.119 ; 11.048   ; 0.318   ; 8.442               ;
+;  FPGA_CLK1_50        ; 7.041  ; 0.119 ; 11.048   ; 0.421   ; 8.442               ;
+;  altera_reserved_tck ; 11.794 ; 0.230 ; 14.644   ; 0.318   ; 15.700              ;
 ; Design-wide TNS      ; 0.0    ; 0.0   ; 0.0      ; 0.0     ; 0.0                 ;
 ;  FPGA_CLK1_50        ; 0.000  ; 0.000 ; 0.000    ; 0.000   ; 0.000               ;
 ;  altera_reserved_tck ; 0.000  ; 0.000 ; 0.000    ; 0.000   ; 0.000               ;
@@ -428,9 +428,9 @@ Worst Case Available Settling Time: 34.679 ns
 +---------------------+--------------+-------------------+-------------------------+-------------------------+---------------+---------------------+----------------+------------------+--------+------------------+------------------------+------------------------+--------------+---------------+-----------------+-------+---------------------+--------------------+---------------+-----------------+-------------+
 ; Pin                 ; I/O Standard ; Near Tline Length ; Near Tline L per Length ; Near Tline C per Length ; Near Series R ; Near Differential R ; Near Pull-up R ; Near Pull-down R ; Near C ; Far Tline Length ; Far Tline L per Length ; Far Tline C per Length ; Far Series R ; Far Pull-up R ; Far Pull-down R ; Far C ; Termination Voltage ; Far Differential R ; EBD File Name ; EBD Signal Name ; EBD Far-end ;
 +---------------------+--------------+-------------------+-------------------------+-------------------------+---------------+---------------------+----------------+------------------+--------+------------------+------------------------+------------------------+--------------+---------------+-----------------+-------+---------------------+--------------------+---------------+-----------------+-------------+
+; LED[1]              ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
 ; UART_TX             ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
 ; LED[0]              ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
-; LED[1]              ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
 ; LED[2]              ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
 ; LED[3]              ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
 ; LED[4]              ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
@@ -460,9 +460,9 @@ Worst Case Available Settling Time: 34.679 ns
 +---------------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
 ; Pin                 ; I/O Standard ; Board Delay on Rise ; Board Delay on Fall ; Steady State Voh at FPGA Pin ; Steady State Vol at FPGA Pin ; Voh Max at FPGA Pin ; Vol Min at FPGA Pin ; Ringback Voltage on Rise at FPGA Pin ; Ringback Voltage on Fall at FPGA Pin ; 10-90 Rise Time at FPGA Pin ; 90-10 Fall Time at FPGA Pin ; Monotonic Rise at FPGA Pin ; Monotonic Fall at FPGA Pin ; Steady State Voh at Far-end ; Steady State Vol at Far-end ; Voh Max at Far-end ; Vol Min at Far-end ; Ringback Voltage on Rise at Far-end ; Ringback Voltage on Fall at Far-end ; 10-90 Rise Time at Far-end ; 90-10 Fall Time at Far-end ; Monotonic Rise at Far-end ; Monotonic Fall at Far-end ;
 +---------------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; LED[1]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 1.91e-08 V                   ; 3.17 V              ; -0.306 V            ; 0.142 V                              ; 0.425 V                              ; 4.17e-10 s                  ; 1.36e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 1.91e-08 V                  ; 3.17 V             ; -0.306 V           ; 0.142 V                             ; 0.425 V                             ; 4.17e-10 s                 ; 1.36e-10 s                 ; Yes                       ; No                        ;
 ; UART_TX             ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 1.91e-08 V                   ; 3.17 V              ; -0.306 V            ; 0.142 V                              ; 0.425 V                              ; 4.17e-10 s                  ; 1.36e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 1.91e-08 V                  ; 3.17 V             ; -0.306 V           ; 0.142 V                             ; 0.425 V                             ; 4.17e-10 s                 ; 1.36e-10 s                 ; Yes                       ; No                        ;
 ; LED[0]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 1.47e-08 V                   ; 3.11 V              ; -0.195 V            ; 0.108 V                              ; 0.32 V                               ; 4.03e-10 s                  ; 1.44e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 1.47e-08 V                  ; 3.11 V             ; -0.195 V           ; 0.108 V                             ; 0.32 V                              ; 4.03e-10 s                 ; 1.44e-10 s                 ; Yes                       ; No                        ;
-; LED[1]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 1.91e-08 V                   ; 3.17 V              ; -0.306 V            ; 0.142 V                              ; 0.425 V                              ; 4.17e-10 s                  ; 1.36e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 1.91e-08 V                  ; 3.17 V             ; -0.306 V           ; 0.142 V                             ; 0.425 V                             ; 4.17e-10 s                 ; 1.36e-10 s                 ; Yes                       ; No                        ;
 ; LED[2]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2e-08 V                      ; 3.17 V              ; -0.245 V            ; 0.166 V                              ; 0.398 V                              ; 4.33e-10 s                  ; 1.46e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 2e-08 V                     ; 3.17 V             ; -0.245 V           ; 0.166 V                             ; 0.398 V                             ; 4.33e-10 s                 ; 1.46e-10 s                 ; Yes                       ; No                        ;
 ; LED[3]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 1.47e-08 V                   ; 3.11 V              ; -0.195 V            ; 0.108 V                              ; 0.32 V                               ; 4.03e-10 s                  ; 1.44e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 1.47e-08 V                  ; 3.11 V             ; -0.195 V           ; 0.108 V                             ; 0.32 V                              ; 4.03e-10 s                 ; 1.44e-10 s                 ; Yes                       ; No                        ;
 ; LED[4]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 1.91e-08 V                   ; 3.17 V              ; -0.306 V            ; 0.142 V                              ; 0.425 V                              ; 4.17e-10 s                  ; 1.36e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 1.91e-08 V                  ; 3.17 V             ; -0.306 V           ; 0.142 V                             ; 0.425 V                             ; 4.17e-10 s                 ; 1.36e-10 s                 ; Yes                       ; No                        ;
@@ -478,9 +478,9 @@ Worst Case Available Settling Time: 34.679 ns
 +---------------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
 ; Pin                 ; I/O Standard ; Board Delay on Rise ; Board Delay on Fall ; Steady State Voh at FPGA Pin ; Steady State Vol at FPGA Pin ; Voh Max at FPGA Pin ; Vol Min at FPGA Pin ; Ringback Voltage on Rise at FPGA Pin ; Ringback Voltage on Fall at FPGA Pin ; 10-90 Rise Time at FPGA Pin ; 90-10 Fall Time at FPGA Pin ; Monotonic Rise at FPGA Pin ; Monotonic Fall at FPGA Pin ; Steady State Voh at Far-end ; Steady State Vol at Far-end ; Voh Max at Far-end ; Vol Min at Far-end ; Ringback Voltage on Rise at Far-end ; Ringback Voltage on Fall at Far-end ; 10-90 Rise Time at Far-end ; 90-10 Fall Time at Far-end ; Monotonic Rise at Far-end ; Monotonic Fall at Far-end ;
 +---------------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; LED[1]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 3.73e-05 V                   ; 3.11 V              ; -0.104 V            ; 0.101 V                              ; 0.139 V                              ; 5.54e-10 s                  ; 3.16e-10 s                  ; Yes                        ; Yes                        ; 3.08 V                      ; 3.73e-05 V                  ; 3.11 V             ; -0.104 V           ; 0.101 V                             ; 0.139 V                             ; 5.54e-10 s                 ; 3.16e-10 s                 ; Yes                       ; Yes                       ;
 ; UART_TX             ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 3.73e-05 V                   ; 3.11 V              ; -0.104 V            ; 0.101 V                              ; 0.139 V                              ; 5.54e-10 s                  ; 3.16e-10 s                  ; Yes                        ; Yes                        ; 3.08 V                      ; 3.73e-05 V                  ; 3.11 V             ; -0.104 V           ; 0.101 V                             ; 0.139 V                             ; 5.54e-10 s                 ; 3.16e-10 s                 ; Yes                       ; Yes                       ;
 ; LED[0]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 3.09e-05 V                   ; 3.09 V              ; -0.0462 V           ; 0.045 V                              ; 0.085 V                              ; 5.49e-10 s                  ; 3.06e-10 s                  ; Yes                        ; Yes                        ; 3.08 V                      ; 3.09e-05 V                  ; 3.09 V             ; -0.0462 V          ; 0.045 V                             ; 0.085 V                             ; 5.49e-10 s                 ; 3.06e-10 s                 ; Yes                       ; Yes                       ;
-; LED[1]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 3.73e-05 V                   ; 3.11 V              ; -0.104 V            ; 0.101 V                              ; 0.139 V                              ; 5.54e-10 s                  ; 3.16e-10 s                  ; Yes                        ; Yes                        ; 3.08 V                      ; 3.73e-05 V                  ; 3.11 V             ; -0.104 V           ; 0.101 V                             ; 0.139 V                             ; 5.54e-10 s                 ; 3.16e-10 s                 ; Yes                       ; Yes                       ;
 ; LED[2]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 3.87e-05 V                   ; 3.11 V              ; -0.0814 V           ; 0.131 V                              ; 0.136 V                              ; 5.88e-10 s                  ; 3.2e-10 s                   ; Yes                        ; Yes                        ; 3.08 V                      ; 3.87e-05 V                  ; 3.11 V             ; -0.0814 V          ; 0.131 V                             ; 0.136 V                             ; 5.88e-10 s                 ; 3.2e-10 s                  ; Yes                       ; Yes                       ;
 ; LED[3]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 3.09e-05 V                   ; 3.09 V              ; -0.0462 V           ; 0.045 V                              ; 0.085 V                              ; 5.49e-10 s                  ; 3.06e-10 s                  ; Yes                        ; Yes                        ; 3.08 V                      ; 3.09e-05 V                  ; 3.09 V             ; -0.0462 V          ; 0.045 V                             ; 0.085 V                             ; 5.49e-10 s                 ; 3.06e-10 s                 ; Yes                       ; Yes                       ;
 ; LED[4]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 3.73e-05 V                   ; 3.11 V              ; -0.104 V            ; 0.101 V                              ; 0.139 V                              ; 5.54e-10 s                  ; 3.16e-10 s                  ; Yes                        ; Yes                        ; 3.08 V                      ; 3.73e-05 V                  ; 3.11 V             ; -0.104 V           ; 0.101 V                             ; 0.139 V                             ; 5.54e-10 s                 ; 3.16e-10 s                 ; Yes                       ; Yes                       ;
@@ -496,9 +496,9 @@ Worst Case Available Settling Time: 34.679 ns
 +---------------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
 ; Pin                 ; I/O Standard ; Board Delay on Rise ; Board Delay on Fall ; Steady State Voh at FPGA Pin ; Steady State Vol at FPGA Pin ; Voh Max at FPGA Pin ; Vol Min at FPGA Pin ; Ringback Voltage on Rise at FPGA Pin ; Ringback Voltage on Fall at FPGA Pin ; 10-90 Rise Time at FPGA Pin ; 90-10 Fall Time at FPGA Pin ; Monotonic Rise at FPGA Pin ; Monotonic Fall at FPGA Pin ; Steady State Voh at Far-end ; Steady State Vol at Far-end ; Voh Max at Far-end ; Vol Min at Far-end ; Ringback Voltage on Rise at Far-end ; Ringback Voltage on Fall at Far-end ; 10-90 Rise Time at Far-end ; 90-10 Fall Time at Far-end ; Monotonic Rise at Far-end ; Monotonic Fall at Far-end ;
 +---------------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; LED[1]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 4.42e-07 V                   ; 3.75 V              ; -0.588 V            ; 0.329 V                              ; 0.704 V                              ; 2.77e-10 s                  ; 1.3e-10 s                   ; Yes                        ; No                         ; 3.63 V                      ; 4.42e-07 V                  ; 3.75 V             ; -0.588 V           ; 0.329 V                             ; 0.704 V                             ; 2.77e-10 s                 ; 1.3e-10 s                  ; Yes                       ; No                        ;
 ; UART_TX             ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 4.42e-07 V                   ; 3.75 V              ; -0.588 V            ; 0.329 V                              ; 0.704 V                              ; 2.77e-10 s                  ; 1.3e-10 s                   ; Yes                        ; No                         ; 3.63 V                      ; 4.42e-07 V                  ; 3.75 V             ; -0.588 V           ; 0.329 V                             ; 0.704 V                             ; 2.77e-10 s                 ; 1.3e-10 s                  ; Yes                       ; No                        ;
 ; LED[0]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 3.38e-07 V                   ; 3.67 V              ; -0.403 V            ; 0.084 V                              ; 0.542 V                              ; 3.5e-10 s                   ; 1.32e-10 s                  ; Yes                        ; No                         ; 3.63 V                      ; 3.38e-07 V                  ; 3.67 V             ; -0.403 V           ; 0.084 V                             ; 0.542 V                             ; 3.5e-10 s                  ; 1.32e-10 s                 ; Yes                       ; No                        ;
-; LED[1]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 4.42e-07 V                   ; 3.75 V              ; -0.588 V            ; 0.329 V                              ; 0.704 V                              ; 2.77e-10 s                  ; 1.3e-10 s                   ; Yes                        ; No                         ; 3.63 V                      ; 4.42e-07 V                  ; 3.75 V             ; -0.588 V           ; 0.329 V                             ; 0.704 V                             ; 2.77e-10 s                 ; 1.3e-10 s                  ; Yes                       ; No                        ;
 ; LED[2]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 4.64e-07 V                   ; 3.74 V              ; -0.508 V            ; 0.391 V                              ; 0.647 V                              ; 3.08e-10 s                  ; 1.34e-10 s                  ; No                         ; No                         ; 3.63 V                      ; 4.64e-07 V                  ; 3.74 V             ; -0.508 V           ; 0.391 V                             ; 0.647 V                             ; 3.08e-10 s                 ; 1.34e-10 s                 ; No                        ; No                        ;
 ; LED[3]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 3.38e-07 V                   ; 3.67 V              ; -0.403 V            ; 0.084 V                              ; 0.542 V                              ; 3.5e-10 s                   ; 1.32e-10 s                  ; Yes                        ; No                         ; 3.63 V                      ; 3.38e-07 V                  ; 3.67 V             ; -0.403 V           ; 0.084 V                             ; 0.542 V                             ; 3.5e-10 s                  ; 1.32e-10 s                 ; Yes                       ; No                        ;
 ; LED[4]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 4.42e-07 V                   ; 3.75 V              ; -0.588 V            ; 0.329 V                              ; 0.704 V                              ; 2.77e-10 s                  ; 1.3e-10 s                   ; Yes                        ; No                         ; 3.63 V                      ; 4.42e-07 V                  ; 3.75 V             ; -0.588 V           ; 0.329 V                             ; 0.704 V                             ; 2.77e-10 s                 ; 1.3e-10 s                  ; Yes                       ; No                        ;
@@ -514,9 +514,9 @@ Worst Case Available Settling Time: 34.679 ns
 +---------------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
 ; Pin                 ; I/O Standard ; Board Delay on Rise ; Board Delay on Fall ; Steady State Voh at FPGA Pin ; Steady State Vol at FPGA Pin ; Voh Max at FPGA Pin ; Vol Min at FPGA Pin ; Ringback Voltage on Rise at FPGA Pin ; Ringback Voltage on Fall at FPGA Pin ; 10-90 Rise Time at FPGA Pin ; 90-10 Fall Time at FPGA Pin ; Monotonic Rise at FPGA Pin ; Monotonic Fall at FPGA Pin ; Steady State Voh at Far-end ; Steady State Vol at Far-end ; Voh Max at Far-end ; Vol Min at Far-end ; Ringback Voltage on Rise at Far-end ; Ringback Voltage on Fall at Far-end ; 10-90 Rise Time at Far-end ; 90-10 Fall Time at Far-end ; Monotonic Rise at Far-end ; Monotonic Fall at Far-end ;
 +---------------------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; LED[1]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 0.000379 V                   ; 3.65 V              ; -0.289 V            ; 0.051 V                              ; 0.523 V                              ; 4.36e-10 s                  ; 1.95e-10 s                  ; Yes                        ; No                         ; 3.63 V                      ; 0.000379 V                  ; 3.65 V             ; -0.289 V           ; 0.051 V                             ; 0.523 V                             ; 4.36e-10 s                 ; 1.95e-10 s                 ; Yes                       ; No                        ;
 ; UART_TX             ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 0.000379 V                   ; 3.65 V              ; -0.289 V            ; 0.051 V                              ; 0.523 V                              ; 4.36e-10 s                  ; 1.95e-10 s                  ; Yes                        ; No                         ; 3.63 V                      ; 0.000379 V                  ; 3.65 V             ; -0.289 V           ; 0.051 V                             ; 0.523 V                             ; 4.36e-10 s                 ; 1.95e-10 s                 ; Yes                       ; No                        ;
 ; LED[0]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 0.000307 V                   ; 3.64 V              ; -0.165 V            ; 0.022 V                              ; 0.425 V                              ; 4.58e-10 s                  ; 2e-10 s                     ; Yes                        ; No                         ; 3.63 V                      ; 0.000307 V                  ; 3.64 V             ; -0.165 V           ; 0.022 V                             ; 0.425 V                             ; 4.58e-10 s                 ; 2e-10 s                    ; Yes                       ; No                        ;
-; LED[1]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 0.000379 V                   ; 3.65 V              ; -0.289 V            ; 0.051 V                              ; 0.523 V                              ; 4.36e-10 s                  ; 1.95e-10 s                  ; Yes                        ; No                         ; 3.63 V                      ; 0.000379 V                  ; 3.65 V             ; -0.289 V           ; 0.051 V                             ; 0.523 V                             ; 4.36e-10 s                 ; 1.95e-10 s                 ; Yes                       ; No                        ;
 ; LED[2]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 0.000395 V                   ; 3.65 V              ; -0.232 V            ; 0.065 V                              ; 0.547 V                              ; 4.68e-10 s                  ; 2.07e-10 s                  ; Yes                        ; No                         ; 3.63 V                      ; 0.000395 V                  ; 3.65 V             ; -0.232 V           ; 0.065 V                             ; 0.547 V                             ; 4.68e-10 s                 ; 2.07e-10 s                 ; Yes                       ; No                        ;
 ; LED[3]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 0.000307 V                   ; 3.64 V              ; -0.165 V            ; 0.022 V                              ; 0.425 V                              ; 4.58e-10 s                  ; 2e-10 s                     ; Yes                        ; No                         ; 3.63 V                      ; 0.000307 V                  ; 3.64 V             ; -0.165 V           ; 0.022 V                             ; 0.425 V                             ; 4.58e-10 s                 ; 2e-10 s                    ; Yes                       ; No                        ;
 ; LED[4]              ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.63 V                       ; 0.000379 V                   ; 3.65 V              ; -0.289 V            ; 0.051 V                              ; 0.523 V                              ; 4.36e-10 s                  ; 1.95e-10 s                  ; Yes                        ; No                         ; 3.63 V                      ; 0.000379 V                  ; 3.65 V             ; -0.289 V           ; 0.051 V                             ; 0.523 V                             ; 4.36e-10 s                 ; 1.95e-10 s                 ; Yes                       ; No                        ;
@@ -532,10 +532,10 @@ Worst Case Available Settling Time: 34.679 ns
 +---------------------+---------------------+------------+----------+----------+----------+
 ; From Clock          ; To Clock            ; RR Paths   ; FR Paths ; RF Paths ; FF Paths ;
 +---------------------+---------------------+------------+----------+----------+----------+
-; altera_reserved_tck ; altera_reserved_tck ; 821        ; 0        ; 29       ; 1        ;
+; altera_reserved_tck ; altera_reserved_tck ; 849        ; 0        ; 29       ; 1        ;
 ; FPGA_CLK1_50        ; altera_reserved_tck ; false path ; 0        ; 0        ; 0        ;
 ; altera_reserved_tck ; FPGA_CLK1_50        ; false path ; 0        ; 0        ; 0        ;
-; FPGA_CLK1_50        ; FPGA_CLK1_50        ; 838364     ; 0        ; 0        ; 0        ;
+; FPGA_CLK1_50        ; FPGA_CLK1_50        ; 898051     ; 0        ; 0        ; 0        ;
 +---------------------+---------------------+------------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -545,10 +545,10 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +---------------------+---------------------+------------+----------+----------+----------+
 ; From Clock          ; To Clock            ; RR Paths   ; FR Paths ; RF Paths ; FF Paths ;
 +---------------------+---------------------+------------+----------+----------+----------+
-; altera_reserved_tck ; altera_reserved_tck ; 821        ; 0        ; 29       ; 1        ;
+; altera_reserved_tck ; altera_reserved_tck ; 849        ; 0        ; 29       ; 1        ;
 ; FPGA_CLK1_50        ; altera_reserved_tck ; false path ; 0        ; 0        ; 0        ;
 ; altera_reserved_tck ; FPGA_CLK1_50        ; false path ; 0        ; 0        ; 0        ;
-; FPGA_CLK1_50        ; FPGA_CLK1_50        ; 838364     ; 0        ; 0        ; 0        ;
+; FPGA_CLK1_50        ; FPGA_CLK1_50        ; 898051     ; 0        ; 0        ; 0        ;
 +---------------------+---------------------+------------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -558,8 +558,8 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +---------------------+---------------------+----------+----------+----------+----------+
 ; From Clock          ; To Clock            ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +---------------------+---------------------+----------+----------+----------+----------+
-; altera_reserved_tck ; altera_reserved_tck ; 62       ; 0        ; 1        ; 0        ;
-; FPGA_CLK1_50        ; FPGA_CLK1_50        ; 1716     ; 0        ; 0        ; 0        ;
+; altera_reserved_tck ; altera_reserved_tck ; 61       ; 0        ; 1        ; 0        ;
+; FPGA_CLK1_50        ; FPGA_CLK1_50        ; 1751     ; 0        ; 0        ; 0        ;
 +---------------------+---------------------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -569,8 +569,8 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +---------------------+---------------------+----------+----------+----------+----------+
 ; From Clock          ; To Clock            ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +---------------------+---------------------+----------+----------+----------+----------+
-; altera_reserved_tck ; altera_reserved_tck ; 62       ; 0        ; 1        ; 0        ;
-; FPGA_CLK1_50        ; FPGA_CLK1_50        ; 1716     ; 0        ; 0        ; 0        ;
+; altera_reserved_tck ; altera_reserved_tck ; 61       ; 0        ; 1        ; 0        ;
+; FPGA_CLK1_50        ; FPGA_CLK1_50        ; 1751     ; 0        ; 0        ; 0        ;
 +---------------------+---------------------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -655,7 +655,7 @@ No non-DPA dedicated SERDES Receiver circuitry present in device or used in desi
 Info: *******************************************************************
 Info: Running Quartus Prime Timing Analyzer
     Info: Version 25.1std.0 Build 1129 10/21/2025 SC Standard Edition
-    Info: Processing started: Mon Oct 19 19:23:33 2026
+    Info: Processing started: Mon Oct 19 19:38:47 2026
 Info: Command: quartus_sta igor_jtag -c igor_jtag
 Info: qsta_default_script.tcl version: #1
 Info (20032): Parallel compilation is enabled and will use up to 4 processors
@@ -706,150 +706,150 @@ Info (332151): Clock uncertainty is not calculated until you update the timing n
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
 Info: Found TIMING_ANALYZER_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
 Info: Analyzing Slow 1100mV 100C Model
-Info (332146): Worst-case setup slack is 7.090
+Info (332146): Worst-case setup slack is 7.041
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     7.090               0.000 FPGA_CLK1_50 
-    Info (332119):    11.978               0.000 altera_reserved_tck 
-Info (332146): Worst-case hold slack is 0.261
+    Info (332119):     7.041               0.000 FPGA_CLK1_50 
+    Info (332119):    11.794               0.000 altera_reserved_tck 
+Info (332146): Worst-case hold slack is 0.253
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.261               0.000 FPGA_CLK1_50 
-    Info (332119):     0.672               0.000 altera_reserved_tck 
-Info (332146): Worst-case recovery slack is 12.767
+    Info (332119):     0.253               0.000 FPGA_CLK1_50 
+    Info (332119):     0.617               0.000 altera_reserved_tck 
+Info (332146): Worst-case recovery slack is 11.048
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    12.767               0.000 FPGA_CLK1_50 
-    Info (332119):    14.442               0.000 altera_reserved_tck 
-Info (332146): Worst-case removal slack is 0.744
+    Info (332119):    11.048               0.000 FPGA_CLK1_50 
+    Info (332119):    14.644               0.000 altera_reserved_tck 
+Info (332146): Worst-case removal slack is 1.014
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.744               0.000 FPGA_CLK1_50 
-    Info (332119):     1.057               0.000 altera_reserved_tck 
-Info (332146): Worst-case minimum pulse width slack is 8.843
+    Info (332119):     1.014               0.000 FPGA_CLK1_50 
+    Info (332119):     1.036               0.000 altera_reserved_tck 
+Info (332146): Worst-case minimum pulse width slack is 8.849
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     8.843               0.000 FPGA_CLK1_50 
-    Info (332119):    15.753               0.000 altera_reserved_tck 
+    Info (332119):     8.849               0.000 FPGA_CLK1_50 
+    Info (332119):    15.700               0.000 altera_reserved_tck 
 Info (332114): Report Metastability: Found 3 synchronizer chains.
     Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
     Info (332114): Number of Synchronizer Chains Found: 3
     Info (332114): Shortest Synchronizer Chain: 2 Registers
     Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-    Info (332114): Worst Case Available Settling Time: 29.179 ns
+    Info (332114): Worst Case Available Settling Time: 29.060 ns
     Info (332114): 
 Info: Analyzing Slow 1100mV -40C Model
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
-Info (332146): Worst-case setup slack is 7.708
+Info (332146): Worst-case setup slack is 7.267
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     7.708               0.000 FPGA_CLK1_50 
-    Info (332119):    11.940               0.000 altera_reserved_tck 
-Info (332146): Worst-case hold slack is 0.249
+    Info (332119):     7.267               0.000 FPGA_CLK1_50 
+    Info (332119):    11.870               0.000 altera_reserved_tck 
+Info (332146): Worst-case hold slack is 0.243
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.249               0.000 FPGA_CLK1_50 
-    Info (332119):     0.669               0.000 altera_reserved_tck 
-Info (332146): Worst-case recovery slack is 13.147
+    Info (332119):     0.243               0.000 FPGA_CLK1_50 
+    Info (332119):     0.610               0.000 altera_reserved_tck 
+Info (332146): Worst-case recovery slack is 11.489
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    13.147               0.000 FPGA_CLK1_50 
-    Info (332119):    14.522               0.000 altera_reserved_tck 
-Info (332146): Worst-case removal slack is 0.662
+    Info (332119):    11.489               0.000 FPGA_CLK1_50 
+    Info (332119):    14.770               0.000 altera_reserved_tck 
+Info (332146): Worst-case removal slack is 0.933
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.662               0.000 FPGA_CLK1_50 
-    Info (332119):     0.935               0.000 altera_reserved_tck 
-Info (332146): Worst-case minimum pulse width slack is 8.794
+    Info (332119):     0.933               0.000 FPGA_CLK1_50 
+    Info (332119):     0.943               0.000 altera_reserved_tck 
+Info (332146): Worst-case minimum pulse width slack is 8.796
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     8.794               0.000 FPGA_CLK1_50 
-    Info (332119):    15.779               0.000 altera_reserved_tck 
+    Info (332119):     8.796               0.000 FPGA_CLK1_50 
+    Info (332119):    15.734               0.000 altera_reserved_tck 
 Info (332114): Report Metastability: Found 3 synchronizer chains.
     Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
     Info (332114): Number of Synchronizer Chains Found: 3
     Info (332114): Shortest Synchronizer Chain: 2 Registers
     Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-    Info (332114): Worst Case Available Settling Time: 29.535 ns
+    Info (332114): Worst Case Available Settling Time: 29.517 ns
     Info (332114): 
 Info: Analyzing Fast 1100mV 100C Model
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
-Info (332146): Worst-case setup slack is 12.027
+Info (332146): Worst-case setup slack is 12.087
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    12.027               0.000 FPGA_CLK1_50 
-    Info (332119):    14.579               0.000 altera_reserved_tck 
-Info (332146): Worst-case hold slack is 0.139
+    Info (332119):    12.087               0.000 FPGA_CLK1_50 
+    Info (332119):    14.505               0.000 altera_reserved_tck 
+Info (332146): Worst-case hold slack is 0.137
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.139               0.000 FPGA_CLK1_50 
-    Info (332119):     0.296               0.000 altera_reserved_tck 
-Info (332146): Worst-case recovery slack is 15.460
+    Info (332119):     0.137               0.000 FPGA_CLK1_50 
+    Info (332119):     0.285               0.000 altera_reserved_tck 
+Info (332146): Worst-case recovery slack is 14.294
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    15.460               0.000 FPGA_CLK1_50 
-    Info (332119):    15.707               0.000 altera_reserved_tck 
-Info (332146): Worst-case removal slack is 0.385
+    Info (332119):    14.294               0.000 FPGA_CLK1_50 
+    Info (332119):    15.796               0.000 altera_reserved_tck 
+Info (332146): Worst-case removal slack is 0.409
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.385               0.000 FPGA_CLK1_50 
-    Info (332119):     0.389               0.000 altera_reserved_tck 
-Info (332146): Worst-case minimum pulse width slack is 8.516
+    Info (332119):     0.409               0.000 altera_reserved_tck 
+    Info (332119):     0.499               0.000 FPGA_CLK1_50 
+Info (332146): Worst-case minimum pulse width slack is 8.512
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     8.516               0.000 FPGA_CLK1_50 
+    Info (332119):     8.512               0.000 FPGA_CLK1_50 
+    Info (332119):    15.726               0.000 altera_reserved_tck 
+Info (332114): Report Metastability: Found 3 synchronizer chains.
+    Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
+    Info (332114): Number of Synchronizer Chains Found: 3
+    Info (332114): Shortest Synchronizer Chain: 2 Registers
+    Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
+    Info (332114): Worst Case Available Settling Time: 33.290 ns
+    Info (332114): 
+Info: Analyzing Fast 1100mV -40C Model
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info (332146): Worst-case setup slack is 13.562
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):    13.562               0.000 FPGA_CLK1_50 
+    Info (332119):    14.803               0.000 altera_reserved_tck 
+Info (332146): Worst-case hold slack is 0.119
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     0.119               0.000 FPGA_CLK1_50 
+    Info (332119):     0.230               0.000 altera_reserved_tck 
+Info (332146): Worst-case recovery slack is 15.355
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):    15.355               0.000 FPGA_CLK1_50 
+    Info (332119):    15.956               0.000 altera_reserved_tck 
+Info (332146): Worst-case removal slack is 0.318
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     0.318               0.000 altera_reserved_tck 
+    Info (332119):     0.421               0.000 FPGA_CLK1_50 
+Info (332146): Worst-case minimum pulse width slack is 8.442
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     8.442               0.000 FPGA_CLK1_50 
     Info (332119):    15.780               0.000 altera_reserved_tck 
 Info (332114): Report Metastability: Found 3 synchronizer chains.
     Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
     Info (332114): Number of Synchronizer Chains Found: 3
     Info (332114): Shortest Synchronizer Chain: 2 Registers
     Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-    Info (332114): Worst Case Available Settling Time: 33.535 ns
-    Info (332114): 
-Info: Analyzing Fast 1100mV -40C Model
-Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
-Info (332146): Worst-case setup slack is 13.533
-    Info (332119):     Slack       End Point TNS Clock 
-    Info (332119): ========= =================== =====================
-    Info (332119):    13.533               0.000 FPGA_CLK1_50 
-    Info (332119):    14.850               0.000 altera_reserved_tck 
-Info (332146): Worst-case hold slack is 0.123
-    Info (332119):     Slack       End Point TNS Clock 
-    Info (332119): ========= =================== =====================
-    Info (332119):     0.123               0.000 FPGA_CLK1_50 
-    Info (332119):     0.251               0.000 altera_reserved_tck 
-Info (332146): Worst-case recovery slack is 15.880
-    Info (332119):     Slack       End Point TNS Clock 
-    Info (332119): ========= =================== =====================
-    Info (332119):    15.880               0.000 altera_reserved_tck 
-    Info (332119):    16.295               0.000 FPGA_CLK1_50 
-Info (332146): Worst-case removal slack is 0.305
-    Info (332119):     Slack       End Point TNS Clock 
-    Info (332119): ========= =================== =====================
-    Info (332119):     0.305               0.000 altera_reserved_tck 
-    Info (332119):     0.311               0.000 FPGA_CLK1_50 
-Info (332146): Worst-case minimum pulse width slack is 8.443
-    Info (332119):     Slack       End Point TNS Clock 
-    Info (332119): ========= =================== =====================
-    Info (332119):     8.443               0.000 FPGA_CLK1_50 
-    Info (332119):    15.812               0.000 altera_reserved_tck 
-Info (332114): Report Metastability: Found 3 synchronizer chains.
-    Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
-    Info (332114): Number of Synchronizer Chains Found: 3
-    Info (332114): Shortest Synchronizer Chain: 2 Registers
-    Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-    Info (332114): Worst Case Available Settling Time: 34.679 ns
+    Info (332114): Worst Case Available Settling Time: 34.476 ns
     Info (332114): 
 Info (332102): Design is not fully constrained for setup requirements
 Info (332102): Design is not fully constrained for hold requirements
 Info: Quartus Prime Timing Analyzer was successful. 0 errors, 6 warnings
-    Info: Peak virtual memory: 5539 megabytes
-    Info: Processing ended: Mon Oct 19 19:23:52 2026
+    Info: Peak virtual memory: 5555 megabytes
+    Info: Processing ended: Mon Oct 19 19:39:06 2026
     Info: Elapsed time: 00:00:19
-    Info: Total CPU time (on all processors): 00:00:42
+    Info: Total CPU time (on all processors): 00:00:41
 
 

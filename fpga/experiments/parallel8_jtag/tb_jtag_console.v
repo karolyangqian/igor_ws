@@ -27,9 +27,10 @@ module tb_jtag_console;
     $fatal(1,"Bad CRC not fail-closed");
    if(reports==3 && (console.demo_mode || accepted!=2 || cycles!=6916 || a0!=-46 || a1!=60 || a2!=34))
     $fatal(1,"Pasted hexadecimal frame failed");
-   if(reports==4)begin
+   if(reports==4 && (!console.check_pass || accepted!=3))$fatal(1,"r+Enter failed");
+   if(reports==5)begin
     if(console.check_pass || error_code!=1 || permit || a0 || a1 || a2)$fatal(1,"Estop failed");
-    $display("\nPASS: real Parallel8 serial inference, CRC rejection, pasted hex frame, E-stop, console reports");$finish;
+    $display("\nPASS: real Parallel8 serial inference, CRC rejection, pasted hex frame, E-stop, console reports; blank CR/LF ignored, r+Enter works");$finish;
    end
   end
  end
@@ -39,14 +40,21 @@ module tb_jtag_console;
  integer j;
  initial begin
   repeat(5)@(negedge clk);rst_n=1;
-  wait(reports==1);repeat(5)@(negedge clk);command("!");
+  wait(reports==1);repeat(5)@(negedge clk);
+  for(j=0;j<10;j=j+1)begin command(13);command(10);end
+  repeat(200100)@(negedge clk);
+  if(reports!=1 || console.state!=0 || accepted!=1)$fatal(1,"Empty CR/LF created a transaction");
+  command("!");
   wait(reports==2);repeat(5)@(negedge clk);
   for(j=0;j<153;j=j+1)begin
    command(console.hexchar(console.frame[j][7:4]));
    command(console.hexchar(console.frame[j][3:0]));command(" ");
   end
-  command(13);
-  wait(reports==3);repeat(5)@(negedge clk);estop=1;command("r");
+  command(13);command(10);
+  wait(reports==3);repeat(5)@(negedge clk);command("r");command(13);command(10);
+  wait(reports==4);repeat(200100)@(negedge clk);
+  if(reports!=4 || console.state!=0)$fatal(1,"r+Enter produced extra reports");
+  estop=1;command("r");
  end
  initial begin #100000000;$fatal(1,"Test watchdog");end
 endmodule

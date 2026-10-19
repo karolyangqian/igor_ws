@@ -1,5 +1,10 @@
 # Physical Parallel8 JTAG console verification — 19 October 2026
 
+**Latest console correction:** see [the empty-Enter fix](EMPTY_ENTER_FIX.md) and
+[ten passing physical checks](20261019T123946Z/physical_commands.json).
+The screenshot and five-command logs below describe the initial image, not the
+subsequent corrected build. Both use the same Parallel8 neural core and weights.
+
 Quartus Programmer GUI configured `igor_parallel8_jtag.sof` on
 `DE-SoC [USB-1]`, HPS bypass at device 1, FPGA at device 2. GUI completion:
 **100**, `Successfully performed operation(s)`, **19:26:57 WIB**.
@@ -34,10 +39,10 @@ because stdout was redirected and the terminal was stopped by timeout. The
 connection and inference preceding it succeeded; physical command tests use the
 DLL directly and complete without that terminal redirection issue.
 
-Build evidence: `../../experiments/parallel8_jtag/output_files/` contains original
-Quartus reports. Full compile: **0 errors, 53 warnings**, 3,933 ALMs, 6,992
-registers, 66 M10K, eight DSP, zero PLL, 12 pins. Minimum summary hold slack:
-**+0.123 ns**, minimum setup slack **+7.090 ns**. Warnings include vendor debug
+Build evidence: `../../experiments/parallel8_jtag/output_files/` contains the
+latest original Quartus reports. Latest full compile: **0 errors, 53 warnings**,
+4,013 ALMs, 7,017 registers, 66 M10K, eight DSP, zero PLL, 12 pins. Minimum
+summary hold slack: **+0.119 ns**, minimum setup slack **+7.041 ns**. Warnings include vendor debug
 SDC filters and retained core ROM implementation messages; this is a working
 FPGA demonstration, not ASIC fabrication sign-off or exhaustive verification.
 

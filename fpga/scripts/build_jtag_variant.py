@@ -43,8 +43,8 @@ dynamic = {}
 dynamic[template.index('N FPGA')] = 'hexchar(count)'
 start = template.index('xx')
 for i in range(11):
-    dynamic[start+i*3] = f'hexchar(captured[{i}][7:4])'
-    dynamic[start+i*3+1] = f'hexchar(captured[{i}][3:0])'
+    dynamic[start+i*3] = f"count>{i} ? hexchar(captured[{i}][7:4]) : 8'h2d"
+    dynamic[start+i*3+1] = f"count>{i} ? hexchar(captured[{i}][3:0]) : 8'h2d"
 for token, signal in [('CCCCCCCC','snap_cycles'),('AAAAAAAA','snap_accepted'),('BBBBBBBB','snap_rejected'),('EE','snap_error')]:
     start = template.index(token)
     for i in range(len(token)):

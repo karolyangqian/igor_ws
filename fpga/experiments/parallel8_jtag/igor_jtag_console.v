@@ -44,7 +44,7 @@ module igor_jtag_console #(parameter integer AUTO_DELAY=150000000,
  reg [31:0] timer,boot_timer,snap_cycles,snap_accepted,snap_rejected;
  reg [7:0] snap_error;
  reg auto_pending,bad_crc,check_pass,matched,demo_mode;
- reg nibble_pending;reg [3:0] nibble;
+ reg nibble_pending,hex_started;reg [3:0] nibble;
  reg send;reg [7:0] send_data;wire busy;
  wire got,framing;wire [7:0] received;
  integer i;
@@ -63,7 +63,7 @@ module igor_jtag_console #(parameter integer AUTO_DELAY=150000000,
    state<=IDLE;index<=0;count<=0;timer<=0;boot_timer<=0;auto_pending<=1;
    bad_crc<=0;check_pass<=0;matched<=1;demo_mode<=1;send<=0;send_data<=0;
    snap_cycles<=0;snap_accepted<=0;snap_rejected<=0;snap_error<=0;
-   nibble_pending<=0;nibble<=0;
+   nibble_pending<=0;hex_started<=0;nibble<=0;
    for(i=0;i<11;i=i+1)captured[i]<=0;
   end else begin
    send<=0;
@@ -81,14 +81,19 @@ module igor_jtag_console #(parameter integer AUTO_DELAY=150000000,
      end else if(host_valid && host_ready)begin
       auto_pending<=0;
       if(host_data=="r" || host_data=="R" || host_data=="!")begin
-       bad_crc<=host_data=="!";demo_mode<=1;index<=0;count<=0;matched<=1;nibble_pending<=0;state<=DEMO;
+       bad_crc<=host_data=="!";demo_mode<=1;index<=0;count<=0;matched<=1;nibble_pending<=0;hex_started<=0;state<=DEMO;
        for(i=0;i<11;i=i+1)captured[i]<=0;
       end else if(ishex(host_data))begin
        demo_mode<=0;
+       hex_started<=1;
+       if(!hex_started)begin
+        count<=0;matched<=1;
+        for(i=0;i<11;i=i+1)captured[i]<=0;
+       end
        if(!nibble_pending)begin nibble<=unhex(host_data);nibble_pending<=1;end
        else begin send_data<={nibble,unhex(host_data)};send<=1;nibble_pending<=0;end
-      end else if(host_data==13 || host_data==10)begin
-       bad_crc<=0;timer<=0;state<=WAIT_REPLY;
+      end else if((host_data==13 || host_data==10) && hex_started)begin
+       bad_crc<=0;timer<=0;nibble_pending<=0;hex_started<=0;state<=WAIT_REPLY;
       end
      end
     end

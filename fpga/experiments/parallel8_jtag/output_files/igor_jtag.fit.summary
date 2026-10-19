@@ -1,12 +1,12 @@
-Fitter Status : Successful - Mon Oct 19 19:23:16 2026
+Fitter Status : Successful - Mon Oct 19 19:38:30 2026
 Quartus Prime Version : 25.1std.0 Build 1129 10/21/2025 SC Standard Edition
 Revision Name : igor_jtag
 Top-level Entity Name : igor_jtag_top
 Family : Cyclone V
 Device : 5CSEBA6U23I7
 Timing Models : Final
-Logic utilization (in ALMs) : 3,933 / 41,910 ( 9 % )
-Total registers : 6992
+Logic utilization (in ALMs) : 4,013 / 41,910 ( 10 % )
+Total registers : 7017
 Total pins : 12 / 314 ( 4 % )
 Total virtual pins : 0
 Total block memory bits : 525,312 / 5,662,720 ( 9 % )

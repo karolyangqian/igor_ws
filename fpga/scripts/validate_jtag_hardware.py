@@ -9,8 +9,8 @@ import time
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
-evidence = root/'evidence/jtag_parallel8'
-evidence.mkdir(exist_ok=True)
+evidence = root/'evidence/jtag_parallel8'/time.strftime('%Y%m%dT%H%M%SZ',time.gmtime())
+evidence.mkdir(parents=True,exist_ok=True)
 lib = C.CDLL(r'D:\Quartus-Program\quartus\bin64\jtag_atlantic.dll')
 def bind(name, result, args):
     f=getattr(lib,name);f.restype=result;f.argtypes=args;return f
@@ -48,22 +48,35 @@ def send(data):
 results=[]
 try:
     receive(.3,False) # Discard any previous prompt before each command test.
-    for i in range(3):
-        send(b'r');text=receive()
+    for i,command in enumerate([b'r',b'r\r',b'r\r\n']):
+        send(command);text=receive()
         ok='5A A5 02 06 D2 FF 3C 00 22 00 61' in text and 'cycles=0x00001B04' in text and 'CHECK=PASS' in text
         results.append({'test':f'physical_demo_{i+1}','pass':ok})
         if not ok:raise AssertionError(results[-1])
+        extra=receive(.25,False)
+        ok='RX count=' not in extra
+        results.append({'test':f'no_extra_report_after_demo_{i+1}','pass':ok})
+        if not ok:raise AssertionError(results[-1])
+    send(b'\r\n'*20);text=receive(.25,False)
+    ok='RX count=' not in text
+    results.append({'test':'twenty_blank_CRLF_pairs_ignored','pass':ok})
+    if not ok:raise AssertionError(results[-1])
     send(b'!');text=receive()
-    ok='RX count=0x0' in text and 'error=0x06 CHECK=PASS' in text
+    ok='RX count=0x0 FPGA bytes: -- -- -- -- -- -- -- -- -- -- --' in text and 'error=0x06 CHECK=PASS' in text
     results.append({'test':'physical_bad_crc','pass':ok})
     if not ok:raise AssertionError(results[-1])
     manifest=json.loads((root/'experiments/parallel8_jtag/source_manifest.json').read_text())
-    send(manifest['demo_request_hex'].encode()+b'\r');text=receive()
+    send(manifest['demo_request_hex'].encode()+b'\r\n');text=receive()
     ok='5A A5 02 06 D2 FF 3C 00 22 00 61' in text and 'CHECK=DATA' in text
     results.append({'test':'physical_pasted_hex','pass':ok})
     if not ok:raise AssertionError(results[-1])
-    print('PASS: all five physical JTAG transactions',flush=True)
+    extra=receive(.25,False)
+    ok='RX count=' not in extra
+    results.append({'test':'custom_frame_CRLF_single_report','pass':ok})
+    if not ok:raise AssertionError(results[-1])
+    print(f'PASS: all {len(results)} physical JTAG checks; evidence: {evidence}',flush=True)
 finally:
     close_uart(handle)
     (evidence/'physical_commands.log').write_text('\n'.join(raw))
-    (evidence/'physical_commands.json').write_text(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'cable':'DE-SoC [USB-1]','device':2,'instance':0,'results':results},indent=2)+'\n')
+    image=json.loads((root/'bitstreams/igor_parallel8_jtag.json').read_text(encoding='utf-8-sig'))
+    (evidence/'physical_commands.json').write_text(json.dumps({'utc':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),'image_sha256':image['sha256'],'cable':'DE-SoC [USB-1]','device':2,'instance':0,'results':results},indent=2)+'\n')

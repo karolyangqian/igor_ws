@@ -1,5 +1,5 @@
 Analysis & Synthesis report for igor_jtag
-Mon Oct 19 19:21:07 2026
+Mon Oct 19 19:36:14 2026
 Quartus Prime Version 25.1std.0 Build 1129 10/21/2025 SC Standard Edition
 
 
@@ -18,10 +18,10 @@ Quartus Prime Version 25.1std.0 Build 1129 10/21/2025 SC Standard Edition
  10. Analysis & Synthesis IP Cores Summary
  11. State Machine - |igor_jtag_top|igor_src_policy_uart:policy|mode
  12. State Machine - |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|state
- 13. State Machine - |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|state
- 14. State Machine - |igor_jtag_top|igor_jtag_console:console|state
- 15. State Machine - |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|state
- 16. State Machine - |igor_jtag_top|igor_jtag_bytes:bridge|state
+ 13. State Machine - |igor_jtag_top|igor_jtag_console:console|state
+ 14. State Machine - |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|state
+ 15. State Machine - |igor_jtag_top|igor_jtag_bytes:bridge|state
+ 16. State Machine - |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|state
  17. Registers Protected by Synthesis
  18. Registers Removed During Synthesis
  19. Removed Registers Triggering Further Register Optimizations
@@ -96,13 +96,13 @@ on the Quartus Prime software download page.
 +---------------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                          ;
 +---------------------------------+-----------------------------------------------------+
-; Analysis & Synthesis Status     ; Successful - Mon Oct 19 19:21:06 2026               ;
+; Analysis & Synthesis Status     ; Successful - Mon Oct 19 19:36:14 2026               ;
 ; Quartus Prime Version           ; 25.1std.0 Build 1129 10/21/2025 SC Standard Edition ;
 ; Revision Name                   ; igor_jtag                                           ;
 ; Top-level Entity Name           ; igor_jtag_top                                       ;
 ; Family                          ; Cyclone V                                           ;
 ; Logic utilization (in ALMs)     ; N/A                                                 ;
-; Total registers                 ; 6949                                                ;
+; Total registers                 ; 6950                                                ;
 ; Total pins                      ; 12                                                  ;
 ; Total virtual pins              ; 0                                                   ;
 ; Total block memory bits         ; 525,312                                             ;
@@ -212,14 +212,14 @@ on the Quartus Prime software download page.
 ; Number detected on machine ; 12          ;
 ; Maximum allowed            ; 4           ;
 ;                            ;             ;
-; Average used               ; 1.00        ;
+; Average used               ; 1.59        ;
 ; Maximum used               ; 4           ;
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;   0.0%      ;
-;     Processor 3            ;   0.0%      ;
-;     Processor 4            ;   0.0%      ;
+;     Processor 2            ;  20.2%      ;
+;     Processor 3            ;  20.2%      ;
+;     Processor 4            ;  18.7%      ;
 +----------------------------+-------------+
 
 
@@ -297,16 +297,16 @@ on the Quartus Prime software download page.
 +---------------------------------------------+--------------------+
 ; Resource                                    ; Usage              ;
 +---------------------------------------------+--------------------+
-; Estimate of Logic utilization (ALMs needed) ; 5163               ;
+; Estimate of Logic utilization (ALMs needed) ; 5234               ;
 ;                                             ;                    ;
-; Combinational ALUT usage for logic          ; 4488               ;
-;     -- 7 input functions                    ; 550                ;
-;     -- 6 input functions                    ; 1825               ;
-;     -- 5 input functions                    ; 522                ;
-;     -- 4 input functions                    ; 473                ;
-;     -- <=3 input functions                  ; 1118               ;
+; Combinational ALUT usage for logic          ; 4738               ;
+;     -- 7 input functions                    ; 548                ;
+;     -- 6 input functions                    ; 1915               ;
+;     -- 5 input functions                    ; 559                ;
+;     -- 4 input functions                    ; 490                ;
+;     -- <=3 input functions                  ; 1226               ;
 ;                                             ;                    ;
-; Dedicated logic registers                   ; 6949               ;
+; Dedicated logic registers                   ; 6950               ;
 ;                                             ;                    ;
 ; I/O pins                                    ; 12                 ;
 ; Total MLAB memory bits                      ; 0                  ;
@@ -315,9 +315,9 @@ on the Quartus Prime software download page.
 ; Total DSP Blocks                            ; 8                  ;
 ;                                             ;                    ;
 ; Maximum fan-out node                        ; FPGA_CLK1_50~input ;
-; Maximum fan-out                             ; 6980               ;
-; Total fan-out                               ; 47489              ;
-; Average fan-out                             ; 4.09               ;
+; Maximum fan-out                             ; 6981               ;
+; Total fan-out                               ; 48493              ;
+; Average fan-out                             ; 4.08               ;
 +---------------------------------------------+--------------------+
 
 
@@ -326,14 +326,14 @@ on the Quartus Prime software download page.
 +-----------------------------------------------------------------------------------------------------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------------+--------------+
 ; Compilation Hierarchy Node                                                                                                              ; Combinational ALUTs ; Dedicated Logic Registers ; Block Memory Bits ; DSP Blocks ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                                                                                                                                                                                                                                                                                       ; Entity Name                       ; Library Name ;
 +-----------------------------------------------------------------------------------------------------------------------------------------+---------------------+---------------------------+-------------------+------------+------+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------------+--------------+
-; |igor_jtag_top                                                                                                                          ; 4488 (4)            ; 6949 (5)                  ; 525312            ; 8          ; 12   ; 0            ; |igor_jtag_top                                                                                                                                                                                                                                                                                                                                            ; igor_jtag_top                     ; work         ;
-;    |altera_avalon_jtag_uart:jtag|                                                                                                       ; 100 (22)            ; 102 (6)                   ; 1024              ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag                                                                                                                                                                                                                                                                                                               ; altera_avalon_jtag_uart           ; work         ;
-;       |alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|                                                                     ; 30 (30)             ; 56 (56)                   ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic                                                                                                                                                                                                                                                   ; alt_jtag_atlantic                 ; work         ;
-;       |altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|                                                               ; 24 (0)              ; 20 (0)                    ; 512               ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r                                                                                                                                                                                                                                             ; altera_avalon_jtag_uart_scfifo_r  ; work         ;
-;          |scfifo:rfifo|                                                                                                                 ; 24 (0)              ; 20 (0)                    ; 512               ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|scfifo:rfifo                                                                                                                                                                                                                                ; scfifo                            ; work         ;
-;             |scfifo_1t91:auto_generated|                                                                                                ; 24 (0)              ; 20 (0)                    ; 512               ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|scfifo:rfifo|scfifo_1t91:auto_generated                                                                                                                                                                                                     ; scfifo_1t91                       ; work         ;
-;                |a_dpfifo_5771:dpfifo|                                                                                                   ; 24 (0)              ; 20 (0)                    ; 512               ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|scfifo:rfifo|scfifo_1t91:auto_generated|a_dpfifo_5771:dpfifo                                                                                                                                                                                ; a_dpfifo_5771                     ; work         ;
-;                   |a_fefifo_7cf:fifo_state|                                                                                             ; 12 (6)              ; 8 (2)                     ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|scfifo:rfifo|scfifo_1t91:auto_generated|a_dpfifo_5771:dpfifo|a_fefifo_7cf:fifo_state                                                                                                                                                        ; a_fefifo_7cf                      ; work         ;
+; |igor_jtag_top                                                                                                                          ; 4738 (5)            ; 6950 (5)                  ; 525312            ; 8          ; 12   ; 0            ; |igor_jtag_top                                                                                                                                                                                                                                                                                                                                            ; igor_jtag_top                     ; work         ;
+;    |altera_avalon_jtag_uart:jtag|                                                                                                       ; 99 (23)             ; 102 (6)                   ; 1024              ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag                                                                                                                                                                                                                                                                                                               ; altera_avalon_jtag_uart           ; work         ;
+;       |alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|                                                                     ; 29 (29)             ; 56 (56)                   ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic                                                                                                                                                                                                                                                   ; alt_jtag_atlantic                 ; work         ;
+;       |altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|                                                               ; 23 (0)              ; 20 (0)                    ; 512               ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r                                                                                                                                                                                                                                             ; altera_avalon_jtag_uart_scfifo_r  ; work         ;
+;          |scfifo:rfifo|                                                                                                                 ; 23 (0)              ; 20 (0)                    ; 512               ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|scfifo:rfifo                                                                                                                                                                                                                                ; scfifo                            ; work         ;
+;             |scfifo_1t91:auto_generated|                                                                                                ; 23 (0)              ; 20 (0)                    ; 512               ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|scfifo:rfifo|scfifo_1t91:auto_generated                                                                                                                                                                                                     ; scfifo_1t91                       ; work         ;
+;                |a_dpfifo_5771:dpfifo|                                                                                                   ; 23 (0)              ; 20 (0)                    ; 512               ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|scfifo:rfifo|scfifo_1t91:auto_generated|a_dpfifo_5771:dpfifo                                                                                                                                                                                ; a_dpfifo_5771                     ; work         ;
+;                   |a_fefifo_7cf:fifo_state|                                                                                             ; 11 (5)              ; 8 (2)                     ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|scfifo:rfifo|scfifo_1t91:auto_generated|a_dpfifo_5771:dpfifo|a_fefifo_7cf:fifo_state                                                                                                                                                        ; a_fefifo_7cf                      ; work         ;
 ;                      |cntr_vg7:count_usedw|                                                                                             ; 6 (6)               ; 6 (6)                     ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|scfifo:rfifo|scfifo_1t91:auto_generated|a_dpfifo_5771:dpfifo|a_fefifo_7cf:fifo_state|cntr_vg7:count_usedw                                                                                                                                   ; cntr_vg7                          ; work         ;
 ;                   |altsyncram_7pu1:FIFOram|                                                                                             ; 0 (0)               ; 0 (0)                     ; 512               ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|scfifo:rfifo|scfifo_1t91:auto_generated|a_dpfifo_5771:dpfifo|altsyncram_7pu1:FIFOram                                                                                                                                                        ; altsyncram_7pu1                   ; work         ;
 ;                   |cntr_jgb:rd_ptr_count|                                                                                               ; 6 (6)               ; 6 (6)                     ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_r:altera_avalon_jtag_uart_scfifo_r|scfifo:rfifo|scfifo_1t91:auto_generated|a_dpfifo_5771:dpfifo|cntr_jgb:rd_ptr_count                                                                                                                                                          ; cntr_jgb                          ; work         ;
@@ -348,11 +348,11 @@ on the Quartus Prime software download page.
 ;                   |cntr_jgb:rd_ptr_count|                                                                                               ; 6 (6)               ; 6 (6)                     ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w|scfifo:wfifo|scfifo_1t91:auto_generated|a_dpfifo_5771:dpfifo|cntr_jgb:rd_ptr_count                                                                                                                                                          ; cntr_jgb                          ; work         ;
 ;                   |cntr_jgb:wr_ptr|                                                                                                     ; 6 (6)               ; 6 (6)                     ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|altera_avalon_jtag_uart_scfifo_w:altera_avalon_jtag_uart_scfifo_w|scfifo:wfifo|scfifo_1t91:auto_generated|a_dpfifo_5771:dpfifo|cntr_jgb:wr_ptr                                                                                                                                                                ; cntr_jgb                          ; work         ;
 ;    |igor_jtag_bytes:bridge|                                                                                                             ; 14 (14)             ; 15 (15)                   ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_jtag_bytes:bridge                                                                                                                                                                                                                                                                                                                     ; igor_jtag_bytes                   ; work         ;
-;    |igor_jtag_console:console|                                                                                                          ; 796 (695)           ; 359 (287)                 ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_jtag_console:console                                                                                                                                                                                                                                                                                                                  ; igor_jtag_console                 ; work         ;
-;       |igor_uart_rx:monitor|                                                                                                            ; 62 (62)             ; 42 (42)                   ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor                                                                                                                                                                                                                                                                                             ; igor_uart_rx                      ; work         ;
+;    |igor_jtag_console:console|                                                                                                          ; 889 (786)           ; 360 (288)                 ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_jtag_console:console                                                                                                                                                                                                                                                                                                                  ; igor_jtag_console                 ; work         ;
+;       |igor_uart_rx:monitor|                                                                                                            ; 64 (64)             ; 42 (42)                   ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor                                                                                                                                                                                                                                                                                             ; igor_uart_rx                      ; work         ;
 ;       |igor_uart_tx:inject|                                                                                                             ; 39 (39)             ; 30 (30)                   ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_jtag_console:console|igor_uart_tx:inject                                                                                                                                                                                                                                                                                              ; igor_uart_tx                      ; work         ;
-;    |igor_src_policy_uart:policy|                                                                                                        ; 3481 (1023)         ; 6393 (1525)               ; 524288            ; 8          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy                                                                                                                                                                                                                                                                                                                ; igor_src_policy_uart              ; work         ;
-;       |igor_src_policy_core:core|                                                                                                       ; 2357 (2118)         ; 4795 (4795)               ; 524288            ; 8          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core                                                                                                                                                                                                                                                                                      ; igor_src_policy_core              ; work         ;
+;    |igor_src_policy_uart:policy|                                                                                                        ; 3638 (1148)         ; 6393 (1525)               ; 524288            ; 8          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy                                                                                                                                                                                                                                                                                                                ; igor_src_policy_uart              ; work         ;
+;       |igor_src_policy_core:core|                                                                                                       ; 2381 (2142)         ; 4795 (4795)               ; 524288            ; 8          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core                                                                                                                                                                                                                                                                                      ; igor_src_policy_core              ; work         ;
 ;          |altsyncram:lane0.memory_rtl_0|                                                                                                ; 0 (0)               ; 0 (0)                     ; 65536             ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|altsyncram:lane0.memory_rtl_0                                                                                                                                                                                                                                                        ; altsyncram                        ; work         ;
 ;             |altsyncram_5lg1:auto_generated|                                                                                            ; 0 (0)               ; 0 (0)                     ; 65536             ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|altsyncram:lane0.memory_rtl_0|altsyncram_5lg1:auto_generated                                                                                                                                                                                                                         ; altsyncram_5lg1                   ; work         ;
 ;          |altsyncram:lane1.memory_rtl_0|                                                                                                ; 0 (0)               ; 0 (0)                     ; 65536             ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|altsyncram:lane1.memory_rtl_0                                                                                                                                                                                                                                                        ; altsyncram                        ; work         ;
@@ -377,8 +377,8 @@ on the Quartus Prime software download page.
 ;          |igor_src_policy_activation:lane5.activation|                                                                                  ; 31 (31)             ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane5.activation                                                                                                                                                                                                                                          ; igor_src_policy_activation        ; work         ;
 ;          |igor_src_policy_activation:lane6.activation|                                                                                  ; 31 (31)             ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane6.activation                                                                                                                                                                                                                                          ; igor_src_policy_activation        ; work         ;
 ;          |igor_src_policy_activation:lane7.activation|                                                                                  ; 31 (31)             ; 0 (0)                     ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane7.activation                                                                                                                                                                                                                                          ; igor_src_policy_activation        ; work         ;
-;       |igor_uart_rx:receiver|                                                                                                           ; 62 (62)             ; 43 (43)                   ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver                                                                                                                                                                                                                                                                                          ; igor_uart_rx                      ; work         ;
-;       |igor_uart_tx:transmitter|                                                                                                        ; 39 (39)             ; 30 (30)                   ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_tx:transmitter                                                                                                                                                                                                                                                                                       ; igor_uart_tx                      ; work         ;
+;       |igor_uart_rx:receiver|                                                                                                           ; 69 (69)             ; 43 (43)                   ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver                                                                                                                                                                                                                                                                                          ; igor_uart_rx                      ; work         ;
+;       |igor_uart_tx:transmitter|                                                                                                        ; 40 (40)             ; 30 (30)                   ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_tx:transmitter                                                                                                                                                                                                                                                                                       ; igor_uart_tx                      ; work         ;
 ;    |sld_hub:auto_hub|                                                                                                                   ; 93 (1)              ; 75 (0)                    ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|sld_hub:auto_hub                                                                                                                                                                                                                                                                                                                           ; sld_hub                           ; altera_sld   ;
 ;       |alt_sld_fab_with_jtag_input:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:with_jtag_input_gen:instrumentation_fabric| ; 92 (0)              ; 75 (0)                    ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|sld_hub:auto_hub|alt_sld_fab_with_jtag_input:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:with_jtag_input_gen:instrumentation_fabric                                                                                                                                                                                           ; alt_sld_fab_with_jtag_input       ; altera_sld   ;
 ;          |alt_sld_fab:instrumentation_fabric|                                                                                           ; 92 (0)              ; 75 (0)                    ; 0                 ; 0          ; 0    ; 0            ; |igor_jtag_top|sld_hub:auto_hub|alt_sld_fab_with_jtag_input:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:with_jtag_input_gen:instrumentation_fabric|alt_sld_fab:instrumentation_fabric                                                                                                                                                        ; alt_sld_fab                       ; alt_sld_fab  ;
@@ -471,19 +471,6 @@ Encoding Type:  One-Hot
 
 
 Encoding Type:  One-Hot
-+----------------------------------------------------------------------------------------+
-; State Machine - |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|state ;
-+----------+----------+----------+----------+--------------------------------------------+
-; Name     ; state.11 ; state.10 ; state.01 ; state.00                                   ;
-+----------+----------+----------+----------+--------------------------------------------+
-; state.00 ; 0        ; 0        ; 0        ; 0                                          ;
-; state.01 ; 0        ; 0        ; 1        ; 1                                          ;
-; state.10 ; 0        ; 1        ; 0        ; 1                                          ;
-; state.11 ; 1        ; 0        ; 0        ; 1                                          ;
-+----------+----------+----------+----------+--------------------------------------------+
-
-
-Encoding Type:  One-Hot
 +------------------------------------------------------------------------------+
 ; State Machine - |igor_jtag_top|igor_jtag_console:console|state               ;
 +------------------+--------------+------------------+------------+------------+
@@ -497,16 +484,16 @@ Encoding Type:  One-Hot
 
 
 Encoding Type:  One-Hot
-+-------------------------------------------------------------------------------------+
-; State Machine - |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|state ;
-+----------+----------+----------+----------+-----------------------------------------+
-; Name     ; state.11 ; state.10 ; state.01 ; state.00                                ;
-+----------+----------+----------+----------+-----------------------------------------+
-; state.00 ; 0        ; 0        ; 0        ; 0                                       ;
-; state.01 ; 0        ; 0        ; 1        ; 1                                       ;
-; state.10 ; 0        ; 1        ; 0        ; 1                                       ;
-; state.11 ; 1        ; 0        ; 0        ; 1                                       ;
-+----------+----------+----------+----------+-----------------------------------------+
++----------------------------------------------------------------------------------------+
+; State Machine - |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|state ;
++----------+----------+----------+----------+--------------------------------------------+
+; Name     ; state.11 ; state.10 ; state.01 ; state.00                                   ;
++----------+----------+----------+----------+--------------------------------------------+
+; state.00 ; 0        ; 0        ; 0        ; 0                                          ;
+; state.01 ; 0        ; 0        ; 1        ; 1                                          ;
+; state.10 ; 0        ; 1        ; 0        ; 1                                          ;
+; state.11 ; 1        ; 0        ; 0        ; 1                                          ;
++----------+----------+----------+----------+--------------------------------------------+
 
 
 Encoding Type:  One-Hot
@@ -523,6 +510,19 @@ Encoding Type:  One-Hot
 +-------------+------------+-------------+-------------+------------+-----------+
 
 
+Encoding Type:  One-Hot
++-------------------------------------------------------------------------------------+
+; State Machine - |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|state ;
++----------+----------+----------+----------+-----------------------------------------+
+; Name     ; state.11 ; state.10 ; state.01 ; state.00                                ;
++----------+----------+----------+----------+-----------------------------------------+
+; state.00 ; 0        ; 0        ; 0        ; 0                                       ;
+; state.01 ; 0        ; 0        ; 1        ; 1                                       ;
+; state.10 ; 0        ; 1        ; 0        ; 1                                       ;
+; state.11 ; 1        ; 0        ; 0        ; 1                                       ;
++----------+----------+----------+----------+-----------------------------------------+
+
+
 +--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 ; Registers Protected by Synthesis                                                                                                                                                                                         ;
 +----------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+--------------------------------------------+
@@ -532,15 +532,18 @@ Encoding Type:  One-Hot
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|tck_t_dav       ; yes                                                              ; yes                                        ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|user_saw_rvalid ; yes                                                              ; yes                                        ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|write_stalled   ; yes                                                              ; yes                                        ;
+; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|read_req        ; yes                                                              ; yes                                        ;
+; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|read            ; yes                                                              ; yes                                        ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[7]        ; yes                                                              ; yes                                        ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[0]        ; yes                                                              ; yes                                        ;
-; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|read_req        ; yes                                                              ; yes                                        ;
-; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[1]        ; yes                                                              ; yes                                        ;
-; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|read            ; yes                                                              ; yes                                        ;
-; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[2]        ; yes                                                              ; yes                                        ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|write_valid     ; yes                                                              ; yes                                        ;
-; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[3]        ; yes                                                              ; yes                                        ;
+; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[1]        ; yes                                                              ; yes                                        ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|write           ; yes                                                              ; yes                                        ;
+; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[2]        ; yes                                                              ; yes                                        ;
+; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[3]        ; yes                                                              ; yes                                        ;
+; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[4]        ; yes                                                              ; yes                                        ;
+; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[5]        ; yes                                                              ; yes                                        ;
+; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[6]        ; yes                                                              ; yes                                        ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|wdata[0]        ; yes                                                              ; yes                                        ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|wdata[7]        ; yes                                                              ; yes                                        ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|wdata[6]        ; yes                                                              ; yes                                        ;
@@ -549,9 +552,6 @@ Encoding Type:  One-Hot
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|wdata[3]        ; yes                                                              ; yes                                        ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|wdata[2]        ; yes                                                              ; yes                                        ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|wdata[1]        ; yes                                                              ; yes                                        ;
-; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[4]        ; yes                                                              ; yes                                        ;
-; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[5]        ; yes                                                              ; yes                                        ;
-; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rdata[6]        ; yes                                                              ; yes                                        ;
 ; Total number of protected registers is 24                                                                ;                                                                  ;                                            ;
 +----------------------------------------------------------------------------------------------------------+------------------------------------------------------------------+--------------------------------------------+
 
@@ -561,10 +561,10 @@ Encoding Type:  One-Hot
 +--------------------------------------------------------------------+---------------------------------------------+
 ; Register name                                                      ; Reason for Removal                          ;
 +--------------------------------------------------------------------+---------------------------------------------+
-; igor_src_policy_uart:policy|igor_uart_tx:transmitter|shift[9]      ; Stuck at VCC due to stuck port data_in      ;
-; igor_jtag_console:console|igor_uart_tx:inject|shift[9]             ; Stuck at VCC due to stuck port data_in      ;
 ; igor_src_policy_uart:policy|igor_src_policy_core:core|neuron[0..2] ; Stuck at GND due to stuck port data_in      ;
 ; igor_src_policy_uart:policy|error_code[4..7]                       ; Stuck at GND due to stuck port data_in      ;
+; igor_jtag_console:console|igor_uart_tx:inject|shift[9]             ; Stuck at VCC due to stuck port data_in      ;
+; igor_src_policy_uart:policy|igor_uart_tx:transmitter|shift[9]      ; Stuck at VCC due to stuck port data_in      ;
 ; igor_jtag_console:console|snap_error[4..7]                         ; Stuck at GND due to stuck port data_in      ;
 ; altera_avalon_jtag_uart:jtag|ien_AE                                ; Stuck at GND due to stuck port clock_enable ;
 ; altera_avalon_jtag_uart:jtag|ien_AF                                ; Stuck at GND due to stuck port clock_enable ;
@@ -576,33 +576,27 @@ Encoding Type:  One-Hot
 ; igor_src_policy_uart:policy|igor_src_policy_core:core|state~10     ; Lost fanout                                 ;
 ; igor_src_policy_uart:policy|igor_src_policy_core:core|state~11     ; Lost fanout                                 ;
 ; igor_src_policy_uart:policy|igor_src_policy_core:core|state~12     ; Lost fanout                                 ;
-; igor_src_policy_uart:policy|igor_uart_rx:receiver|state~8          ; Lost fanout                                 ;
-; igor_src_policy_uart:policy|igor_uart_rx:receiver|state~9          ; Lost fanout                                 ;
 ; igor_jtag_console:console|state~6                                  ; Lost fanout                                 ;
 ; igor_jtag_console:console|state~7                                  ; Lost fanout                                 ;
-; igor_jtag_console:console|igor_uart_rx:monitor|state~8             ; Lost fanout                                 ;
-; igor_jtag_console:console|igor_uart_rx:monitor|state~9             ; Lost fanout                                 ;
+; igor_src_policy_uart:policy|igor_uart_rx:receiver|state~8          ; Lost fanout                                 ;
+; igor_src_policy_uart:policy|igor_uart_rx:receiver|state~9          ; Lost fanout                                 ;
 ; igor_jtag_bytes:bridge|state~6                                     ; Lost fanout                                 ;
 ; igor_jtag_bytes:bridge|state~7                                     ; Lost fanout                                 ;
+; igor_jtag_console:console|igor_uart_rx:monitor|state~8             ; Lost fanout                                 ;
+; igor_jtag_console:console|igor_uart_rx:monitor|state~9             ; Lost fanout                                 ;
 ; igor_src_policy_uart:policy|igor_src_policy_core:core|neuron[7]    ; Stuck at GND due to stuck port data_in      ;
 ; Total Number of Removed Registers = 32                             ;                                             ;
 +--------------------------------------------------------------------+---------------------------------------------+
 
 
-+-------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Removed Registers Triggering Further Register Optimizations                                                                                           ;
-+-------------------------------------------+---------------------------+-------------------------------------------------------------------------------+
-; Register name                             ; Reason for Removal        ; Registers Removed due to This Register                                        ;
-+-------------------------------------------+---------------------------+-------------------------------------------------------------------------------+
-; igor_src_policy_uart:policy|error_code[4] ; Stuck at GND              ; igor_jtag_console:console|snap_error[4], altera_avalon_jtag_uart:jtag|ien_AE, ;
-;                                           ; due to stuck port data_in ; altera_avalon_jtag_uart:jtag|ien_AF                                           ;
-; igor_src_policy_uart:policy|error_code[7] ; Stuck at GND              ; igor_jtag_console:console|snap_error[7]                                       ;
-;                                           ; due to stuck port data_in ;                                                                               ;
-; igor_src_policy_uart:policy|error_code[6] ; Stuck at GND              ; igor_jtag_console:console|snap_error[6]                                       ;
-;                                           ; due to stuck port data_in ;                                                                               ;
-; igor_src_policy_uart:policy|error_code[5] ; Stuck at GND              ; igor_jtag_console:console|snap_error[5]                                       ;
-;                                           ; due to stuck port data_in ;                                                                               ;
-+-------------------------------------------+---------------------------+-------------------------------------------------------------------------------+
++------------------------------------------------------------------------------------------------------------------------------------------------+
+; Removed Registers Triggering Further Register Optimizations                                                                                    ;
++-----------------------------------------+---------------------------+--------------------------------------------------------------------------+
+; Register name                           ; Reason for Removal        ; Registers Removed due to This Register                                   ;
++-----------------------------------------+---------------------------+--------------------------------------------------------------------------+
+; igor_jtag_console:console|snap_error[4] ; Stuck at GND              ; altera_avalon_jtag_uart:jtag|ien_AE, altera_avalon_jtag_uart:jtag|ien_AF ;
+;                                         ; due to stuck port data_in ;                                                                          ;
++-----------------------------------------+---------------------------+--------------------------------------------------------------------------+
 
 
 +------------------------------------------------------+
@@ -610,12 +604,12 @@ Encoding Type:  One-Hot
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 6949  ;
-; Number of registers using Synchronous Clear  ; 474   ;
+; Total registers                              ; 6950  ;
+; Number of registers using Synchronous Clear  ; 473   ;
 ; Number of registers using Synchronous Load   ; 386   ;
-; Number of registers using Asynchronous Clear ; 1456  ;
+; Number of registers using Asynchronous Clear ; 1457  ;
 ; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 6647  ;
+; Number of registers using Clock Enable       ; 6614  ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
 
@@ -628,7 +622,7 @@ Encoding Type:  One-Hot
 ; igor_src_policy_uart:policy|igor_uart_tx:transmitter|shift[0]                                                                                                                                                                                                                                                                   ; 1       ;
 ; igor_src_policy_uart:policy|igor_uart_tx:transmitter|shift[1]                                                                                                                                                                                                                                                                   ; 1       ;
 ; igor_src_policy_uart:policy|igor_uart_tx:transmitter|shift[2]                                                                                                                                                                                                                                                                   ; 1       ;
-; igor_src_policy_uart:policy|igor_uart_rx:receiver|sync                                                                                                                                                                                                                                                                          ; 16      ;
+; igor_src_policy_uart:policy|igor_uart_rx:receiver|sync                                                                                                                                                                                                                                                                          ; 17      ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|count[9]                                                                                                                                                                                                                               ; 11      ;
 ; igor_src_policy_uart:policy|igor_uart_tx:transmitter|shift[3]                                                                                                                                                                                                                                                                   ; 1       ;
 ; igor_src_policy_uart:policy|igor_uart_rx:receiver|meta                                                                                                                                                                                                                                                                          ; 1       ;
@@ -641,8 +635,8 @@ Encoding Type:  One-Hot
 ; altera_avalon_jtag_uart:jtag|av_waitrequest                                                                                                                                                                                                                                                                                     ; 11      ;
 ; altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|rst1                                                                                                                                                                                                                                   ; 1       ;
 ; igor_src_policy_uart:policy|igor_uart_tx:transmitter|shift[6]                                                                                                                                                                                                                                                                   ; 1       ;
+; igor_jtag_console:console|auto_pending                                                                                                                                                                                                                                                                                          ; 4       ;
 ; igor_jtag_console:console|igor_uart_tx:inject|shift[2]                                                                                                                                                                                                                                                                          ; 1       ;
-; igor_jtag_console:console|auto_pending                                                                                                                                                                                                                                                                                          ; 2       ;
 ; igor_jtag_console:console|demo_mode                                                                                                                                                                                                                                                                                             ; 6       ;
 ; igor_src_policy_uart:policy|igor_uart_tx:transmitter|shift[7]                                                                                                                                                                                                                                                                   ; 1       ;
 ; igor_jtag_console:console|igor_uart_tx:inject|shift[3]                                                                                                                                                                                                                                                                          ; 1       ;
@@ -677,84 +671,94 @@ Encoding Type:  One-Hot
 +-------------------------------------------------------------------------+--------------------------------------------------------------------------+------+
 
 
-+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                                                                                           ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------------------------------------------------------------------------------------------------------+
-; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                                                                                 ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------------------------------------------------------------------------------------------------------+
-; 3:1                ; 256 bits  ; 512 LEs       ; 0 LEs                ; 512 LEs                ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane4.acc[16]                                         ;
-; 3:1                ; 64 bits   ; 128 LEs       ; 0 LEs                ; 128 LEs                ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane0.acc[3]                                          ;
-; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_tx:transmitter|bit_index[0]                                           ;
-; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_tx:inject|bit_index[3]                                                  ;
-; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|load_index[4]                                                                   ;
-; 3:1                ; 10 bits   ; 20 LEs        ; 0 LEs                ; 20 LEs                 ; Yes        ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|count[5]           ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[0][7]                                                                    ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[8][2]                                                                    ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[4][6]                                                                    ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[2][1]                                                                    ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[10][3]                                                                   ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[6][2]                                                                    ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[1][4]                                                                    ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[9][0]                                                                    ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[5][4]                                                                    ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[3][7]                                                                    ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[7][1]                                                                    ;
-; 3:1                ; 48 bits   ; 96 LEs        ; 0 LEs                ; 96 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|actions[0][13]                                        ;
-; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|error                                                     ;
-; 3:1                ; 12 bits   ; 24 LEs        ; 0 LEs                ; 24 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|address[8]                                            ;
-; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|td_shift[9]        ;
-; 4:1                ; 16 bits   ; 32 LEs        ; 32 LEs               ; 0 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_tx:transmitter|count[7]                                               ;
-; 4:1                ; 16 bits   ; 32 LEs        ; 32 LEs               ; 0 LEs                  ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_tx:inject|count[11]                                                     ;
-; 16:1               ; 8 bits    ; 80 LEs        ; 56 LEs               ; 24 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|tx_data[4]                                                                      ;
-; 5:1                ; 3 bits    ; 9 LEs         ; 6 LEs                ; 3 LEs                  ; Yes        ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|td_shift[4]        ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|td_shift[1]        ;
-; 5:1                ; 2 bits    ; 6 LEs         ; 4 LEs                ; 2 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|core_output_index[0]                                                            ;
-; 5:1                ; 32 bits   ; 96 LEs        ; 0 LEs                ; 96 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|timer[17]                                                                         ;
-; 5:1                ; 3 bits    ; 9 LEs         ; 3 LEs                ; 6 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|neuron[1]                                             ;
-; 5:1                ; 2 bits    ; 6 LEs         ; 2 LEs                ; 4 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|layer[0]                                              ;
-; 5:1                ; 3 bits    ; 9 LEs         ; 3 LEs                ; 6 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|bit_index[0]                                              ;
-; 5:1                ; 3 bits    ; 9 LEs         ; 3 LEs                ; 6 LEs                  ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|bit_index[1]                                                 ;
-; 5:1                ; 8 bits    ; 24 LEs        ; 0 LEs                ; 24 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|send_data[6]                                                                      ;
-; 6:1                ; 5 bits    ; 20 LEs        ; 10 LEs               ; 10 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|neuron[7]                                             ;
-; 6:1                ; 9 bits    ; 36 LEs        ; 9 LEs                ; 27 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|weight_address[9]                                     ;
-; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|weight_address[10]                                    ;
-; 8:1                ; 3 bits    ; 15 LEs        ; 15 LEs               ; 0 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|core_start                                                                      ;
-; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |igor_jtag_top|igor_jtag_console:console|count[3]                                                                          ;
-; 7:1                ; 11 bits   ; 44 LEs        ; 22 LEs               ; 22 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|count[10]                                                 ;
-; 7:1                ; 11 bits   ; 44 LEs        ; 22 LEs               ; 22 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|count[13]                                                    ;
-; 9:1                ; 8 bits    ; 48 LEs        ; 0 LEs                ; 48 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|index[0]                                                                          ;
-; 10:1               ; 32 bits   ; 192 LEs       ; 0 LEs                ; 192 LEs                ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|rx_timer[17]                                                                    ;
-; 9:1                ; 5 bits    ; 30 LEs        ; 10 LEs               ; 20 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|count[0]                                                  ;
-; 9:1                ; 5 bits    ; 30 LEs        ; 10 LEs               ; 20 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|count[1]                                                     ;
-; 258:1              ; 4 bits    ; 688 LEs       ; 4 LEs                ; 684 LEs                ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|crc[7]                                                                          ;
-; 193:1              ; 16 bits   ; 2048 LEs      ; 2048 LEs             ; 0 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|operand[6]                                            ;
-; 260:1              ; 32 bits   ; 5536 LEs      ; 0 LEs                ; 5536 LEs               ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|rejected_frames[22]                                                             ;
-; 267:1              ; 5 bits    ; 890 LEs       ; 40 LEs               ; 850 LEs                ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|position[5]                                                                     ;
-; 80:1               ; 2 bits    ; 106 LEs       ; 18 LEs               ; 88 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|position[0]                                                                     ;
-; 270:1              ; 8 bits    ; 1440 LEs      ; 64 LEs               ; 1376 LEs               ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|error_code[1]                                                                   ;
-; 14:1               ; 32 bits   ; 288 LEs       ; 0 LEs                ; 288 LEs                ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|infer_timer[30]                                                                 ;
-; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_tx:transmitter|shift[6]                                               ;
-; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_tx:inject|shift[7]                                                      ;
-; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|state                                                 ;
-; 4:1                ; 16 bits   ; 32 LEs        ; 32 LEs               ; 0 LEs                  ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|output_value[4]                                       ;
-; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane0.activation|value[0]  ;
-; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane1.activation|value[0]  ;
-; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane2.activation|value[10] ;
-; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane3.activation|value[4]  ;
-; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane4.activation|value[14] ;
-; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane5.activation|value[14] ;
-; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane6.activation|value[5]  ;
-; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane7.activation|value[9]  ;
-; 6:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|Selector3                                                 ;
-; 6:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|Selector3                                                    ;
-; 8:1                ; 2 bits    ; 10 LEs        ; 4 LEs                ; 6 LEs                  ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|Selector0                                                 ;
-; 8:1                ; 2 bits    ; 10 LEs        ; 4 LEs                ; 6 LEs                  ; No         ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|Selector2                                                    ;
-; 6:1                ; 3 bits    ; 12 LEs        ; 9 LEs                ; 3 LEs                  ; No         ; |igor_jtag_top|igor_jtag_bytes:bridge|Selector3                                                                            ;
-; 8:1                ; 2 bits    ; 10 LEs        ; 8 LEs                ; 2 LEs                  ; No         ; |igor_jtag_top|igor_jtag_bytes:bridge|Selector4                                                                            ;
-; 11:1               ; 4 bits    ; 28 LEs        ; 16 LEs               ; 12 LEs                 ; No         ; |igor_jtag_top|igor_jtag_console:console|Selector48                                                                        ;
-; 273:1              ; 4 bits    ; 728 LEs       ; 40 LEs               ; 688 LEs                ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|mode                                                                            ;
-; 305:1              ; 2 bits    ; 406 LEs       ; 262 LEs              ; 144 LEs                ; No         ; |igor_jtag_top|igor_jtag_console:console|Mux0                                                                              ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------------------------------------------------------------------------------------------------------+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                                                                                                          ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+---------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                                                                                ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+---------------------------------------------------------------------------------------------------------------------------+
+; 3:1                ; 48 bits   ; 96 LEs        ; 0 LEs                ; 96 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|actions[2][0]                                        ;
+; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|load_index[6]                                                                  ;
+; 5:1                ; 3 bits    ; 9 LEs         ; 3 LEs                ; 6 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|neuron[2]                                            ;
+; 5:1                ; 2 bits    ; 6 LEs         ; 2 LEs                ; 4 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|layer[1]                                             ;
+; 6:1                ; 5 bits    ; 20 LEs        ; 10 LEs               ; 10 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|neuron[3]                                            ;
+; 6:1                ; 9 bits    ; 36 LEs        ; 9 LEs                ; 27 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|weight_address[2]                                    ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|weight_address[3]                                    ;
+; 8:1                ; 3 bits    ; 15 LEs        ; 15 LEs               ; 0 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|response_valid                                                                 ;
+; 10:1               ; 32 bits   ; 192 LEs       ; 0 LEs                ; 192 LEs                ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|rx_timer[16]                                                                   ;
+; 12:1               ; 32 bits   ; 256 LEs       ; 0 LEs                ; 256 LEs                ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|rejected_frames[15]                                                            ;
+; 193:1              ; 16 bits   ; 2048 LEs      ; 2048 LEs             ; 0 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|operand[14]                                          ;
+; 15:1               ; 5 bits    ; 50 LEs        ; 35 LEs               ; 15 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|position[5]                                                                    ;
+; 16:1               ; 2 bits    ; 20 LEs        ; 16 LEs               ; 4 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|position[1]                                                                    ;
+; 19:1               ; 8 bits    ; 96 LEs        ; 64 LEs               ; 32 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|error_code[3]                                                                  ;
+; 19:1               ; 32 bits   ; 384 LEs       ; 0 LEs                ; 384 LEs                ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|infer_timer[30]                                                                ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 16 LEs               ; 0 LEs                  ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|state                                                ;
+; 22:1               ; 4 bits    ; 56 LEs        ; 40 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|mode                                                                           ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[0][6]                                                                   ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[1][5]                                                                   ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[2][6]                                                                   ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[3][1]                                                                   ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[4][0]                                                                   ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[5][7]                                                                   ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[6][3]                                                                   ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[7][0]                                                                   ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[8][3]                                                                   ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[9][7]                                                                   ;
+; 4:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|captured[10][0]                                                                  ;
+; 5:1                ; 32 bits   ; 96 LEs        ; 0 LEs                ; 96 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|timer[9]                                                                         ;
+; 5:1                ; 8 bits    ; 24 LEs        ; 0 LEs                ; 24 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|send_data[0]                                                                     ;
+; 6:1                ; 4 bits    ; 16 LEs        ; 12 LEs               ; 4 LEs                  ; Yes        ; |igor_jtag_top|igor_jtag_console:console|count[3]                                                                         ;
+; 9:1                ; 8 bits    ; 48 LEs        ; 0 LEs                ; 48 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|index[7]                                                                         ;
+; 11:1               ; 4 bits    ; 28 LEs        ; 16 LEs               ; 12 LEs                 ; No         ; |igor_jtag_top|igor_jtag_console:console|Selector47                                                                       ;
+; 327:1              ; 2 bits    ; 436 LEs       ; 292 LEs              ; 144 LEs                ; No         ; |igor_jtag_top|igor_jtag_console:console|Mux1                                                                             ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane7.acc[13]                                        ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane7.acc[7]                                         ;
+; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane7.activation|value[3] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane6.acc[13]                                        ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane6.acc[7]                                         ;
+; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane6.activation|value[3] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane5.acc[13]                                        ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane5.acc[7]                                         ;
+; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane5.activation|value[3] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane4.acc[13]                                        ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane4.acc[7]                                         ;
+; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane4.activation|value[3] ;
+; 3:1                ; 32 bits   ; 64 LEs        ; 0 LEs                ; 64 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane3.acc[13]                                        ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane3.acc[7]                                         ;
+; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane3.activation|value[3] ;
+; 3:1                ; 12 bits   ; 24 LEs        ; 0 LEs                ; 24 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|address[0]                                           ;
+; 3:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|error                                                    ;
+; 5:1                ; 3 bits    ; 9 LEs         ; 3 LEs                ; 6 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|bit_index[2]                                             ;
+; 6:1                ; 4 bits    ; 16 LEs        ; 4 LEs                ; 12 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|crc[6]                                                                         ;
+; 7:1                ; 11 bits   ; 44 LEs        ; 22 LEs               ; 22 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|count[7]                                                 ;
+; 9:1                ; 5 bits    ; 30 LEs        ; 10 LEs               ; 20 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|count[5]                                                 ;
+; 6:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|Selector1                                                ;
+; 8:1                ; 2 bits    ; 10 LEs        ; 4 LEs                ; 6 LEs                  ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_rx:receiver|Selector0                                                ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_tx:inject|bit_index[2]                                                 ;
+; 3:1                ; 10 bits   ; 20 LEs        ; 0 LEs                ; 20 LEs                 ; Yes        ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|count[6]          ;
+; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; Yes        ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|td_shift[8]       ;
+; 4:1                ; 16 bits   ; 32 LEs        ; 32 LEs               ; 0 LEs                  ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_tx:inject|count[2]                                                     ;
+; 5:1                ; 3 bits    ; 9 LEs         ; 6 LEs                ; 3 LEs                  ; Yes        ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|td_shift[7]       ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 8 LEs                ; 4 LEs                  ; Yes        ; |igor_jtag_top|altera_avalon_jtag_uart:jtag|alt_jtag_atlantic:altera_avalon_jtag_uart_alt_jtag_atlantic|td_shift[2]       ;
+; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_tx:inject|shift[1]                                                     ;
+; 6:1                ; 3 bits    ; 12 LEs        ; 9 LEs                ; 3 LEs                  ; No         ; |igor_jtag_top|igor_jtag_bytes:bridge|Selector1                                                                           ;
+; 8:1                ; 2 bits    ; 10 LEs        ; 8 LEs                ; 2 LEs                  ; No         ; |igor_jtag_top|igor_jtag_bytes:bridge|Selector4                                                                           ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_tx:transmitter|bit_index[3]                                          ;
+; 4:1                ; 16 bits   ; 32 LEs        ; 32 LEs               ; 0 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_tx:transmitter|count[2]                                              ;
+; 5:1                ; 3 bits    ; 9 LEs         ; 3 LEs                ; 6 LEs                  ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|bit_index[2]                                                ;
+; 7:1                ; 11 bits   ; 44 LEs        ; 22 LEs               ; 22 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|count[8]                                                    ;
+; 9:1                ; 5 bits    ; 30 LEs        ; 10 LEs               ; 20 LEs                 ; Yes        ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|count[1]                                                    ;
+; 3:1                ; 7 bits    ; 14 LEs        ; 7 LEs                ; 7 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_uart_tx:transmitter|shift[1]                                              ;
+; 6:1                ; 2 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|Selector3                                                   ;
+; 8:1                ; 2 bits    ; 10 LEs        ; 4 LEs                ; 6 LEs                  ; No         ; |igor_jtag_top|igor_jtag_console:console|igor_uart_rx:monitor|Selector2                                                   ;
+; 16:1               ; 8 bits    ; 80 LEs        ; 56 LEs               ; 24 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|tx_data[4]                                                                     ;
+; 5:1                ; 2 bits    ; 6 LEs         ; 4 LEs                ; 2 LEs                  ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|core_output_index[0]                                                           ;
+; 4:1                ; 16 bits   ; 32 LEs        ; 32 LEs               ; 0 LEs                  ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|output_value[5]                                      ;
+; 3:1                ; 96 bits   ; 192 LEs       ; 0 LEs                ; 192 LEs                ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane0.acc[20]                                        ;
+; 3:1                ; 24 bits   ; 48 LEs        ; 0 LEs                ; 48 LEs                 ; Yes        ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|lane2.acc[5]                                         ;
+; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane2.activation|value[4] ;
+; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane1.activation|value[8] ;
+; 6:1                ; 16 bits   ; 64 LEs        ; 48 LEs               ; 16 LEs                 ; No         ; |igor_jtag_top|igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane0.activation|value[0] ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+---------------------------------------------------------------------------------------------------------------------------+
 
 
 +------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -1706,36 +1710,37 @@ Note: In order to hide this table in the UI and the text report file, please set
 +-----------------------+-----------------------------+
 ; Type                  ; Count                       ;
 +-----------------------+-----------------------------+
-; arriav_ff             ; 6874                        ;
-;     CLR               ; 164                         ;
-;     CLR SCLR          ; 32                          ;
+; arriav_ff             ; 6875                        ;
+;     CLR               ; 166                         ;
+;     CLR SCLR          ; 64                          ;
 ;     CLR SCLR SLD      ; 76                          ;
 ;     CLR SLD           ; 2                           ;
 ;     ENA               ; 5440                        ;
 ;     ENA CLR           ; 493                         ;
-;     ENA CLR SCLR      ; 359                         ;
+;     ENA CLR SCLR      ; 326                         ;
 ;     ENA CLR SLD       ; 308                         ;
-; arriav_lcell_comb     ; 4395                        ;
+; arriav_lcell_comb     ; 4645                        ;
 ;     arith             ; 734                         ;
 ;         0 data inputs ; 5                           ;
-;         1 data inputs ; 391                         ;
-;         2 data inputs ; 338                         ;
-;     extend            ; 550                         ;
-;         7 data inputs ; 550                         ;
-;     normal            ; 3111                        ;
+;         1 data inputs ; 393                         ;
+;         2 data inputs ; 335                         ;
+;         3 data inputs ; 1                           ;
+;     extend            ; 548                         ;
+;         7 data inputs ; 548                         ;
+;     normal            ; 3363                        ;
 ;         0 data inputs ; 1                           ;
-;         1 data inputs ; 7                           ;
-;         2 data inputs ; 111                         ;
-;         3 data inputs ; 220                         ;
-;         4 data inputs ; 462                         ;
-;         5 data inputs ; 500                         ;
-;         6 data inputs ; 1810                        ;
+;         1 data inputs ; 16                          ;
+;         2 data inputs ; 160                         ;
+;         3 data inputs ; 270                         ;
+;         4 data inputs ; 479                         ;
+;         5 data inputs ; 537                         ;
+;         6 data inputs ; 1900                        ;
 ; arriav_mac            ; 8                           ;
 ; boundary_port         ; 24                          ;
 ; stratixv_ram_block    ; 144                         ;
 ;                       ;                             ;
 ; Max LUT depth         ; 7.00                        ;
-; Average LUT depth     ; 3.95                        ;
+; Average LUT depth     ; 3.93                        ;
 +-----------------------+-----------------------------+
 
 
@@ -1744,7 +1749,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 +----------------+--------------+
 ; Partition Name ; Elapsed Time ;
 +----------------+--------------+
-; Top            ; 00:00:16     ;
+; Top            ; 00:00:20     ;
 +----------------+--------------+
 
 
@@ -1754,7 +1759,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 25.1std.0 Build 1129 10/21/2025 SC Standard Edition
-    Info: Processing started: Mon Oct 19 19:20:22 2026
+    Info: Processing started: Mon Oct 19 19:35:20 2026
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off igor_jtag -c igor_jtag
 Info (20032): Parallel compilation is enabled and will use up to 4 processors
 Info (12021): Found 1 design units, including 1 entities, in source file igor_jtag_top.v
@@ -1870,7 +1875,7 @@ Warning (10030): Net "memory.we_a" at igor_src_policy_core.v(395) has no driver 
 Warning (10030): Net "memory.we_a" at igor_src_policy_core.v(450) has no driver or initial value, using a default initial value '0' File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/experiments/parallel8_jtag/igor_src_policy_core.v Line: 450
 Info (12128): Elaborating entity "igor_src_policy_activation" for hierarchy "igor_src_policy_uart:policy|igor_src_policy_core:core|igor_src_policy_activation:lane0.activation" File: D:/LinkedinProjects/igor_ws/igor_ws/fpga/experiments/parallel8_jtag/igor_src_policy_core.v Line: 114
 Info (11170): Starting IP generation for the debug fabric: alt_sld_fab.
-Info (11172): 2026.10.19.19:20:39 Progress: Loading sld0c169d05/alt_sld_fab_wrapper_hw.tcl
+Info (11172): 2026.10.19.19:35:40 Progress: Loading sld0c169d05/alt_sld_fab_wrapper_hw.tcl
 Info (11172): Alt_sld_fab.alt_sld_fab: SLD fabric agents which did not specify prefer_host were connected to JTAG
 Info (11172): Alt_sld_fab: Generating "alt_sld_fab" for QUARTUS_SYNTH
 Info (11172): Alt_sld_fab: "alt_sld_fab" instantiated alt_sld_fab "alt_sld_fab"
@@ -2120,17 +2125,17 @@ Info (17049): 16 registers lost all their fanouts during netlist optimizations.
 Info (144001): Generated suppressed messages file D:/LinkedinProjects/igor_ws/igor_ws/fpga/experiments/parallel8_jtag/output_files/igor_jtag.map.smsg
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 9 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Info (21057): Implemented 10526 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 10771 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 6 input pins
     Info (21059): Implemented 10 output pins
-    Info (21061): Implemented 10357 logic cells
+    Info (21061): Implemented 10602 logic cells
     Info (21064): Implemented 144 RAM segments
     Info (21062): Implemented 8 DSP elements
 Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 41 warnings
-    Info: Peak virtual memory: 5083 megabytes
-    Info: Processing ended: Mon Oct 19 19:21:07 2026
-    Info: Elapsed time: 00:00:45
-    Info: Total CPU time (on all processors): 00:01:09
+    Info: Peak virtual memory: 5106 megabytes
+    Info: Processing ended: Mon Oct 19 19:36:14 2026
+    Info: Elapsed time: 00:00:54
+    Info: Total CPU time (on all processors): 00:01:42
 
 
 +------------------------------------------+

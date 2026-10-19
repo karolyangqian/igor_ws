@@ -1,5 +1,5 @@
 Flow report for igor_jtag
-Mon Oct 19 19:23:52 2026
+Mon Oct 19 19:39:06 2026
 Quartus Prime Version 25.1std.0 Build 1129 10/21/2025 SC Standard Edition
 
 
@@ -41,15 +41,15 @@ on the Quartus Prime software download page.
 +---------------------------------------------------------------------------------------+
 ; Flow Summary                                                                          ;
 +---------------------------------+-----------------------------------------------------+
-; Flow Status                     ; Successful - Mon Oct 19 19:23:32 2026               ;
+; Flow Status                     ; Successful - Mon Oct 19 19:38:46 2026               ;
 ; Quartus Prime Version           ; 25.1std.0 Build 1129 10/21/2025 SC Standard Edition ;
 ; Revision Name                   ; igor_jtag                                           ;
 ; Top-level Entity Name           ; igor_jtag_top                                       ;
 ; Family                          ; Cyclone V                                           ;
 ; Device                          ; 5CSEBA6U23I7                                        ;
 ; Timing Models                   ; Final                                               ;
-; Logic utilization (in ALMs)     ; 3,933 / 41,910 ( 9 % )                              ;
-; Total registers                 ; 6992                                                ;
+; Logic utilization (in ALMs)     ; 4,013 / 41,910 ( 10 % )                             ;
+; Total registers                 ; 7017                                                ;
 ; Total pins                      ; 12 / 314 ( 4 % )                                    ;
 ; Total virtual pins              ; 0                                                   ;
 ; Total block memory bits         ; 525,312 / 5,662,720 ( 9 % )                         ;
@@ -68,7 +68,7 @@ on the Quartus Prime software download page.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 10/19/2026 19:20:23 ;
+; Start date & time ; 10/19/2026 19:35:21 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; igor_jtag           ;
 +-------------------+---------------------+
@@ -79,7 +79,7 @@ on the Quartus Prime software download page.
 +--------------------------+---------------------------------+---------------+-------------+------------+
 ; Assignment Name          ; Value                           ; Default Value ; Entity Name ; Section Id ;
 +--------------------------+---------------------------------+---------------+-------------+------------+
-; COMPILER_SIGNATURE_ID    ; 281474976645120.179241242222856 ; --            ; --          ; --         ;
+; COMPILER_SIGNATURE_ID    ; 281474976645120.179241332131740 ; --            ; --          ; --         ;
 ; NUM_PARALLEL_PROCESSORS  ; 4                               ; --            ; --          ; --         ;
 ; PROJECT_OUTPUT_DIRECTORY ; output_files                    ; --            ; --          ; --         ;
 ; TOP_LEVEL_ENTITY         ; igor_jtag_top                   ; igor_jtag     ; --          ; --         ;
@@ -91,11 +91,11 @@ on the Quartus Prime software download page.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:42     ; 1.0                     ; 5083 MB             ; 00:01:06                           ;
-; Fitter               ; 00:02:08     ; 1.3                     ; 6773 MB             ; 00:05:44                           ;
-; Assembler            ; 00:00:12     ; 1.0                     ; 5305 MB             ; 00:00:12                           ;
-; Timing Analyzer      ; 00:00:19     ; 2.4                     ; 5539 MB             ; 00:00:42                           ;
-; Total                ; 00:03:21     ; --                      ; --                  ; 00:07:44                           ;
+; Analysis & Synthesis ; 00:00:52     ; 1.6                     ; 5106 MB             ; 00:01:40                           ;
+; Fitter               ; 00:02:15     ; 1.3                     ; 6786 MB             ; 00:05:43                           ;
+; Assembler            ; 00:00:12     ; 1.0                     ; 5305 MB             ; 00:00:11                           ;
+; Timing Analyzer      ; 00:00:19     ; 2.4                     ; 5555 MB             ; 00:00:41                           ;
+; Total                ; 00:03:38     ; --                      ; --                  ; 00:08:15                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 

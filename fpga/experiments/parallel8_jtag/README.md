@@ -27,8 +27,8 @@ cycles=0x00001B04 accepted=0x00000001 rejected=0x00000000 error=0x00 CHECK=PASS
 
 Type `r` to repeat. Type `!` to inject a frame with a deliberately wrong CRC:
 the reply count must be zero, rejected count increases, error becomes `06`, and
-`CHECK=PASS` means the rejection test passed. The displayed zero byte slots in a
-zero-count report are placeholders, not a received zero-valued response.
+`CHECK=PASS` means the rejection test passed. Missing byte slots display `--`;
+they are not received zero-valued bytes or data retained from an earlier reply.
 An E-stop during a normal demo yields `CHECK=FAIL`, error `01`, and no inference
 reply. This is expected inhibition, not an instruction to bypass the stop.
 `error` records the latest fault and may remain `06` after a later valid request.
@@ -37,8 +37,10 @@ For custom observations, paste a complete 153-byte frame as hexadecimal pairs
 separated by spaces and press Enter. `CHECK=DATA` identifies a custom transaction;
 it does not compare arbitrary observations against the built-in demo oracle.
 Use only hex digits/spaces, then one Enter. Input is serviced while idle; wait
-for the next `>` prompt before sending another transaction. A terminal may send
-CR+LF; the extra LF causes a harmless no-response report, so prefer CR-only.
+for the next `>` prompt before sending another transaction. Bare Enter, LF and
+CR+LF without hexadecimal input are ignored. `r`, `r` followed by Enter, and a
+custom frame followed by CR+LF each produce one report. A newline submits a
+custom frame only after at least one hexadecimal digit has been entered.
 The exact example request is in `source_manifest.json` (`demo_request_hex`).
 
 ## Actual signal path
@@ -88,7 +90,8 @@ compilation, nonnegative timing summary slack, the two passing simulation logs,
 and an unchanged core source hash before installing the distinct SOF/receipt.
 `output_files/igor_jtag.*.rpt` and `.summary` are the original Quartus reports.
 Simulations cover byte order/backpressure, real neural inference, CRC rejection,
-custom hex input and E-stop; they do not constitute exhaustive formal verification.
+custom hex input, blank-line rejection, CR/LF command termination and E-stop;
+they do not constitute exhaustive formal verification.
 
 Vendor IP sources are referenced from the local Quartus installation and retain
 their Altera licensing terms. Adjust the three absolute IP paths in the QSF when

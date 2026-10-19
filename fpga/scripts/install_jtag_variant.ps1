@@ -20,6 +20,8 @@ $receipt = [ordered]@{
     project = 'fpga/experiments/parallel8_jtag/igor_jtag.qpf'
     minimum_reported_slack_ns = ($slacks | Measure-Object -Minimum).Minimum
     core_sha256 = (Get-FileHash $originalCore).Hash.ToLowerInvariant()
+    console_sha256 = (Get-FileHash (Join-Path $project 'igor_jtag_console.v')).Hash.ToLowerInvariant()
+    status_format_sha256 = (Get-FileHash (Join-Path $project 'status_chars.vh')).Hash.ToLowerInvariant()
     simulations = @('200-byte Avalon backpressure/order test','Parallel8 inference','CRC rejection','pasted hex frame','E-stop')
 }
 $receipt | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $fpgaRoot 'bitstreams/igor_parallel8_jtag.json')
