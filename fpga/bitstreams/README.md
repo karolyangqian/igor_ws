@@ -1,5 +1,15 @@
 # Program IGOR Parallel8 on DE10-Nano
 
+**USB-Blaster console option (19 October 2026):**
+double-click the Desktop shortcut **IGOR - JTAG Terminal**, or
+[OPEN_JTAG_TERMINAL.bat](OPEN_JTAG_TERMINAL.bat). It programs the separate
+`igor_parallel8_jtag.sof` and opens the real JTAG UART console. Type `r` for a
+known-vector inference. This variant passed five physical JTAG command tests;
+see the [console guide](../experiments/parallel8_jtag/README.md) and
+[original GUI/runtime evidence](../evidence/jtag_parallel8/README.md).
+Use the original image below for physical JP1 RX; the console image owns its
+receiver through an internal serializer.
+
 **Use `igor_src_policy_parallel8.sof` for the verified 74 -> 128 -> 64 -> 3
 neural core: 6,916 cycles, 138.32 us at 50 MHz.** Pins and model weights are
 already compiled into this image. No new compilation or pin planning is needed.
