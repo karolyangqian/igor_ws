@@ -1,5 +1,16 @@
 # IGOR FPGA — mulai di sini
 
+**LiDAR dari laptop:** [panduan Express Scan, 64 kandidat input AI, validity mask dan tes A/B/C](docs/LIDAR_AI_LAPTOP.md). Shortcut Desktop: **IGOR - LiDAR AI Live**, **IGOR - Testing ABC**, **IGOR - LiDAR AI Logs**.
+
+**Live input → output otomatis:** [terminal, repeat timer 1 detik, status komunikasi dan CSV/JSONL](docs/LIVE_INPUT_OUTPUT.md). Shortcut Desktop: **IGOR - LIVE Input Output Auto Check**.
+
+**Testing scenarios dari laptop:** [runner, pemetaan A/B/C, hasil dan shortcut](docs/TESTING_SCENARIO_RUNNER.md); [dokumen asli pengguna](testing_scenario.md).
+
+**FPGA → laptop datalogger:** [timestamp, lokasi manual, CSV/JSONL dan shortcut Desktop](docs/FPGA_DATALOGGER.md). Jalankan setelah image observer diprogram; logger membaca hasil melalui USB-Blaster JTAG.
+
+**Uji mock numerik pada FPGA fisik:** [panduan 256 pola, oracle Q8.8, dan shortcut Desktop](docs/MOCK_BOARD_VERIFICATION.md). Input COM12 dan pembacaan hasil JTAG dicatat terpisah dari pengujian jalur balik UART.
+
+
 **Versi sederhana sesuai contoh:** [3 FSM lingkaran](docs/FSM_3_SIMPLE.md),
 dengan [file draw.io tiga halaman](docs/assets/igor_fsm_3_simple.drawio).
 

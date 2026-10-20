@@ -1,5 +1,7 @@
 # Parameter evidence screenshots
 
+**For the requested native Quartus GUI proof, use [quartus_gui/README.md](../quartus_gui/README.md).** That folder contains 18 original Computer Use captures. The images in this folder remain browser report-reader visualizations.
+
 These PNGs are genuine Edge headless captures of local report-reader pages. They are **not screenshots of the native Quartus GUI**. The Windows Computer Use runtime failed with `failed to write kernel assets: The system cannot find the path specified`, including after reset. No values were edited in the original tool reports.
 
 Each HTML retains original source paths, hashes and line numbers. Reformatted extracted columns and calculated values are labelled. No Quartus build or simulation was rerun for these captures.

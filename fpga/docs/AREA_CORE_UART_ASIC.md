@@ -2,7 +2,9 @@
 
 Analysis: 19 October 2026. All FPGA figures below are for the **Parallel8 921600-baud implementation**, not the baseline serial core. Physical ASIC figures come from the imported IHP CMOS5L Tiny Tapeout reports. Calculations and source hashes: [parallel8_area.json](../evidence/area_analysis/parallel8_area.json). Reproduce from repository root: `python fpga/scripts/report_parallel8_area.py`.
 
-Visual evidence: [10 parameter screenshots and source index](../evidence/parameter_screenshots/README.md), including [core/UART hierarchy](../evidence/parameter_screenshots/02_core_uart_hierarchy.png), [raw ASIC areas](../evidence/parameter_screenshots/07_asic_area_raw.png), and [derived percentages](../evidence/parameter_screenshots/08_calculations.png). These are browser screenshots of labelled local report excerpts, not the native Quartus GUI; original report hashes and line numbers accompany every capture.
+**Primary FPGA visual evidence: [18 original Quartus GUI screenshots](../evidence/quartus_gui/README.md)**, captured through Computer Use on 19 October 2026. See [actual core/UART hierarchy](../evidence/quartus_gui/04_core_uart_resources.jpg), [memory capacity](../evidence/quartus_gui/06_memory_dsp_capacity.jpg), [timing](../evidence/quartus_gui/09_multicorner_timing.jpg) and [native Power Analyzer](../evidence/quartus_gui/12_power_summary_maximum.jpg). No reconstruction or annotation was applied to the screenshot bytes.
+
+Earlier [browser report-reader images](../evidence/parameter_screenshots/README.md) remain document visualizations, not native GUI proof. ASIC areas and calculated percentages are outside the Quartus GUI evidence scope; their original source metrics and derivations remain below.
 
 ## 1. Pure core versus core with UART
 
